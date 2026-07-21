@@ -19,6 +19,6 @@ Specific use cases include:
 - [TEHDAS2 deliverables](https://tehdas.eu/results/)
 - [Metadata Catalog](https://catalogue-metadonnees.health-data-hub.fr/) of the French Health Data Hub, with its [editor](https://editor.catalogue-metadonnees.health-data-hub.fr/)
 - [QUANTUM Data Quality Labelling Tool](https://github.com/quantum-label/quantum_labelling_tool/tree/1.1.0)
-
+- [EDDI 2024 presentation](https://zenodo.org/records/14823393) on "Mapping PhysicalInstance and DCAT" by Christophe Dzikowski, Insee
 
 This work is sponsored by [Making Sense](https://making-sense.info/), the [Constances Cohort](https://www.constances.fr/) and the [CASD](https://casd.eu/).
