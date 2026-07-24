@@ -6,13 +6,45 @@ Here we document the model-level mapping between DDI and DCAT, or more precisely
 
 Since the aim is to produce metadata conforming to DCAT profiles, the document is organized according to the DCAT model. Each main section corresponds to a DCAT class, and is further divided according to the DDI product which is source of the mapping.
 
+The DCAT model is detailed [in the Recommendation](https://www.w3.org/TR/vocab-dcat-3/#fig-dcat-all-attributes); a summary view of its structure is given below.
+
+```mermaid
+---
+config:
+  layout: elk
+title: DCAT v3
+---
+classDiagram
+    Resource <|-- Dataset
+    Resource <|-- DataService
+    Resource <-- Relationship
+    Relationship <-- Resource
+    Distribution <-- Dataset
+    DataService <-- Distribution
+    Dataset <-- DataService
+    Dataset <|-- DatasetSeries
+    DatasetSeries <-- Dataset
+    Resource <-- CatalogRecord
+    CatalogRecord <-- Catalog
+    Resource <-- Catalog
+    Dataset <-- Catalog
+    DataService <-- Catalog
+    Catalog <-- Catalog
+```
+
+## DCAT Resource
+
+The DCAT Recommendation defines the [Resource class](https://www.w3.org/TR/vocab-dcat-3/#Class:Resource) by: "This class carries properties common to all cataloged resources, including datasets and data services." This class is mainly useful to catalog resources that are not data sets or data services, so we may ignore it in this mapping exercice. However, it bears a great number of properties that are inherited by Dataset and DataService.
+
+
 ## DCAT Dataset
 
 The DCAT Recommendation defines the [Dataset class](https://www.w3.org/TR/vocab-dcat-3/#Class:Dataset) as a "collection of data, published or curated by a single agent, and available for access or download in one or more representations".
 
+
 ### DDI Lifecycle
 
-What DDI-L construct corresponds to the DCAT Dataset?
+What DDI-L class corresponds to the DCAT Dataset?
 
 ## DCAT Distribution
 
@@ -22,4 +54,4 @@ The DCAT Recommendation defines the [Distribution class](https://www.w3.org/TR/v
 
 ### DDI Lifecycle
 
-What DDI-L construct corresponds to the DCAT Distribution?
+What DDI-L class corresponds to the DCAT Distribution?
