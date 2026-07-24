@@ -9,7 +9,11 @@ Since the aim is to produce metadata conforming to DCAT profiles, the document i
 The DCAT model is detailed [in the Recommendation](https://www.w3.org/TR/vocab-dcat-3/#fig-dcat-all-attributes); a summary view of its structure is given below.
 
 ```mermaid
-%%{init: { 'config': {'layout':elk} , 'title':'DCAT v3' } }%%
+---
+config:
+  layout: elk
+title: DCAT v3
+---
 classDiagram
     Resource <|-- Dataset
     Resource <|-- DataService
