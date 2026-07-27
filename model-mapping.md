@@ -77,3 +77,21 @@ How do we obtain the Distribution properties from DDI-L metadata? As for the the
 > DCAT-AP also recommmends the "availability" property, but this is an extension not defined in DCAT.
 
 How do we derive the property that links a dataset to a distribution?
+
+#### `dcat:accessURL`
+
+The `PhysicalInstance` class in Lifecycle has a [`DataFileIdentification`](https://ddialliance.github.io/ddimodel-web/DDI-L-3.3/composite-types/DataFileIdentificationType/) field for which the documentation explains:
+
+> Identifies the data file documented in the physical instance and provides information about its location.
+
+More specifically, `DataFileIdentification` has a `DataFileURI` property.
+
+#### `dct:description`
+
+For this, we should probably use the [`Citation`](https://ddialliance.github.io/ddimodel-web/DDI-L-3.3/composite-types/CitationType/) property. It provides several "DC-like" fields and the possibility to add any Dublin Core terms with `DCTerms` ([here](https://docs.ddialliance.org/DDI-Lifecycle/3.3/xmlschema/schemas/dc_xsd/elements/any.html) is the XML schema doc for this).
+
+#### `dct:format`
+
+The most direct way to implement this is to use as mentionned earlier the `Citation` element.
+
+We could also consider the use of the `FileFormat` property of `PhysicalStructure`. The lattest is link to the `PhysicalInstance` through its `RecordLayout`.
