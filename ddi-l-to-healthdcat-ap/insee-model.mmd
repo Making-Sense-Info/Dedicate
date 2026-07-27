@@ -1,0 +1,143 @@
+classDiagram
+direction TB
+
+%% This diagram is best viewed with a layout option set to "elk"
+
+class Catalog {
+    <<DCAT>>
+}
+class Dataset {
+    <<DCAT>>
+}
+class Distribution {
+    <<DCAT>>
+}
+
+
+
+class RepresentedVariableScheme {
+    <<DDI>>
+}
+class PhysicalInstance {
+    <<DDI>>
+}
+class DataRelationship {
+    <<DDI>>
+}
+class Variable_instance_ {
+    <<DDI>>
+}
+class qb_DataStructureDefinition {
+    <<DDI>>
+}
+
+class StudyUnit {
+    <<DDI>>
+}
+class Group {
+    <<DDI>>
+}
+class LogicalProduct {
+    <<DDI>>
+}
+class CategoryScheme {
+    <<DDI>>
+}
+class Category {
+    <<DDI>>
+}
+class CodeListScheme {
+    <<DDI>>
+}
+class CodeList {
+    <<DDI>>
+}
+class ManagedRepresentationScheme {
+    <<DDI>>
+}
+class ManagedMissingValuesRepresentation {
+    <<DDI>>
+}
+class RepresentedVariable {
+    <<DDI>>
+}
+class VariableScheme {
+    <<DDI>>
+}
+class LogicalProduct {
+    <<DDI>>
+}
+
+class LogicalProduct_2["LogicalProduct"] {
+    <<DDI>>
+}
+
+%% Relationships
+
+%% DDI
+
+LogicalProduct --> RepresentedVariableScheme
+LogicalProduct --> ManagedRepresentationScheme
+LogicalProduct --> CategoryScheme
+LogicalProduct --> CodeListScheme
+
+
+Group --> LogicalProduct
+Group --> StudyUnit
+
+StudyUnit --> LogicalProduct_2
+StudyUnit --> PhysicalInstance
+
+LogicalProduct_2 --> VariableScheme
+
+VariableScheme --> Variable_instance_
+
+Variable_instance_ --> RepresentedVariable
+
+RepresentedVariable --> CodeList
+
+CodeList --> Category
+
+CategoryScheme --> Category
+CodeListScheme --> CodeList
+ManagedRepresentationScheme --> ManagedMissingValuesRepresentation
+
+PhysicalInstance --> DataRelationship
+
+DataRelationship --> Variable_instance_
+
+%% DCAT
+
+Catalog --> Dataset
+Dataset --> Distribution
+
+Dataset --> Group : prov_wasGeneratedBy
+Dataset --> StudyUnit : prov_wasGeneratedBy
+Distribution --> PhysicalInstance : owl_sameAs
+
+Dataset --> qb_DataStructureDefinition :  stat_dataStructureDefinition
+
+%% ---------
+%%   Styles
+%% ---------
+style Catalog fill:#fff2cc,stroke:#d6b656
+style Dataset fill:#fff2cc,stroke:#d6b656
+style Distribution fill:#fff2cc,stroke:#d6b656
+
+style RepresentedVariableScheme fill:#dae8fc,stroke:#6c8ebf
+style PhysicalInstance fill:#dae8fc,stroke:#6c8ebf
+style DataRelationship fill:#dae8fc,stroke:#6c8ebf
+style Variable_instance_ fill:#dae8fc,stroke:#6c8ebf
+style StudyUnit fill:#dae8fc,stroke:#6c8ebf
+style Group fill:#dae8fc,stroke:#6c8ebf
+style LogicalProduct fill:#dae8fc,stroke:#6c8ebf
+style CategoryScheme fill:#dae8fc,stroke:#6c8ebf
+style Category fill:#dae8fc,stroke:#6c8ebf
+style CodeListScheme fill:#dae8fc,stroke:#6c8ebf
+style CodeList fill:#dae8fc,stroke:#6c8ebf
+style ManagedRepresentationScheme fill:#dae8fc,stroke:#6c8ebf
+style ManagedMissingValuesRepresentation fill:#dae8fc,stroke:#6c8ebf
+style VariableScheme fill:#dae8fc,stroke:#6c8ebf
+style LogicalProduct_2 fill:#dae8fc,stroke:#6c8ebf
+
+style qb_DataStructureDefinition fill:#e1d5e7,stroke:#9673a6
