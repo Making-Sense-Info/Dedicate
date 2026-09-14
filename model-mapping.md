@@ -141,7 +141,7 @@ The most direct way to implement this is to use as mentionned earlier the `Citat
 
 We could also consider the use of the `FileFormat` property of `PhysicalStructure`. The lattest is link to the `PhysicalInstance` through its `RecordLayout`.
 
-## Catalog
+## DCAT Catalog
 
 The DCAT Recommendation defines the [Catalog](https://www.w3.org/TR/vocab-dcat-3/#Class:Catalog) as such:
 
