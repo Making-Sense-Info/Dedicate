@@ -5,3 +5,8 @@
 - [ ] DCAT AP optional
 - [ ] implementation
 - [ ] extension of the mapping to Health DCAT AP
+
+
+## Ideas
+
+- Mapping using SSSOM
