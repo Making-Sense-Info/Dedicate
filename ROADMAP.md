@@ -1,12 +1,12 @@
-# Roadmap
+# Dedicate roadmap
 
-- [x] DCAT AP mandatory and recommended, mapping from DDI L
-- [ ] implementation (XSL)
-- [ ] DCAT AP optional
-- [ ] implementation
-- [ ] extension of the mapping to Health DCAT AP
+- [x] Map from DDI-L to main DCAT classes and DCAT-AP mandatory and recommended properties
+- [ ] Implementation of step 1 (XSL)
+- [ ] Add mapping for selected DCAT-AP optional properties
+- [ ] Implementation of step 2
+- [ ] Extension of the mapping to HealthDCAT-AP
 
 
 ## Ideas
 
-- Mapping using SSSOM
+- Use [SSSOM](https://mapping-commons.github.io/sssom/dev/) to express the mappings
