@@ -10,3 +10,8 @@
 ## Ideas
 
 - Use [SSSOM](https://mapping-commons.github.io/sssom/dev/) to express the mappings
+
+## Questions
+
+- 🆕 How to link DDI Lifecycle concepts to CSVW `propertyURL` ([see here](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Column))?
+- 🆕 How to produce mandatory CV-based field like [`healthCategory`](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#properties-with-controlled-vocabularies-that-must-be-used-for-the-listed-properties)?
