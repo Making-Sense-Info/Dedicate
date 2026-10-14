@@ -1,0 +1,97 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix lifecycle: <https://rdf-vocabulary.ddialliance.org/lifecycle#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sssom: <https://w3id.org/sssom/> .
+
+# The MappingSet is the set of all the identified mappings between Lifecycle and DCAT-AP
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset> a sssom:MappingSet ;
+  dcterms:description "Mapping DDI Lifecycle to DCAT-AP";
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/>; # Adapt license
+
+  # Each mapping describe the relation between a Lifecycle element and a DCAT-AP one.
+  # Questions:
+  # - record_id useful?
+  # - mapping_provider instead of see_also?
+  # - review?
+  # - curation_rule for describing how to go from a class to another (see contactPoint)?
+  sssom:mappings [
+    a owl:Axiom; # Necessary?
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title> ; # To be validated
+    pav:authoredBy "<http://id.making-sense.info/romain>"; # Level-up? Use MS?
+    dcterms:created "2026-10-14"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass; # https://www.w3.org/TR/owl-ref/#equivalentClass-def
+    owl:annotatedSource lifecycle:title;
+    owl:annotatedTarget dcterms:title;
+    sssom:confidence 0.9; # TODO
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Title"@en; # https://docs.ddialliance.org/DDI-Lifecycle/dev/output/lifecycle40.ttl
+    sssom:object_label "Title";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcattitle> ; # 🤔
+    sssom:comment "We are mapping the `StudyUnit/Citation/Title` of DDI Lifecycle to the DC Terms `title` used in DCAT-AP"
+  ],
+  [
+    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description> ;
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-14"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:description;
+    owl:annotatedTarget dcterms:description;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Description"@en;
+    sssom:object_label "Description";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctdescription> ;
+    sssom:comment "We are mapping the `StudyUnit/Citation/Description` of DDI Lifecycle to the DC Terms `description` used in DCAT-AP" ;
+  ],
+  # https://github.com/Making-Sense-Info/Mekong/blob/main/cataloging/example.ttl#L22C43-L22C55
+  [
+    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint> ;
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-14"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:contactInformation;
+    owl:annotatedTarget dcat:contactPoint;
+    sssom:confidence 0.8;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "ContactInformation"@en;
+    sssom:object_label "contact point"; # ❗️
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatcontactpoint> ;
+    sssom:comment "Using here the `ContactInformation` of an Organization" ;
+  ],
+  [
+    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-14"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:keyword;
+    owl:annotatedTarget dcat:keyword;
+    sssom:confidence 1.0;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Keyword"@en;
+    sssom:object_label "keyword";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatkeyword> ;
+    sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/keyword-to-theme> ;
+    sssom:comment "The `StudyUnit/Coverage/TopicalCoverage/Keyword` maps to dcat:keyword when its value/range is a string" ;
+  ],
+  [
+    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme> ;
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-14"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:keyword;
+    owl:annotatedTarget dcat:theme;
+    sssom:confidence 1.0;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Keyword"@en;
+    sssom:object_label "keyword";
+    sssom:object_category <http://publications.europa.eu/resource/authority/data-theme/HEAL> ; # ❗️To be validated
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatkeyword> ;
+    sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/keyword-to-keyword> ;
+    sssom:comment "The `StudyUnit/Coverage/TopicalCoverage/Keyword` maps to `dcat:theme` when it contains a controlled vocabulary URI" ;
+  ] .
