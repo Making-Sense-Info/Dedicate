@@ -139,7 +139,7 @@ For this, we should probably use the [`Citation`](https://ddialliance.github.io/
 
 The most direct way to implement this is to use as mentionned earlier the `Citation` element.
 
-We could also consider the use of the `FileFormat` property of `PhysicalStructure`. The lattest is link to the `PhysicalInstance` through its `RecordLayout`.
+We could also consider the use of the `FileFormat` property of `PhysicalStructure`. The latter is linked to the `PhysicalInstance` through its `RecordLayout`.
 
 ## DCAT Catalog
 
