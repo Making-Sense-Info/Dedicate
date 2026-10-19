@@ -135,7 +135,7 @@
   sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/description-to-description> ;
   dcterms:created "2026-10-19"^^xsd:date ;
   owl:annotatedProperty owl:equivalentClass ;
-  owl:annotatedSource dct:description ; # ???
+  owl:annotatedSource dcterms:description ; # ???
   owl:annotatedTarget dcterms:description ;
   sssom:confidence 0.9;
   sssom:mapping_justification semapv:ManualMappingCuration;
@@ -150,7 +150,7 @@
   sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/format-to-format> ;
   dcterms:created "2026-10-19"^^xsd:date ;
   owl:annotatedProperty owl:equivalentClass ;
-  owl:annotatedSource dct:format ; # ???
+  owl:annotatedSource dcterms:format ; # ???
   owl:annotatedTarget dcterms:format ;
   sssom:confidence 0.9;
   sssom:mapping_justification semapv:ManualMappingCuration;
