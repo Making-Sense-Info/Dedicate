@@ -8,33 +8,65 @@
 @prefix sssom: <https://w3id.org/sssom/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# The MappingSet is the set of all the identified mappings between Lifecycle and DCAT-AP
-<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset> a sssom:MappingSet ;
-  dcterms:description "Mapping DDI Lifecycle to DCAT-AP";
+# Questions:
+# - record_id useful?
+# - review?
+# - curation_rule for describing how to go from a class to another (see contactPoint)?
+
+# --- Mapping sets --- #
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog> a sssom:MappingSet ;
+  dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP dataset";
   dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
   sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
   sssom:mappings (
-  # Dataset mandatory properties
+  # Catalog mandatory properties
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/orgname-to-title>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/orgname-to-description>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/org-to-publisher>
+  ) .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset> a sssom:MappingSet ;
+  dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP dataset";
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
+  sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
+  sssom:mappings (
+  # Dataset mandatory and recommended properties
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme>
+  ) .
 
-  # Distribution mandatory properties
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution> a sssom:MappingSet ;
+  dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP distribution";
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
+  sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
+  sssom:mappings (
+  # Distribution mandatory  and recommended properties
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/datafileuri-to-accessurl>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/description-to-description>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/format-to-format>
   ) .
 
-  # Each mapping describe the relation between a Lifecycle element and a DCAT-AP one.
-  # Questions:
-  # - record_id useful?
-  # - review?
-  # - curation_rule for describing how to go from a class to another (see contactPoint)?
 
+# --- Mappings --- #
 
-# --- Dataset --- #
+# Catalog
+# They are only stubs for now
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/orgname-to-title>
+  a owl:Axiom .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/orgname-to-description>
+  a owl:Axiom .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog/org-to-publisher>
+  a owl:Axiom .
+
+# Dataset
+
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title>
     a owl:Axiom ;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title> ; # To be validated
@@ -114,7 +146,7 @@
     sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/keyword-to-keyword> ;
     sssom:comment "The `StudyUnit/Coverage/TopicalCoverage/Keyword` maps to `dcat:theme` when it contains a controlled vocabulary URI" .
 
-# --- Distribution --- #
+# Distribution
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/datafileuri-to-accessurl>
   a owl:Axiom ;
