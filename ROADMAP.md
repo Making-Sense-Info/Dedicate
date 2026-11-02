@@ -5,6 +5,8 @@
 - [ ] Add mapping for selected DCAT-AP optional properties
 - [ ] Implementation of step 2
 - [ ] Extension of the mapping to HealthDCAT-AP
+- [x] Mapping extension for variables (DDI Variable / LogicalRecord → HealthDCAT-AP `hasVariables` + CSVW) in [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl)
+- [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
 
 
 ## Ideas

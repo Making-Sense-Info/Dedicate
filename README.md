@@ -5,6 +5,7 @@
 This repository details how to produce [DCAT](https://www.w3.org/TR/vocab-dcat-3/) metadata for resources documented in [DDI](https://ddialliance.org/). The [roadmap](./ROADMAP.md) gives more detail on the operations planned.
 
 A common base for the different use cases is the [model-level mapping](./model-mapping.md) between DDI and DCAT.
+The curated SSSOM file is [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl) (Catalog / Dataset / Distribution for DCAT-AP, plus a `variables` set targeting HealthDCAT-AP `hasVariables` + CSVW).
 
 Specific use cases include:
 

@@ -176,3 +176,48 @@ Same as above.
 #### `dct:publisher`
 
 Here use the relevant information from Organisation that corresponds to the `dct:publisher` property.
+
+## Dataset structure / variables (HealthDCAT-AP + CSVW)
+
+Core DCAT-AP does not describe dataset variables. HealthDCAT-AP does, via CSVW:
+
+- `healthdcatap:hasStructuredData` on the Dataset
+- `healthdcatap:hasVariables` -> `csvw:TableGroup` -> `csvw:Table` -> `csvw:Column`
+
+SSSOM records live in the `variables` mapping set of
+[`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl).
+
+### DDI Lifecycle attachment path
+
+```text
+StudyUnit                    ->  dcat:Dataset
+  PhysicalInstanceReference
+    PhysicalInstance         ->  (also dcat:Distribution)
+      DataRelationshipReference
+        DataRelationship
+          LogicalRecord      ->  csvw:Table
+            VariablesInRecord / VariableUsedReference
+              Variable       ->  csvw:Column
+LogicalProduct (parent)      ->  csvw:TableGroup
+```
+
+Prefer variables listed in `VariablesInRecord` for the LogicalRecord linked from
+the PhysicalInstance. Do not dump every Variable in the ResourcePackage unless
+that scoped path is missing.
+
+### Column property mapping
+
+| DDI Lifecycle | CSVW / DCT | Notes |
+| --- | --- | --- |
+| `Variable` | `csvw:Column` | Column IRI = Variable URN |
+| `VariableName` | `csvw:name` | Machine name |
+| `Label` | `csvw:title` | Multi-language |
+| `Description` | `dcterms:description` | Multi-language |
+| `UserID` | `dcterms:identifier` | Optional business id (e.g. ConstancesID) |
+| `RecommendedDataType` (or representation class) | `csvw:datatype` | Map to XSD IRIs; see SSSOM comment |
+| `ConceptReference` / Concept URI | `csvw:propertyUrl` | Provisional; omit if absent — do not invent DPV-PD URIs |
+
+### Open points
+
+- See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`).
+- Code lists / coding systems: out of scope for this first variables set.
