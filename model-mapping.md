@@ -213,7 +213,7 @@ that scoped path is missing.
 | `VariableName` | `csvw:name` | Machine name |
 | `Label` | `csvw:title` | Multi-language |
 | `Description` | `dcterms:description` | Multi-language |
-| `UserID` | `dcterms:identifier` | Optional business id (e.g. ConstancesID) |
+| `UserID` | `dcterms:identifier` | Optional business id (e.g. ExampleID) |
 | `RecommendedDataType` (or representation class) | `csvw:datatype` | Map to XSD IRIs; see SSSOM comment |
 | `ConceptReference` / Concept URI | `csvw:propertyUrl` | Provisional; omit if absent — do not invent DPV-PD URIs |
 
@@ -221,3 +221,4 @@ that scoped path is missing.
 
 - See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`).
 - Code lists / coding systems: out of scope for this first variables set.
+- XSL implementation: [`ddi-l-to-healthdcat-ap/xsl/ddi-lifecycle-to-dcat-ap.xsl`](./ddi-l-to-healthdcat-ap/xsl/ddi-lifecycle-to-dcat-ap.xsl).

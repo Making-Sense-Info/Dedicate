@@ -354,7 +354,7 @@
     pav:authoredBy "<http://id.making-sense.info/romain>";
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
-    owl:annotatedSource lifecycle:userId; # ❓ Which typeOfUserID when several? (e.g. ConstancesID)
+    owl:annotatedSource lifecycle:userId; # ❓ Which typeOfUserID when several? (e.g. ExampleID)
     owl:annotatedTarget dcterms:identifier;
     sssom:confidence 0.8; # ⏳
     sssom:mapping_justification semapv:ManualMappingCuration;
