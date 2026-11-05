@@ -49,11 +49,13 @@ chmod +x run.sh   # once
 
 [`in/ddil-example.xml`](./in/ddil-example.xml) is a compact DDI Lifecycle 3.3 instance built from the public [HDH synthetic SNDS](https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante) on data.gouv.fr (Licence Ouverte 2.0, 50 fictional patients). Variable names match the published CSV headers, the DDI itself is hand-authored for Dedicate demos (not an official HDH product).
 
-It contains:
+It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several PhysicalInstances / tables under each):
 
-- 1 StudyUnit (`SNDS-SYNTH-HDH`)
-- 2 PhysicalInstances (`IR_BEN_R`, `ER_PHA_F`)
-- 15 variables (8 on beneficiaries, 7 on pharmacy claims)
+- Group `snds-synth-hdh` with 3 StudyUnits: `BEN`, `DCIR`, `DECES`
+- 5 PhysicalInstances: `IR_BEN_R`, `IR_IBA_R`, `ER_PHA_F`, `ER_BIO_F`, `KI_ECD_R`
+- 5 LogicalProducts (one per PI, Mekong-like) / 5 LogicalRecords -> still **one TableGroup per StudyUnit** with N Tables
+- StudyUnit Citation/Coverage filled in Mekong catalogue style (`Creator`/`Publisher`/`Contributor`, `dcterms:*`, Subject/Keyword, spatial, temporal)
+- 24 variables (shared where the same column name appears on several tables)
 - 2 code lists (`BEN_SEX_COD`, Yes/No for `PHA_DEC_TOP`)
 
 Try it:
