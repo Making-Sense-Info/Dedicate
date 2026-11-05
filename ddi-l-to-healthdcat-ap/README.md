@@ -45,6 +45,32 @@ chmod +x run.sh   # once
 .\run.ps1 -InputPath "path\to\input.xml" [-OutputPath "path\to\output.ttl"]
 ```
 
+## Validation
+
+HealthDCAT-AP specification provides [validation SHACL files](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#validation-of-healthdcat-ap).
+
+You can validate your HealthDCAT-AP files thanks to the nice SHACL Play! [Sparna]https://www.sparna.fr/en/ tool.
+
+### Web UI
+
+Try manually the [SHACL Play demo instance](https://shacl-play.sparna.fr/play/validate).
+
+### Java CLI
+
+> Note: requires Java 11+
+
+Download the Java archive from the [latest shacl-play-app-0.Y.Z-onejar.jar release](https://github.com/sparna-git/shacl-play/releases).
+
+Run the `validate` command:
+
+```bash
+java -jar shacl-play-app-0.12.5-onejar.jar validate \
+--input <path/to/input.rdf> \
+--shapes <path/to/shapes.ttl> \
+--output validation-report.html \
+--output validation-report.ttl
+```
+
 ## Sample input
 
 [`in/ddil-example.xml`](./in/ddil-example.xml) is a compact DDI Lifecycle 3.3 instance built from the public [HDH synthetic SNDS](https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante) on data.gouv.fr (Licence Ouverte 2.0, 50 fictional patients). Variable names match the published CSV headers, the DDI itself is hand-authored for Dedicate demos (not an official HDH product).
