@@ -48,57 +48,41 @@ The DCAT Recommendation defines the [Dataset class](https://www.w3.org/TR/vocab-
 
 What DDI-L class corresponds to the DCAT Dataset?
 
-How do we obtain the Dataset properties from DDI-L metadata? We can start with the properties that are actually used (recommended or mandatory) in well-established profiles like [DCAT-AP](https://semiceu.github.io/DCAT-AP/releases/3.0.1/). These are:
+How do we obtain the Dataset properties from DDI-L metadata? We start from StudyUnit `Citation` / `Coverage` (where catalogue DCAT enrichment now lives, PhysicalInstances are distributions / tables). 
 
-| Property          | Range        | DCAT-AP status |
-| ----------------- | ------------ | -------------- |
-| dct:title         | rdfs:Literal | mandatory      |
-| dct:description   | rdfs:Literal | mandatory      |
-| dcat:contactPoint | vcard:Kind   | recommended    |
-| dcat:keyword      | rdfs:Literal | recommended    |
-| dcat:theme        | skos:Concept | recommended    |
+Core DCAT-AP properties plus the StudyUnit support:
 
-#### `dcat:title`
+| Property | DDI Lifecycle (StudyUnit) | Notes |
+| --- | --- | --- |
+| `dct:title` | `Citation/Title` | mandatory |
+| `dct:description` | `Citation/Description` **or** `Citation/dcterms:description` |  |
+| `dct:creator` | `Citation/Creator` (`CreatorName`) | `foaf:Agent` |
+| `dct:publisher` | `Citation/Publisher` (`PublisherName`) | `foaf:Agent` |
+| `dcat:contactPoint` | `ContactInformation` if present, else `Citation/Contributor` | |
+| `dct:language` | `Citation/Language` | |
+| `dct:identifier` | `Citation/InternationalIdentifier/IdentifierContent` | |
+| `dct:source` / `conformsTo` / `accessRights` / `accrualPeriodicity` / `modified` | `Citation/dcterms:*` | URI-shaped values become IRIs |
+| `dcat:keyword` | `Coverage/TopicalCoverage/Keyword` | text + `xml:lang` |
+| `dcat:theme` | `Coverage/TopicalCoverage/Subject` (`controlledVocabularyURN`) | not Keyword |
+| `dct:spatial` | `Coverage/SpatialCoverage` | `dcterms:Location` |
+| `dct:temporal` | `Coverage/TemporalCoverage/ReferenceDate` | `dcterms:PeriodOfTime` + `dcat:startDate` / `endDate` |
+| `dcat:distribution` | `PhysicalInstanceReference` -> PhysicalInstance | one Distribution per PI |
 
-The StudyUnit `Citation/Title` and `Citation/Description` could be use for generating the `dct:title` and `dct:description`
+#### `dct:title` / `dct:description`
 
-Example: for a StudyUnit titled "National census 2026" we can have a Dataset with `dct:title` "Dataset for the National census 2026"
+`Citation/Title` -> `dcterms:title`. Description prefers `Citation/dcterms:description` (catalogue binding) and still accepts classic `Citation/Description`.
 
-#### `dct:description`
+#### `dct:creator` / `dct:publisher` / `dcat:contactPoint`
 
-We can use the same logic as above for `dcat:title`.
+Bibliographic names under Creator / Publisher become `foaf:Agent`. Contact prefers structured `ContactInformation`, otherwise Contributor names become `vcard:Kind` / `vcard:fn`.
 
-#### `dcat:contactPoint`
+#### `dcat:keyword` / `dcat:theme`
 
-It is a `vcard:Kind`, so we could use `StudyUnit/Citation/Publisher/PublisherReference` which is a `Organization`, which contains a `ContactInformation`.
+Keywords are free-text `TopicalCoverage/Keyword`. Themes come from `TopicalCoverage/Subject` via `controlledVocabularyURN` (e.g. data-theme `HEAL`). Legacy Keyword-as-URI still maps to theme for older DDI.
 
-#### `dcat:keyword`
+#### `dct:spatial` / `dct:temporal`
 
-The StudyUnit `Coverage/TopicalCoverage/Keyword` using the available multi-language string values.
-
-#### `dcat:theme`
-
-According to the [DCAT-AP specification for Dataset](https://semiceu.github.io/DCAT-AP/releases/3.0.1/#Dataset), his property should use at least one concept from the [Data Theme controlled vocabulary](https://publications.europa.eu/resource/authority/data-theme).
-
-Here, we should use the the `HEAL` concept, which is defined by:
-
-> dataset theme covering the domain of health which includes health conditions, diseases, treatments, healthcare services, and health policies
-
-The StudyUnit `Coverage/TopicalCoverage/Keyword` using the controlled vocabulary informations to produce a URI.
-
-The following diagram summarizes the decision process:
-
-```mermaid
-stateDiagram-v2
-
-state keyword_or_theme <<choice>>
-[*] --> ThemeOrKeyword
-ThemeOrKeyword --> keyword_or_theme
-keyword_or_theme --> Keyword : TopicalCoverage/Keyword only contains strings
-keyword_or_theme --> Theme : TopicalCoverage/Keyword contains a control vocabulary URI
-Keyword --> [*]
-Theme --> [*]
-```
+Spatial -> blank `dcterms:Location` (`rdfs:label` from Description, `dcterms:identifier` from CountryCode). Temporal -> `dcterms:PeriodOfTime` with `dcat:startDate` / `dcat:endDate` from `ReferenceDate` Start/End/SimpleDate.
 
 ## DCAT Distribution
 
@@ -191,15 +175,18 @@ SSSOM records live in the `variables` mapping set of
 
 ```text
 StudyUnit                    ->  dcat:Dataset
+  + healthdcatap:hasVariables ->  ONE csvw:TableGroup (per Dataset)
   PhysicalInstanceReference
-    PhysicalInstance         ->  (also dcat:Distribution)
+    PhysicalInstance         ->  dcat:Distribution
       DataRelationshipReference
         DataRelationship
-          LogicalRecord      ->  csvw:Table
+          LogicalRecord      ->  csvw:Table  (all records of the StudyUnit
+                                               aggregated in that TableGroup)
             VariablesInRecord / VariableUsedReference
               Variable       ->  csvw:Column
-LogicalProduct (parent)      ->  csvw:TableGroup
 ```
+
+HealthDCAT-AP R8: `hasVariables` is 0..*, but a TableGroup is the container for one or more tables, with one `csvw:Table` per LogicalRecord / PhysicalInstance.
 
 Prefer variables listed in `VariablesInRecord` for the LogicalRecord linked from
 the PhysicalInstance. Do not dump every Variable in the ResourcePackage unless
