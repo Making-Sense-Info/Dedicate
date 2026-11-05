@@ -2,11 +2,13 @@
 
 - [x] Map from DDI-L to main DCAT classes and DCAT-AP mandatory and recommended properties
 - [x] Implementation of step 1 (XSL) — first pass in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/) (graceful on incomplete DDI; not generative from SSSOM yet)
-- [ ] Add mapping for selected DCAT-AP optional properties
+- [x] StudyUnit Citation/Coverage catalogue DCAT enrichment → Dataset (creator, publisher, contactPoint, language, identifier, dcterms passthrough, Subject→theme, Keyword, spatial, temporal)
+- [x] One `hasVariables` / TableGroup per Dataset (aggregate LogicalRecords of all PIs; not one TG per LogicalProduct)
+- [ ] Add mapping for selected DCAT-AP optional properties still parked (version, provenance, …)
 - [ ] Implementation of step 2
 - [x] Mapping extension for variables (DDI Variable / LogicalRecord → HealthDCAT-AP `hasVariables` + CSVW) in [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl)
 - [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
-- [ ] Extension of the mapping to HealthDCAT-AP (remaining properties: healthCategory, accessRights, hdab, …)
+- [ ] Extension of the mapping to HealthDCAT-AP (remaining properties: healthCategory, hdab, …)
 
 
 ## Ideas
