@@ -73,7 +73,7 @@ flowchart TB
 
 Organisation below follows HealthDCAT-AP Release 8 Dataset property tables (cardinality / EHDS requirements).
 
-✅ = emitted by the current XSL; ❌ = not implemented yet.
+✅ = XSL implements the mapping (emitted when the DDI source field is present); ❌ = not implemented yet. Missing DDI fields are omitted.
 
 ### DCAT Dataset
 
@@ -109,7 +109,7 @@ Prefers `Citation/dcterms:description`; also accepts classic `Citation/Descripti
 
 ###### `dct:accessRights` ✅
 
-`Citation/dcterms:accessRights` -> `dcterms:accessRights` (URI-shaped values become IRIs).
+`Citation/dcterms:accessRights` -> `dcterms:accessRights`. Whole-value URIs, or catalogue strings `Label (https://…)`, become IRIs, otherwise kept as language-tagged literals.
 
 ###### `dcatap:applicableLegislation` ❌
 
@@ -133,7 +133,7 @@ When structured data is true: one `csvw:TableGroup` per Dataset (see [Dataset st
 
 ##### Recommended
 
-Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP “Reuse” E/A with optional cardinality).
+Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP "Reuse" E/A with optional cardinality).
 
 ###### `dct:publisher` ✅
 
@@ -161,7 +161,7 @@ Each `PhysicalInstanceReference` -> `dcat:distribution` (one Distribution per Ph
 
 ###### `dct:accrualPeriodicity` ✅
 
-`Citation/dcterms:accrualPeriodicity` -> `dcterms:accrualPeriodicity` (HealthDCAT-AP “frequency”).
+`Citation/dcterms:accrualPeriodicity` -> `dcterms:accrualPeriodicity` (HealthDCAT-AP "frequency"). Same URI / `Label (URI)` rule as `accessRights`.
 
 ###### `dct:spatial` ✅
 
@@ -177,7 +177,7 @@ Each `PhysicalInstanceReference` -> `dcat:distribution` (one Distribution per Ph
 
 ###### `dct:conformsTo` ✅
 
-`Citation/dcterms:conformsTo` -> `dcterms:conformsTo`.
+`Citation/dcterms:conformsTo` -> `dcterms:conformsTo`. Same URI / `Label (URI)` rule as `accessRights` (SNDS-TS keeps prose literals today).
 
 ###### `dct:creator` ✅
 
@@ -317,7 +317,7 @@ Not mapped.
 
 ###### `dpv:hasPersonalData` ❌
 
-HealthDCAT-AP “personal data”. Not mapped.
+HealthDCAT-AP "personal data". Not mapped.
 
 ###### `dqv:hasQualityAnnotation` ❌
 
@@ -341,7 +341,7 @@ Properties with cardinality requiring at least one value in HealthDCAT-AP R8.
 
 ###### `dcat:accessURL` ✅
 
-`PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set.
+`PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set. Omitted when absent (SNDS-TS has no `DataFileURI` today -> Distributions are title-only).
 
 ###### `dcatap:applicableLegislation` ❌
 
@@ -357,9 +357,17 @@ ELI / legal resource on the Distribution. No PhysicalInstance binding, not emitt
 
 `Citation/Description` (`Content` / `String`) -> `dcterms:description`.
 
+Omitted when absent.
+
 ###### `dct:format` ✅
 
-`Citation` format / DCTerms `format` -> `dcterms:format` (literal today). HealthDCAT-AP expects the EU file-type CV when applicable. Alternative DDI path not used yet: `PhysicalStructure/FileFormat` via RecordLayout.
+`Citation` format / DCTerms `format` -> `dcterms:format` (literal today).
+
+HealthDCAT-AP expects the EU file-type CV when applicable.
+
+Alternative DDI path not used yet: `PhysicalStructure/FileFormat` via RecordLayout.
+
+Omitted when absent.
 
 ###### `dcat:downloadURL` ❌
 

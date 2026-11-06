@@ -179,25 +179,33 @@
       <xsl:text> ;&#10;  dcterms:identifier {ded:literal(.)}</xsl:text>
     </xsl:for-each>
 
-    <!-- Other dcterms:* under Citation (source, conformsTo, accessRights, …) -->
-    <xsl:for-each select="r:Citation/*[
-        namespace-uri() eq 'http://purl.org/dc/terms/'
-        and local-name() = $ded:citation-dcterms
-        and local-name() ne 'description'
-      ]">
+    <!-- Other dcterms:* under Citation (source, conformsTo, accessRights, …).
+         Whole-value URI, or catalogue "Label (http://…)" → IRI; else literal. -->
+    <xsl:for-each-group
+      select="r:Citation/*[
+          namespace-uri() eq 'http://purl.org/dc/terms/'
+          and local-name() = $ded:citation-dcterms
+          and local-name() ne 'description'
+        ]"
+      group-by="local-name() || '|' || ded:dcterms-object-key(.)">
       <xsl:variable name="prop" as="xs:string" select="'dcterms:' || local-name()"/>
       <xsl:variable name="val" as="xs:string" select="normalize-space(.)"/>
+      <xsl:variable name="embedded-uri" as="xs:string?"
+        select="ded:embedded-uri($val)"/>
       <xsl:if test="$val">
         <xsl:choose>
           <xsl:when test="matches($val, '^(https?|urn):', 'i')">
             <xsl:text> ;&#10;  {$prop} {ded:iri($val)}</xsl:text>
+          </xsl:when>
+          <xsl:when test="$embedded-uri">
+            <xsl:text> ;&#10;  {$prop} {ded:iri($embedded-uri)}</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <xsl:text> ;&#10;  {$prop} {ded:literal($val, @xml:lang)}</xsl:text>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
-    </xsl:for-each>
+    </xsl:for-each-group>
 
     <!-- theme = Subject (+ optional controlledVocabularyURN); keyword = Keyword text -->
     <xsl:for-each-group
@@ -582,6 +590,30 @@
         else if (matches($value, '^\d{4}-\d{2}-\d{2}$'))
         then '&quot;' || $value || '&quot;^^xsd:date'
         else ded:literal($value)
+      "/>
+  </xsl:function>
+
+  <!-- Catalogue-style "Label (https://…)" → embedded URI, else empty -->
+  <xsl:function name="ded:embedded-uri" as="xs:string?">
+    <xsl:param name="text" as="xs:string?"/>
+    <xsl:variable name="t" as="xs:string"
+      select="normalize-space(string(($text, '')[1]))"/>
+    <xsl:sequence select="
+        if (matches($t, '\(https?://[^)\s]+\)'))
+        then replace($t, '^.*?\((https?://[^)\s]+)\).*$', '$1')
+        else ()
+      "/>
+  </xsl:function>
+
+  <!-- Dedupe key for dcterms passthrough (IRI object vs lang-tagged literal) -->
+  <xsl:function name="ded:dcterms-object-key" as="xs:string">
+    <xsl:param name="node" as="element()"/>
+    <xsl:variable name="val" as="xs:string" select="normalize-space($node)"/>
+    <xsl:variable name="embedded" as="xs:string?" select="ded:embedded-uri($val)"/>
+    <xsl:sequence select="
+        if (matches($val, '^(https?|urn):', 'i')) then lower-case($val)
+        else if ($embedded) then lower-case($embedded)
+        else $val || '|' || normalize-space($node/@xml:lang)
       "/>
   </xsl:function>
 

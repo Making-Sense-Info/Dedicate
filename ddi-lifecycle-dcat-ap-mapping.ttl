@@ -223,7 +223,7 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Citation dcterms children"@en;
     sssom:object_label "dcterms passthrough";
-    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified` → same properties on Dataset (URI-shaped values as IRIs)." .
+    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;
