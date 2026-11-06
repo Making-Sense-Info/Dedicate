@@ -1,0 +1,1131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Compact DDI Lifecycle 3.3 sample for Dedicate.
+  Schema and variable names from the public HDH synthetic SNDS on data.gouv.fr
+  (Licence Ouverte 2.0, 50 fictional patients):
+  https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante
+  Domains/tables: BENEFICIAIRE (IR_BEN_R, IR_IBA_R), DCIR (ER_PHA_F, ER_BIO_F),
+  Causes de décès (KI_ECD_R). Variable subsets only.
+  StudyUnit Citation/Coverage shaped like Mekong catalogue DCAT enrichment.
+  One LogicalProduct per PhysicalInstance (Mekong-like); Dedicate still emits one TableGroup per Dataset.
+  Hand-authored metadata for Dedicate demos — not an official SNDS or HDH DDI product.
+-->
+<DDIInstance xmlns="ddi:instance:3_3" xmlns:dcterms="http://purl.org/dc/terms/" isUniversallyUnique="true">
+   <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:6487eb3b-895e-5d73-9efc-c4ac8fecc3d9:1.0.0</r:URN>
+   <r:Citation xmlns:r="ddi:reusable:3_3">
+      <r:Title>
+         <r:String>Synthetic SNDS sample metadata (HDH / data.gouv.fr)</r:String>
+      </r:Title>
+   </r:Citation>
+   <g:Group xmlns:g="ddi:group:3_3" isUniversallyUnique="true">
+      <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:e3fde49f-0b78-5bcd-86ee-8755e2c7c924:1.0.0</r:URN>
+      <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">snds-synth-hdh</r:UserID>
+      <r:Citation xmlns:r="ddi:reusable:3_3">
+         <r:Title>
+            <r:String xml:lang="en">Synthetic SNDS (HDH)</r:String>
+            <r:String xml:lang="fr">SNDS synthétique (HDH)</r:String>
+         </r:Title>
+      </r:Citation>
+      <r:StudyUnitReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:5e2be0b9-4ae5-53f1-88ed-d6df0fa26649:1.0.0</r:URN>
+         <r:TypeOfObject>StudyUnit</r:TypeOfObject>
+      </r:StudyUnitReference>
+      <r:StudyUnitReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:f28b08e7-be75-5817-93cc-017a71777ae4:1.0.0</r:URN>
+         <r:TypeOfObject>StudyUnit</r:TypeOfObject>
+      </r:StudyUnitReference>
+      <r:StudyUnitReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:ad3b7fcc-1d84-5af9-8527-fd222c6ee382:1.0.0</r:URN>
+         <r:TypeOfObject>StudyUnit</r:TypeOfObject>
+      </r:StudyUnitReference>
+   </g:Group>
+   <g:ResourcePackage xmlns:g="ddi:group:3_3">
+      <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:52501744-d844-551b-b044-0dbe3d60ccc9:1.0.0</r:URN>
+      <r:Citation xmlns:r="ddi:reusable:3_3">
+         <r:Title>
+            <r:String xml:lang="en">Resource package for synthetic SNDS sample</r:String>
+            <r:String xml:lang="fr">Paquet de ressources pour l’exemple SNDS synthétique</r:String>
+         </r:Title>
+      </r:Citation>
+      <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a40d3f28-a8ba-5d07-a459-c49b06aafeea:1.0.0</r:URN>
+         <l:LogicalProductName>
+            <r:String xmlns:r="ddi:reusable:3_3">Logical product for IR_BEN_R</r:String>
+         </l:LogicalProductName>
+         <l:DataRelationship>
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:475773a4-dc65-5d4e-9454-6c14ee5350d5:1.0.0</r:URN>
+            <l:DataRelationshipName>
+               <r:String xmlns:r="ddi:reusable:3_3">DataRelationship for IR_BEN_R</r:String>
+            </l:DataRelationshipName>
+            <l:LogicalRecord>
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:b4d45769-f14a-5cbe-a017-733f34e75070:1.0.0</r:URN>
+               <l:LogicalRecordName>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">IR_BEN_R</r:String>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="fr">IR_BEN_R</r:String>
+               </l:LogicalRecordName>
+               <l:VariablesInRecord>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:89badb99-2ad9-592b-b6f2-44c48cbdebcb:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7fa9dba0-d852-5d16-8a77-ee174e048ed2:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:57ed57b0-3b07-57a0-ac86-171a562a2e95:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:ba13d81a-6751-5d3b-ac8a-030dd77cba0a:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:75686d14-3580-5e90-aa03-4971ce5aff96:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:aa8137f7-bbaa-5209-9524-c77dd3b005de:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:4bc9915f-964d-5afd-86be-38bd92c2e4a6:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:430bc7e3-b2b7-5ce4-9518-d7cbead599fa:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+               </l:VariablesInRecord>
+            </l:LogicalRecord>
+         </l:DataRelationship>
+      </l:LogicalProduct>
+      <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:3e58998d-4b9c-53c4-aff3-85dba7203fd7:1.0.0</r:URN>
+         <l:LogicalProductName>
+            <r:String xmlns:r="ddi:reusable:3_3">Logical product for IR_IBA_R</r:String>
+         </l:LogicalProductName>
+         <l:DataRelationship>
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:08f7408e-bee3-5f79-8638-1c855a6dfc81:1.0.0</r:URN>
+            <l:DataRelationshipName>
+               <r:String xmlns:r="ddi:reusable:3_3">DataRelationship for IR_IBA_R</r:String>
+            </l:DataRelationshipName>
+            <l:LogicalRecord>
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:f424edd0-f97f-5a05-908d-7857c72f6419:1.0.0</r:URN>
+               <l:LogicalRecordName>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">IR_IBA_R</r:String>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="fr">IR_IBA_R</r:String>
+               </l:LogicalRecordName>
+               <l:VariablesInRecord>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:89badb99-2ad9-592b-b6f2-44c48cbdebcb:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:57ed57b0-3b07-57a0-ac86-171a562a2e95:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:75686d14-3580-5e90-aa03-4971ce5aff96:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:aa8137f7-bbaa-5209-9524-c77dd3b005de:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:6f562ffe-ee47-5eed-80b1-bd973e25b49a:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:430bc7e3-b2b7-5ce4-9518-d7cbead599fa:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+               </l:VariablesInRecord>
+            </l:LogicalRecord>
+         </l:DataRelationship>
+      </l:LogicalProduct>
+      <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:779253d8-315a-5b46-a89f-456db39ef1b8:1.0.0</r:URN>
+         <l:LogicalProductName>
+            <r:String xmlns:r="ddi:reusable:3_3">Logical product for ER_PHA_F</r:String>
+         </l:LogicalProductName>
+         <l:DataRelationship>
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:23794b6d-a29e-56f1-8129-112ffd55db76:1.0.0</r:URN>
+            <l:DataRelationshipName>
+               <r:String xmlns:r="ddi:reusable:3_3">DataRelationship for ER_PHA_F</r:String>
+            </l:DataRelationshipName>
+            <l:LogicalRecord>
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:fc3b9815-7606-5b0a-bf8d-4fe8f7986b53:1.0.0</r:URN>
+               <l:LogicalRecordName>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">ER_PHA_F</r:String>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="fr">ER_PHA_F</r:String>
+               </l:LogicalRecordName>
+               <l:VariablesInRecord>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0c8b17e6-6e06-55cc-90b8-24214ca5c93a:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:2bd52995-fef1-5874-8c1a-eb7e2bc8ad2f:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:4ceb5170-e926-5c94-9e17-851467a67315:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:2d77697d-22f8-5ef4-b100-6ab050e04143:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:412d83c7-06fa-5433-9c28-24b7954b1baa:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:96811087-cd3f-5376-a539-11646a687e9c:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:359f2771-5949-5dda-9670-38ff65da4f36:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+               </l:VariablesInRecord>
+            </l:LogicalRecord>
+         </l:DataRelationship>
+      </l:LogicalProduct>
+      <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:5d3593f2-5ec4-5e7f-b734-1b3658071509:1.0.0</r:URN>
+         <l:LogicalProductName>
+            <r:String xmlns:r="ddi:reusable:3_3">Logical product for ER_BIO_F</r:String>
+         </l:LogicalProductName>
+         <l:DataRelationship>
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:d53e7d67-5b7b-515d-a35e-bf4d8928f005:1.0.0</r:URN>
+            <l:DataRelationshipName>
+               <r:String xmlns:r="ddi:reusable:3_3">DataRelationship for ER_BIO_F</r:String>
+            </l:DataRelationshipName>
+            <l:LogicalRecord>
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:60197ec9-5ae0-566f-857c-89d58a751063:1.0.0</r:URN>
+               <l:LogicalRecordName>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">ER_BIO_F</r:String>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="fr">ER_BIO_F</r:String>
+               </l:LogicalRecordName>
+               <l:VariablesInRecord>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0c8b17e6-6e06-55cc-90b8-24214ca5c93a:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:2bd52995-fef1-5874-8c1a-eb7e2bc8ad2f:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:366d687f-c74f-5d3e-8a4c-2d656eb93411:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:fedda0d3-a115-5dc6-bc6d-b3237e96c59c:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0c0b9e56-97fe-5b33-b2c5-2562695b56d5:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+               </l:VariablesInRecord>
+            </l:LogicalRecord>
+         </l:DataRelationship>
+      </l:LogicalProduct>
+      <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a52ca15c-c713-53e8-a3cd-4d7526e5772c:1.0.0</r:URN>
+         <l:LogicalProductName>
+            <r:String xmlns:r="ddi:reusable:3_3">Logical product for KI_ECD_R</r:String>
+         </l:LogicalProductName>
+         <l:DataRelationship>
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:b2462075-77e6-54b1-a8c0-8ecf533bf7ab:1.0.0</r:URN>
+            <l:DataRelationshipName>
+               <r:String xmlns:r="ddi:reusable:3_3">DataRelationship for KI_ECD_R</r:String>
+            </l:DataRelationshipName>
+            <l:LogicalRecord>
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:e45616b8-65e6-5a0f-827c-c3c323fbdd5a:1.0.0</r:URN>
+               <l:LogicalRecordName>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">KI_ECD_R</r:String>
+                  <r:String xmlns:r="ddi:reusable:3_3" xml:lang="fr">KI_ECD_R</r:String>
+               </l:LogicalRecordName>
+               <l:VariablesInRecord>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:89badb99-2ad9-592b-b6f2-44c48cbdebcb:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:c9a6419f-fb7f-5d42-affa-dd6fadf47d64:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7fd4ae51-4f05-5c1f-becb-fe225ab3b611:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:baa9e916-7c09-58f5-b1f5-14aed672fe82:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:1822142f-101f-5223-99a8-629ac3bbdbf1:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:5a9b932c-d065-5ebf-a0a6-1ea05de9319b:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+                  <l:VariableUsedReference>
+                     <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:4bc9915f-964d-5afd-86be-38bd92c2e4a6:1.0.0</r:URN>
+                     <r:TypeOfObject xmlns:r="ddi:reusable:3_3">Variable</r:TypeOfObject>
+                  </l:VariableUsedReference>
+               </l:VariablesInRecord>
+            </l:LogicalRecord>
+         </l:DataRelationship>
+      </l:LogicalProduct>
+      <pi:PhysicalInstance xmlns:pi="ddi:physicalinstance:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:9eaf0c87-16c8-5022-bdd0-017c752ce6d8:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">IR_BEN_R</r:UserID>
+         <r:Citation xmlns:r="ddi:reusable:3_3">
+            <r:Title>
+               <r:String xml:lang="en">Beneficiaries (IR_BEN_R)</r:String>
+               <r:String xml:lang="fr">Bénéficiaires (IR_BEN_R)</r:String>
+            </r:Title>
+            <r:Publisher>
+               <r:PublisherName>
+                  <r:String xml:lang="en">Health Data Hub (synthetic SNDS on data.gouv.fr)</r:String>
+                  <r:String xml:lang="fr">Health Data Hub (SNDS synthétique sur data.gouv.fr)</r:String>
+               </r:PublisherName>
+            </r:Publisher>
+         </r:Citation>
+         <r:DataRelationshipReference xmlns:r="ddi:reusable:3_3">
+            <r:URN>urn:ddi:org.example.snds.synth:475773a4-dc65-5d4e-9454-6c14ee5350d5:1.0.0</r:URN>
+            <r:TypeOfObject>DataRelationship</r:TypeOfObject>
+         </r:DataRelationshipReference>
+      </pi:PhysicalInstance>
+      <pi:PhysicalInstance xmlns:pi="ddi:physicalinstance:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:071b4141-4c04-566e-bae4-e2c634af5674:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">IR_IBA_R</r:UserID>
+         <r:Citation xmlns:r="ddi:reusable:3_3">
+            <r:Title>
+               <r:String xml:lang="en">Beneficiary identity (IR_IBA_R)</r:String>
+               <r:String xml:lang="fr">Identité bénéficiaire (IR_IBA_R)</r:String>
+            </r:Title>
+            <r:Publisher>
+               <r:PublisherName>
+                  <r:String xml:lang="en">Health Data Hub (synthetic SNDS on data.gouv.fr)</r:String>
+                  <r:String xml:lang="fr">Health Data Hub (SNDS synthétique sur data.gouv.fr)</r:String>
+               </r:PublisherName>
+            </r:Publisher>
+         </r:Citation>
+         <r:DataRelationshipReference xmlns:r="ddi:reusable:3_3">
+            <r:URN>urn:ddi:org.example.snds.synth:08f7408e-bee3-5f79-8638-1c855a6dfc81:1.0.0</r:URN>
+            <r:TypeOfObject>DataRelationship</r:TypeOfObject>
+         </r:DataRelationshipReference>
+      </pi:PhysicalInstance>
+      <pi:PhysicalInstance xmlns:pi="ddi:physicalinstance:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7a06e082-49ab-513f-a55a-6524ca2da7e2:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ER_PHA_F</r:UserID>
+         <r:Citation xmlns:r="ddi:reusable:3_3">
+            <r:Title>
+               <r:String xml:lang="en">Pharmacy claims (ER_PHA_F)</r:String>
+               <r:String xml:lang="fr">Prestations pharmacie (ER_PHA_F)</r:String>
+            </r:Title>
+            <r:Publisher>
+               <r:PublisherName>
+                  <r:String xml:lang="en">Health Data Hub (synthetic SNDS on data.gouv.fr)</r:String>
+                  <r:String xml:lang="fr">Health Data Hub (SNDS synthétique sur data.gouv.fr)</r:String>
+               </r:PublisherName>
+            </r:Publisher>
+         </r:Citation>
+         <r:DataRelationshipReference xmlns:r="ddi:reusable:3_3">
+            <r:URN>urn:ddi:org.example.snds.synth:23794b6d-a29e-56f1-8129-112ffd55db76:1.0.0</r:URN>
+            <r:TypeOfObject>DataRelationship</r:TypeOfObject>
+         </r:DataRelationshipReference>
+      </pi:PhysicalInstance>
+      <pi:PhysicalInstance xmlns:pi="ddi:physicalinstance:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:289a67ec-e52f-5a72-b820-d52ffdb9b8cd:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ER_BIO_F</r:UserID>
+         <r:Citation xmlns:r="ddi:reusable:3_3">
+            <r:Title>
+               <r:String xml:lang="en">Biology claims (ER_BIO_F)</r:String>
+               <r:String xml:lang="fr">Prestations biologie (ER_BIO_F)</r:String>
+            </r:Title>
+            <r:Publisher>
+               <r:PublisherName>
+                  <r:String xml:lang="en">Health Data Hub (synthetic SNDS on data.gouv.fr)</r:String>
+                  <r:String xml:lang="fr">Health Data Hub (SNDS synthétique sur data.gouv.fr)</r:String>
+               </r:PublisherName>
+            </r:Publisher>
+         </r:Citation>
+         <r:DataRelationshipReference xmlns:r="ddi:reusable:3_3">
+            <r:URN>urn:ddi:org.example.snds.synth:d53e7d67-5b7b-515d-a35e-bf4d8928f005:1.0.0</r:URN>
+            <r:TypeOfObject>DataRelationship</r:TypeOfObject>
+         </r:DataRelationshipReference>
+      </pi:PhysicalInstance>
+      <pi:PhysicalInstance xmlns:pi="ddi:physicalinstance:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:b8449b89-233e-5a2d-aafe-f1188672489a:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">KI_ECD_R</r:UserID>
+         <r:Citation xmlns:r="ddi:reusable:3_3">
+            <r:Title>
+               <r:String xml:lang="en">Death causes (KI_ECD_R)</r:String>
+               <r:String xml:lang="fr">Causes de décès (KI_ECD_R)</r:String>
+            </r:Title>
+            <r:Publisher>
+               <r:PublisherName>
+                  <r:String xml:lang="en">Health Data Hub (synthetic SNDS on data.gouv.fr)</r:String>
+                  <r:String xml:lang="fr">Health Data Hub (SNDS synthétique sur data.gouv.fr)</r:String>
+               </r:PublisherName>
+            </r:Publisher>
+         </r:Citation>
+         <r:DataRelationshipReference xmlns:r="ddi:reusable:3_3">
+            <r:URN>urn:ddi:org.example.snds.synth:b2462075-77e6-54b1-a8c0-8ecf533bf7ab:1.0.0</r:URN>
+            <r:TypeOfObject>DataRelationship</r:TypeOfObject>
+         </r:DataRelationshipReference>
+      </pi:PhysicalInstance>
+      <l:CategoryScheme xmlns:l="ddi:logicalproduct:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:d9a66a5b-f98e-517b-a88f-e807eb50a756:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_SEX_COD-category-scheme</r:UserID>
+         <l:CategorySchemeName>
+            <r:String xmlns:r="ddi:reusable:3_3">Category scheme for BEN_SEX_COD</r:String>
+         </l:CategorySchemeName>
+         <l:Category isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:430268db-a07f-5323-ad07-c54fd0aec0f9:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_SEX_COD:1</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Male</r:Content>
+               <r:Content xml:lang="fr">Homme</r:Content>
+            </r:Label>
+         </l:Category>
+         <l:Category isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:71d21845-3e18-5d4d-bc43-22a869549cef:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_SEX_COD:2</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Female</r:Content>
+               <r:Content xml:lang="fr">Femme</r:Content>
+            </r:Label>
+         </l:Category>
+      </l:CategoryScheme>
+      <l:CategoryScheme xmlns:l="ddi:logicalproduct:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0696829e-0aa3-597b-8369-d0d1c10d5d4c:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">YES_NO-category-scheme</r:UserID>
+         <l:CategorySchemeName>
+            <r:String xmlns:r="ddi:reusable:3_3">Category scheme for YES_NO</r:String>
+         </l:CategorySchemeName>
+         <l:Category isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a0c27c46-acb7-5e22-b29d-0c8b69d3e78c:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">YES_NO:0</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">No</r:Content>
+               <r:Content xml:lang="fr">Non</r:Content>
+            </r:Label>
+         </l:Category>
+         <l:Category isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:29a82945-f59c-5c26-bffc-864ab50e867d:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">YES_NO:1</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Yes</r:Content>
+               <r:Content xml:lang="fr">Oui</r:Content>
+            </r:Label>
+         </l:Category>
+      </l:CategoryScheme>
+      <l:CodeListScheme xmlns:l="ddi:logicalproduct:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:9fefd3b8-ddaa-5190-ab0c-71947b6419c7:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">snds-synth-codelist-scheme</r:UserID>
+         <l:CodeListSchemeName>
+            <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">Synthetic SNDS sample code lists</r:String>
+         </l:CodeListSchemeName>
+         <l:CodeList isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0d066ee2-fa17-58c6-8e4c-cb0e3795714b:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_SEX_COD</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Sex code</r:Content>
+               <r:Content xml:lang="fr">Code sexe</r:Content>
+            </r:Label>
+            <r:CategorySchemeReference xmlns:r="ddi:reusable:3_3">
+               <r:URN>urn:ddi:org.example.snds.synth:d9a66a5b-f98e-517b-a88f-e807eb50a756:1.0.0</r:URN>
+               <r:TypeOfObject>CategoryScheme</r:TypeOfObject>
+            </r:CategorySchemeReference>
+            <l:Code isUniversallyUnique="true">
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:bb0551d2-6f6b-5432-838c-f9001ca16c27:1.0.0</r:URN>
+               <r:CategoryReference xmlns:r="ddi:reusable:3_3">
+                  <r:URN>urn:ddi:org.example.snds.synth:430268db-a07f-5323-ad07-c54fd0aec0f9:1.0.0</r:URN>
+                  <r:TypeOfObject>Category</r:TypeOfObject>
+               </r:CategoryReference>
+               <r:Value xmlns:r="ddi:reusable:3_3">1</r:Value>
+            </l:Code>
+            <l:Code isUniversallyUnique="true">
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7141ca68-b89f-56d0-9978-2a80530da99a:1.0.0</r:URN>
+               <r:CategoryReference xmlns:r="ddi:reusable:3_3">
+                  <r:URN>urn:ddi:org.example.snds.synth:71d21845-3e18-5d4d-bc43-22a869549cef:1.0.0</r:URN>
+                  <r:TypeOfObject>Category</r:TypeOfObject>
+               </r:CategoryReference>
+               <r:Value xmlns:r="ddi:reusable:3_3">2</r:Value>
+            </l:Code>
+         </l:CodeList>
+         <l:CodeList isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:1957d0b2-bd86-5d1e-a756-3e98177b1c79:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">YES_NO</r:UserID>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Yes / No</r:Content>
+               <r:Content xml:lang="fr">Oui / Non</r:Content>
+            </r:Label>
+            <r:CategorySchemeReference xmlns:r="ddi:reusable:3_3">
+               <r:URN>urn:ddi:org.example.snds.synth:0696829e-0aa3-597b-8369-d0d1c10d5d4c:1.0.0</r:URN>
+               <r:TypeOfObject>CategoryScheme</r:TypeOfObject>
+            </r:CategorySchemeReference>
+            <l:Code isUniversallyUnique="true">
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a7510b6e-86ea-5861-ae87-62a67eef9ddc:1.0.0</r:URN>
+               <r:CategoryReference xmlns:r="ddi:reusable:3_3">
+                  <r:URN>urn:ddi:org.example.snds.synth:a0c27c46-acb7-5e22-b29d-0c8b69d3e78c:1.0.0</r:URN>
+                  <r:TypeOfObject>Category</r:TypeOfObject>
+               </r:CategoryReference>
+               <r:Value xmlns:r="ddi:reusable:3_3">0</r:Value>
+            </l:Code>
+            <l:Code isUniversallyUnique="true">
+               <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a7d6b242-1de6-54e8-94bb-11b192873975:1.0.0</r:URN>
+               <r:CategoryReference xmlns:r="ddi:reusable:3_3">
+                  <r:URN>urn:ddi:org.example.snds.synth:29a82945-f59c-5c26-bffc-864ab50e867d:1.0.0</r:URN>
+                  <r:TypeOfObject>Category</r:TypeOfObject>
+               </r:CategoryReference>
+               <r:Value xmlns:r="ddi:reusable:3_3">1</r:Value>
+            </l:Code>
+         </l:CodeList>
+      </l:CodeListScheme>
+      <l:VariableScheme xmlns:l="ddi:logicalproduct:3_3" isUniversallyUnique="true">
+         <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:19aa8a54-aae2-558e-a9d1-b803bcf284dd:1.0.0</r:URN>
+         <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">snds-synth-variable-scheme</r:UserID>
+         <l:VariableSchemeName>
+            <r:String xmlns:r="ddi:reusable:3_3" xml:lang="en">Synthetic SNDS sample variables</r:String>
+         </l:VariableSchemeName>
+         <r:Label xmlns:r="ddi:reusable:3_3">
+            <r:Content xml:lang="en">Variable subset from HDH synthetic SNDS tables on data.gouv.fr</r:Content>
+            <r:Content xml:lang="fr">Sous-ensemble de variables des tables SNDS synthétiques HDH sur data.gouv.fr</r:Content>
+         </r:Label>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:4bc9915f-964d-5afd-86be-38bd92c2e4a6:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_DCD_DTE</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_DCD_DTE</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Date of death</r:Content>
+               <r:Content xml:lang="fr">Date de décès</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:DateTimeRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Date</r:RecommendedDataType>
+               </r:DateTimeRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:89badb99-2ad9-592b-b6f2-44c48cbdebcb:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_IDT_ANO</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_IDT_ANO</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Anonymised beneficiary identifier</r:Content>
+               <r:Content xml:lang="fr">Identifiant anonymisé du bénéficiaire</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:57ed57b0-3b07-57a0-ac86-171a562a2e95:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_NAI_ANN</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_NAI_ANN</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Year of birth</r:Content>
+               <r:Content xml:lang="fr">Année de naissance</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:ba13d81a-6751-5d3b-ac8a-030dd77cba0a:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_NAI_MOI</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_NAI_MOI</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Month of birth</r:Content>
+               <r:Content xml:lang="fr">Mois de naissance</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:6f562ffe-ee47-5eed-80b1-bd973e25b49a:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_RES_COM</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_RES_COM</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Municipality of residence</r:Content>
+               <r:Content xml:lang="fr">Commune de résidence</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:aa8137f7-bbaa-5209-9524-c77dd3b005de:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_RES_DPT</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_RES_DPT</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Department of residence</r:Content>
+               <r:Content xml:lang="fr">Département de résidence</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7fa9dba0-d852-5d16-8a77-ee174e048ed2:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_RNG_GEM</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_RNG_GEM</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Birth rank (twins)</r:Content>
+               <r:Content xml:lang="fr">Rang de naissance (gémellité)</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:75686d14-3580-5e90-aa03-4971ce5aff96:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN_SEX_COD</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BEN_SEX_COD</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Sex code</r:Content>
+               <r:Content xml:lang="fr">Code sexe</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:CodeRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+                  <r:CodeListReference>
+                     <r:URN>urn:ddi:org.example.snds.synth:0d066ee2-fa17-58c6-8e4c-cb0e3795714b:1.0.0</r:URN>
+                     <r:TypeOfObject>CodeList</r:TypeOfObject>
+                  </r:CodeListReference>
+               </r:CodeRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:fedda0d3-a115-5dc6-bc6d-b3237e96c59c:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BIO_ACT_QSN</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BIO_ACT_QSN</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Number of biology acts</r:Content>
+               <r:Content xml:lang="fr">Nombre d’actes de biologie</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0c0b9e56-97fe-5b33-b2c5-2562695b56d5:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BIO_ORD_NUM</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BIO_ORD_NUM</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Biology sequence number</r:Content>
+               <r:Content xml:lang="fr">Numéro d’ordre biologie</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:366d687f-c74f-5d3e-8a4c-2d656eb93411:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BIO_PRS_IDE</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">BIO_PRS_IDE</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Biology act identifier</r:Content>
+               <r:Content xml:lang="fr">Identifiant de l’acte de biologie</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:c9a6419f-fb7f-5d42-affa-dd6fadf47d64:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">DCD_IDT_ENC</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">DCD_IDT_ENC</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Death certificate identifier</r:Content>
+               <r:Content xml:lang="fr">Identifiant du certificat de décès</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:5a9b932c-d065-5ebf-a0a6-1ea05de9319b:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ECD_CAU_LIB</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">ECD_CAU_LIB</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Cause label</r:Content>
+               <r:Content xml:lang="fr">Libellé de la cause</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:baa9e916-7c09-58f5-b1f5-14aed672fe82:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ECD_CAU_RNG</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">ECD_CAU_RNG</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Cause rank</r:Content>
+               <r:Content xml:lang="fr">Rang de la cause</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:1822142f-101f-5223-99a8-629ac3bbdbf1:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ECD_CIM_COD</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">ECD_CIM_COD</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">ICD cause code</r:Content>
+               <r:Content xml:lang="fr">Code CIM de la cause</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:0c8b17e6-6e06-55cc-90b8-24214ca5c93a:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">FLX_DIS_DTD</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">FLX_DIS_DTD</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Flux availability date</r:Content>
+               <r:Content xml:lang="fr">Date de mise à disposition du flux</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:DateTimeRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Date</r:RecommendedDataType>
+               </r:DateTimeRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:7fd4ae51-4f05-5c1f-becb-fe225ab3b611:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">FLX_PER_ANN</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">FLX_PER_ANN</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Flux year</r:Content>
+               <r:Content xml:lang="fr">Année du flux</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:430bc7e3-b2b7-5ce4-9518-d7cbead599fa:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">ORG_AFF_BEN</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">ORG_AFF_BEN</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Affiliation organisation</r:Content>
+               <r:Content xml:lang="fr">Organisme d’affiliation</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:96811087-cd3f-5376-a539-11646a687e9c:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PHA_ACT_PRU</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PHA_ACT_PRU</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Unit price</r:Content>
+               <r:Content xml:lang="fr">Prix unitaire</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Decimal</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:412d83c7-06fa-5433-9c28-24b7954b1baa:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PHA_ACT_QSN</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PHA_ACT_QSN</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Number of packs dispensed</r:Content>
+               <r:Content xml:lang="fr">Nombre de boîtes délivrées</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:359f2771-5949-5dda-9670-38ff65da4f36:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PHA_DEC_TOP</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PHA_DEC_TOP</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Deconditioning flag</r:Content>
+               <r:Content xml:lang="fr">Top déconditionnement</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:CodeRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+                  <r:CodeListReference>
+                     <r:URN>urn:ddi:org.example.snds.synth:1957d0b2-bd86-5d1e-a756-3e98177b1c79:1.0.0</r:URN>
+                     <r:TypeOfObject>CodeList</r:TypeOfObject>
+                  </r:CodeListReference>
+               </r:CodeRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:4ceb5170-e926-5c94-9e17-851467a67315:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PHA_PRS_C13</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PHA_PRS_C13</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">CIP13 specialty code</r:Content>
+               <r:Content xml:lang="fr">Code CIP13 de la spécialité</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:2d77697d-22f8-5ef4-b100-6ab050e04143:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PHA_PRS_IDE</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PHA_PRS_IDE</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">CIP7 specialty code</r:Content>
+               <r:Content xml:lang="fr">Code CIP7 de la spécialité</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:TextRepresentation xmlns:r="ddi:reusable:3_3" maxLength="100">
+                  <r:RecommendedDataType>String</r:RecommendedDataType>
+               </r:TextRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+         <l:Variable isUniversallyUnique="true">
+            <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:2bd52995-fef1-5874-8c1a-eb7e2bc8ad2f:1.0.0</r:URN>
+            <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">PRS_ORD_NUM</r:UserID>
+            <l:VariableName>
+               <r:String xmlns:r="ddi:reusable:3_3">PRS_ORD_NUM</r:String>
+            </l:VariableName>
+            <r:Label xmlns:r="ddi:reusable:3_3">
+               <r:Content xml:lang="en">Claim sequence number</r:Content>
+               <r:Content xml:lang="fr">Numéro d’ordre de la prestation</r:Content>
+            </r:Label>
+            <l:VariableRepresentation>
+               <r:NumericRepresentation xmlns:r="ddi:reusable:3_3">
+                  <r:RecommendedDataType>Integer</r:RecommendedDataType>
+               </r:NumericRepresentation>
+            </l:VariableRepresentation>
+         </l:Variable>
+      </l:VariableScheme>
+   </g:ResourcePackage>
+   <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
+      <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:5e2be0b9-4ae5-53f1-88ed-d6df0fa26649:1.0.0</r:URN>
+      <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN</r:UserID>
+      <r:Citation xmlns:r="ddi:reusable:3_3">
+         <r:Title>
+            <r:String xml:lang="en">Beneficiaries</r:String>
+            <r:String xml:lang="fr">Bénéficiaires</r:String>
+         </r:Title>
+         <r:Creator>
+            <r:CreatorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:CreatorName>
+         </r:Creator>
+         <r:Publisher>
+            <r:PublisherName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:PublisherName>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">contact@example.org</r:String>
+               <r:String xml:lang="en">contact@example.org</r:String>
+            </r:ContributorName>
+         </r:Contributor>
+         <r:Language>fr</r:Language>
+         <r:InternationalIdentifier>
+            <r:IdentifierContent>hdh-synth-ben</r:IdentifierContent>
+            <r:ManagingAgency>HDH-SYNTH</r:ManagingAgency>
+         </r:InternationalIdentifier>
+         <dcterms:description xml:lang="fr">Tables de référence bénéficiaires du SNDS synthétique HDH sur data.gouv.fr.</dcterms:description>
+         <dcterms:description xml:lang="en">Synthetic beneficiary reference tables from the HDH synthetic SNDS on data.gouv.fr.</dcterms:description>
+         <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
+         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
+         <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
+         <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+      </r:Citation>
+      <r:Coverage xmlns:r="ddi:reusable:3_3">
+         <r:TopicalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:51768c6c-ae8e-56fc-92da-4b20231d30b7:1.0.0</r:URN>
+            <r:Subject xml:lang="fr" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Santé</r:Subject>
+            <r:Subject xml:lang="en" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Health</r:Subject>
+            <r:Keyword xml:lang="fr">bénéficiaire</r:Keyword>
+            <r:Keyword xml:lang="fr">identité</r:Keyword>
+            <r:Keyword xml:lang="en">beneficiary</r:Keyword>
+            <r:Keyword xml:lang="en">identity</r:Keyword>
+         </r:TopicalCoverage>
+         <r:SpatialCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:ae0824d8-cc17-5d07-8014-408427fe736a:1.0.0</r:URN>
+            <r:Description>
+               <r:Content xml:lang="fr">France</r:Content>
+               <r:Content xml:lang="en">France</r:Content>
+            </r:Description>
+            <r:CountryCode>FR</r:CountryCode>
+         </r:SpatialCoverage>
+         <r:TemporalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:f8826cd1-bc95-5ddf-be2b-8a2b4fc2b4d7:1.0.0</r:URN>
+            <r:ReferenceDate>
+               <r:StartDate>2015</r:StartDate>
+               <r:EndDate>2023</r:EndDate>
+            </r:ReferenceDate>
+         </r:TemporalCoverage>
+      </r:Coverage>
+      <r:PhysicalInstanceReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:9eaf0c87-16c8-5022-bdd0-017c752ce6d8:1.0.0</r:URN>
+         <r:TypeOfObject>PhysicalInstance</r:TypeOfObject>
+      </r:PhysicalInstanceReference>
+      <r:PhysicalInstanceReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:071b4141-4c04-566e-bae4-e2c634af5674:1.0.0</r:URN>
+         <r:TypeOfObject>PhysicalInstance</r:TypeOfObject>
+      </r:PhysicalInstanceReference>
+   </s:StudyUnit>
+   <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
+      <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:f28b08e7-be75-5817-93cc-017a71777ae4:1.0.0</r:URN>
+      <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">DCIR</r:UserID>
+      <r:Citation xmlns:r="ddi:reusable:3_3">
+         <r:Title>
+            <r:String xml:lang="en">Ambulatory care claims (DCIR)</r:String>
+            <r:String xml:lang="fr">Soins de ville (DCIR)</r:String>
+         </r:Title>
+         <r:Creator>
+            <r:CreatorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:CreatorName>
+         </r:Creator>
+         <r:Publisher>
+            <r:PublisherName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:PublisherName>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">contact@example.org</r:String>
+               <r:String xml:lang="en">contact@example.org</r:String>
+            </r:ContributorName>
+         </r:Contributor>
+         <r:Language>fr</r:Language>
+         <r:InternationalIdentifier>
+            <r:IdentifierContent>hdh-synth-dcir</r:IdentifierContent>
+            <r:ManagingAgency>HDH-SYNTH</r:ManagingAgency>
+         </r:InternationalIdentifier>
+         <dcterms:description xml:lang="fr">Tables synthétiques de prestations pharmacie et biologie DCIR du SNDS synthétique HDH sur data.gouv.fr.</dcterms:description>
+         <dcterms:description xml:lang="en">Synthetic DCIR pharmacy and biology claim tables from the HDH synthetic SNDS on data.gouv.fr.</dcterms:description>
+         <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
+         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accrualPeriodicity xml:lang="fr">mensuelle</dcterms:accrualPeriodicity>
+         <dcterms:accrualPeriodicity xml:lang="en">monthly</dcterms:accrualPeriodicity>
+         <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+      </r:Citation>
+      <r:Coverage xmlns:r="ddi:reusable:3_3">
+         <r:TopicalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:85aa4aeb-96e8-585e-af3d-845cd0cdb816:1.0.0</r:URN>
+            <r:Subject xml:lang="fr" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Santé</r:Subject>
+            <r:Subject xml:lang="en" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Health</r:Subject>
+            <r:Keyword xml:lang="fr">pharmacie</r:Keyword>
+            <r:Keyword xml:lang="fr">biologie</r:Keyword>
+            <r:Keyword xml:lang="fr">soins de ville</r:Keyword>
+            <r:Keyword xml:lang="en">pharmacy</r:Keyword>
+            <r:Keyword xml:lang="en">biology</r:Keyword>
+            <r:Keyword xml:lang="en">ambulatory care</r:Keyword>
+         </r:TopicalCoverage>
+         <r:SpatialCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:11945e28-99f9-5ac7-bb26-d2e15125d4cc:1.0.0</r:URN>
+            <r:Description>
+               <r:Content xml:lang="fr">France</r:Content>
+               <r:Content xml:lang="en">France</r:Content>
+            </r:Description>
+            <r:CountryCode>FR</r:CountryCode>
+         </r:SpatialCoverage>
+         <r:TemporalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:5cfebe0c-aa7d-5235-b7c0-dee5fdfb9cbd:1.0.0</r:URN>
+            <r:ReferenceDate>
+               <r:StartDate>2015</r:StartDate>
+               <r:EndDate>2023</r:EndDate>
+            </r:ReferenceDate>
+         </r:TemporalCoverage>
+      </r:Coverage>
+      <r:PhysicalInstanceReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:7a06e082-49ab-513f-a55a-6524ca2da7e2:1.0.0</r:URN>
+         <r:TypeOfObject>PhysicalInstance</r:TypeOfObject>
+      </r:PhysicalInstanceReference>
+      <r:PhysicalInstanceReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:289a67ec-e52f-5a72-b820-d52ffdb9b8cd:1.0.0</r:URN>
+         <r:TypeOfObject>PhysicalInstance</r:TypeOfObject>
+      </r:PhysicalInstanceReference>
+   </s:StudyUnit>
+   <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
+      <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:ad3b7fcc-1d84-5af9-8527-fd222c6ee382:1.0.0</r:URN>
+      <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">DECES</r:UserID>
+      <r:Citation xmlns:r="ddi:reusable:3_3">
+         <r:Title>
+            <r:String xml:lang="en">Causes of death</r:String>
+            <r:String xml:lang="fr">Causes de décès</r:String>
+         </r:Title>
+         <r:Creator>
+            <r:CreatorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:CreatorName>
+         </r:Creator>
+         <r:Publisher>
+            <r:PublisherName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:PublisherName>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">contact@example.org</r:String>
+               <r:String xml:lang="en">contact@example.org</r:String>
+            </r:ContributorName>
+         </r:Contributor>
+         <r:Language>fr</r:Language>
+         <r:InternationalIdentifier>
+            <r:IdentifierContent>hdh-synth-deces</r:IdentifierContent>
+            <r:ManagingAgency>HDH-SYNTH</r:ManagingAgency>
+         </r:InternationalIdentifier>
+         <dcterms:description xml:lang="fr">Tables synthétiques de causes de décès du SNDS synthétique HDH sur data.gouv.fr.</dcterms:description>
+         <dcterms:description xml:lang="en">Synthetic causes-of-death tables from the HDH synthetic SNDS on data.gouv.fr.</dcterms:description>
+         <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
+         <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
+         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
+         <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
+         <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+      </r:Citation>
+      <r:Coverage xmlns:r="ddi:reusable:3_3">
+         <r:TopicalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:f94c67ee-73dd-5b90-ba7d-e25d8321fee1:1.0.0</r:URN>
+            <r:Subject xml:lang="fr" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Santé</r:Subject>
+            <r:Subject xml:lang="en" controlledVocabularyURN="http://publications.europa.eu/resource/authority/data-theme/HEAL">Health</r:Subject>
+            <r:Keyword xml:lang="fr">décès</r:Keyword>
+            <r:Keyword xml:lang="fr">cause</r:Keyword>
+            <r:Keyword xml:lang="fr">CIM</r:Keyword>
+            <r:Keyword xml:lang="en">death</r:Keyword>
+            <r:Keyword xml:lang="en">cause</r:Keyword>
+            <r:Keyword xml:lang="en">ICD</r:Keyword>
+         </r:TopicalCoverage>
+         <r:SpatialCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:9e2b2e1d-f2a5-5939-ac95-342643c41d2a:1.0.0</r:URN>
+            <r:Description>
+               <r:Content xml:lang="fr">France</r:Content>
+               <r:Content xml:lang="en">France</r:Content>
+            </r:Description>
+            <r:CountryCode>FR</r:CountryCode>
+         </r:SpatialCoverage>
+         <r:TemporalCoverage isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:08b76bf9-3778-5023-bfa3-502a7d2fabb6:1.0.0</r:URN>
+            <r:ReferenceDate>
+               <r:StartDate>2015</r:StartDate>
+               <r:EndDate>2023</r:EndDate>
+            </r:ReferenceDate>
+         </r:TemporalCoverage>
+      </r:Coverage>
+      <r:PhysicalInstanceReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:b8449b89-233e-5a2d-aafe-f1188672489a:1.0.0</r:URN>
+         <r:TypeOfObject>PhysicalInstance</r:TypeOfObject>
+      </r:PhysicalInstanceReference>
+   </s:StudyUnit>
+</DDIInstance>
