@@ -8,6 +8,7 @@
 - [ ] Implementation of step 2
 - [x] Mapping extension for variables (DDI Variable / LogicalRecord → HealthDCAT-AP `hasVariables` + CSVW) in [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl)
 - [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
+- [x] Code lists → HealthDCAT-AP `hasCodingSystem` / `hasCodeValues` (Dataset-scoped CodeList / Code)
 - [ ] Extension of the mapping to HealthDCAT-AP (remaining properties: healthCategory, hdab, …)
 
 

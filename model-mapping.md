@@ -299,13 +299,35 @@ Not mapped (possible future Universe / Description).
 
 Not mapped.
 
-###### `healthdcatap:hasCodingSystem` ❌
+###### `healthdcatap:hasCodingSystem` ✅
 
-Not mapped (code lists exist in DDI; RDF binding TBD).
+CodeLists referenced by `VariableRepresentation/CodeRepresentation/CodeListReference` on Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard` (+ `skos:ConceptScheme`). 
 
-###### `healthdcatap:hasCodeValues` ❌
+Support:
 
-Not mapped.
+- IRI = CodeList URN
+- `dct:identifier` = `UserID`
+- titles / `skos:prefLabel` from Label (fallback CodeListName)
+
+HealthDCAT-AP R8 prefers the Coding System NAL (or Wikidata) for well-known medical systems (ICD-10, SNOMED,...).
+
+Local Constances lists stay on the DDI CodeList URN, do not invent NAL IRIs.
+
+###### `healthdcatap:hasCodeValues` ✅
+
+Each `CodeList/Code` under those CodeLists -> `healthdcatap:hasCodeValues` -> `skos:Concept`.
+
+Support:
+
+- IRI = Code URN
+- `skos:notation` = `Value`
+- `skos:prefLabel` from the referenced Category Label
+- `skos:inScheme` = CodeList
+- `dct:identifier` = Code `UserID` when present.
+
+R8 Dataset table ranges this property as Literal, Dedicate emits Concept so each code stays tied to its coding system (TEHDAS / current HDAP examples).
+
+❗️ Revisit if SHACL enforces Literal-only.
 
 ###### `dpv:hasLegalBasis` ❌
 
@@ -554,5 +576,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`, `csvw:title` vs `csvw:titles`).
-- Code lists / coding systems: still out of scope for this variables set (`healthdcatap:hasCodingSystem` on Dataset remains ❌).
+- See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept).
+- Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).
