@@ -8,7 +8,9 @@ The curated mapping is in [`ddi-lifecycle-dcat-ap-mapping.ttl`](../ddi-lifecycle
 
 **Java 11 or newer** on the PATH (`java -version`).
 
-That’s the only install required. Saxon-HE (XSLT 3.0 engine) is fetched automatically the first time you run the script (needs network once).
+That’s the only install required for the transform. Saxon-HE (XSLT 3.0 engine) is fetched automatically the first time you run the script (needs network once).
+
+For optional SHACL validation, also download a Sparna [shacl-play onejar](https://github.com/sparna-git/shacl-play/releases).
 
 ### macOS
 
@@ -28,47 +30,70 @@ Install a JDK/JRE 11+ (e.g. [Temurin](https://adoptium.net/)), open a new PowerS
 java -version
 ```
 
-## Run
+## Run and validate
 
-From this directory (`ddi-l-to-healthdcat-ap`), pass any DDI Lifecycle 3.3 XML and an optional Turtle output path (default: `out/dcat-ap.ttl`):
+From this directory (`ddi-l-to-healthdcat-ap`), with the following arguments:
+
+| Argument | Env default | Role |
+| --- | --- | --- |
+| `--input` / `-InputPath` | — | DDI Lifecycle 3.3 XML (required) |
+| `--output` / `-OutputPath` | `out/dcat-ap.ttl` | Turtle output |
+| `--shacl-jar` / `-ShaclJar` | `SHACL_JAR` | If set, run Sparna `validate` after the transform |
+| `--shapes` / `-Shapes` | `SHACL_SHAPES` | Required when validating: local file/dir or `https://...` URL |
+| `--report` / `-Report` | `SHACL_REPORT` or `<output-stem>-shacl-report.html` | HTML report (+ sibling `.ttl`) |
+
+Sparna `validate` only accepts local paths for `--shapes`. If you pass an `https://` URL, `run.sh` / `run.ps1` download it into `lib/shacl-cache/` then pass the cached file.
+
+All HealthDCAT-AP Release 8 SHACL shapes (public / restricted / non-public, ranges, vocabularies, recommended,...) are listed under [Validation of HealthDCAT-AP](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#validation-of-healthdcat-ap).
+
+By default we use the non-public profile, for another access level, use an other shape filefrom that page.
+
+Default non-public shapes URL:
+
+`https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl`
 
 ### macOS / Linux
 
 ```bash
 chmod +x run.sh   # once
-./run.sh path/to/input.xml [path/to/output.ttl]
+
+# Transform only
+./run.sh --input in/ddil-example.xml --output out/ddil-example.ttl
+
+# Transform + SHACL (jar provided -> validation at the end, shapes via HTTPS)
+./run.sh --input in/ddil-example.xml --output out/ddil-example.ttl \
+  --shacl-jar /path/to/shacl-play-app-0.12.5-onejar.jar \
+  --shapes https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl \
+  --report out/ddil-example-shacl-report.html
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-.\run.ps1 -InputPath "path\to\input.xml" [-OutputPath "path\to\output.ttl"]
+# Transform only
+.\run.ps1 -InputPath "in\ddil-example.xml" -OutputPath "out\ddil-example.ttl"
+
+# Transform + SHACL (shapes via HTTPS)
+.\run.ps1 -InputPath "in\ddil-example.xml" -OutputPath "out\ddil-example.ttl" `
+  -ShaclJar "C:\path\shacl-play-app-0.12.5-onejar.jar" `
+  -Shapes "https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl" `
+  -Report "out\ddil-example-shacl-report.html"
 ```
 
-## Validation
+### Validation only
 
-HealthDCAT-AP specification provides [validation SHACL files](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#validation-of-healthdcat-ap).
+Same shapes catalogue: [Validation of HealthDCAT-AP](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#validation-of-healthdcat-ap).
 
-You can validate your HealthDCAT-AP files thanks to the nice SHACL Play! [Sparna]https://www.sparna.fr/en/ tool.
+You can use the [SHACL Play web UI](https://shacl-play.sparna.fr/play/validate).
 
-### Web UI
-
-Try manually the [SHACL Play demo instance](https://shacl-play.sparna.fr/play/validate).
-
-### Java CLI
-
-> Note: requires Java 11+
-
-Download the Java archive from the [latest shacl-play-app-0.Y.Z-onejar.jar release](https://github.com/sparna-git/shacl-play/releases).
-
-Run the `validate` command:
+Or the following command:
 
 ```bash
 java -jar shacl-play-app-0.12.5-onejar.jar validate \
---input <path/to/input.rdf> \
---shapes <path/to/shapes.ttl> \
---output validation-report.html \
---output validation-report.ttl
+  --input path/to/output.ttl \
+  --shapes path/to/shapes.ttl \
+  --output validation-report.html \
+  --output validation-report.ttl
 ```
 
 ## Sample input
@@ -84,16 +109,6 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 - 24 variables (shared where the same column name appears on several tables)
 - 2 code lists (`BEN_SEX_COD`, Yes/No for `PHA_DEC_TOP`)
 
-Try it:
-
-```bash
-./run.sh in/ddil-example.xml out/ddil-example.ttl
-```
-
-```powershell
-.\run.ps1 -InputPath "in\ddil-example.xml" -OutputPath "out\ddil-example.ttl"
-```
-
 ## What you get
 
 - One `dcat:Dataset` per StudyUnit, one `dcat:Distribution` per linked PhysicalInstance
@@ -101,6 +116,7 @@ Try it:
 - `healthdcatap:hasVariables` -> one CSVW `TableGroup` per Dataset, with one `csvw:Table` per LogicalRecord of the StudyUnit’s PhysicalInstances
 - `healthdcatap:hasCodingSystem` / `hasCodeValues` from CodeLists referenced by the Dataset’s variables (`dct:Standard` + `skos:Concept`)
 - Missing DDI fields are omitted (no hard failure)
+- Optional SHACL HTML + Turtle reports when `--shacl-jar` is set
 
 ## Layout
 
@@ -110,6 +126,6 @@ ddi-l-to-healthdcat-ap/
   run.sh / run.ps1
   xsl/ddi-lifecycle-to-dcat-ap.xsl   # XSLT 3.0
   in/ddil-example.xml                # sample DDI (HDH synthetic SNDS subset)
-  out/                               # generated Turtle
+  out/                               # generated Turtle (+ optional SHACL reports)
   lib/                               # Saxon jars (auto-downloaded, gitignored)
 ```
