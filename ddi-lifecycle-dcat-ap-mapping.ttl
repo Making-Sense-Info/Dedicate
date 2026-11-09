@@ -1,6 +1,8 @@
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix lifecycle: <https://rdf-vocabulary.ddialliance.org/lifecycle#>.
+@prefix healthdcatap: <http://healthdataportal.eu/ns/health#> .
+@prefix lifecycle: <https://rdf-vocabulary.ddialliance.org/lifecycle#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix pav: <http://purl.org/pav/> .
 @prefix semapv: <https://w3id.org/semapv/vocab/> .
@@ -8,16 +10,30 @@
 @prefix sssom: <https://w3id.org/sssom/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# Questions:
-# - record_id useful?
-# - review?
-# - curation_rule for describing how to go from a class to another (see contactPoint)?
+# =============================================================================
+# Review markers (use only these two in comments)
+# =============================================================================
+# ❓  We are not sure (open design choice, ambiguous source/target, needs decision)
+# ⏳  Needs validation (proposal written; colleagues should confirm before locking)
+# =============================================================================
+
+# Open points:
+# - ❓ Is sssom:record_id useful as used here?
+# - ⏳ Whole file still needs a review pass
+# - ❓ Curation rule for going from a class to another (see contactPoint)?
+# - ✅ Variables: one TableGroup per Dataset (aggregates LogicalRecords of the StudyUnit's PIs); not one TG per LogicalProduct
+# - ❓ Variables: VariablesInRecord only, or VariableScheme fallback?
+# - ❓ propertyUrl: ConceptReference URN vs Concept URI vs DPV-PD (do not invent)?
+# - ❓ RecommendedDataType → exact xsd:* table (+ representation-class fallback)?
+# - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
+# - ✅ hasCodeValues: R8 Dataset table ranges Literal; Dedicate emits skos:Concept (notation/prefLabel/inScheme) — confirm vs Literal-only
+# - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
 
 # --- Mapping sets --- #
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/catalog> a sssom:MappingSet ;
   dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP dataset";
-  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # ⏳ Adapt license
   sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
   sssom:mappings (
   # Catalog mandatory properties
@@ -28,26 +44,57 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset> a sssom:MappingSet ;
   dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP dataset";
-  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # ⏳ Adapt license
   sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
   sssom:mappings (
-  # Dataset mandatory and recommended properties
+  # Dataset properties from StudyUnit Citation / Coverage (catalogue DCAT enrichment)
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues>
   ) .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution> a sssom:MappingSet ;
   dcterms:description "Mapping DDI Lifecycle elements to DCAT-AP distribution";
-  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # Adapt license
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # ⏳ Adapt license
   sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
   sssom:mappings (
   # Distribution mandatory  and recommended properties
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/datafileuri-to-accessurl>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/description-to-description>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/format-to-format>
+  ) .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables> a sssom:MappingSet ; # ⏳ HealthDCAT-AP extension, not core DCAT-AP
+  dcterms:description "Mapping DDI Lifecycle elements to HealthDCAT-AP / CSVW variables";
+  dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;  # ⏳ Adapt license
+  sssom:mapping_provider <https://github.com/Making-Sense-Info/Dedicate/> ;
+  sssom:mappings (
+  # Variable / structure properties (HealthDCAT-AP + CSVW) — ⏳ review all records below
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalrecord-to-table>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-column>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/userid-to-identifier>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-hasstructureddata>
   ) .
 
 
@@ -69,17 +116,17 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title>
     a owl:Axiom ;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title> ; # To be validated
-    pav:authoredBy "<http://id.making-sense.info/romain>"; # Level-up? Use MS?
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>"; # ❓ Level-up? Use MS?
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass; # https://www.w3.org/TR/owl-ref/#equivalentClass-def
     owl:annotatedSource lifecycle:title;
     owl:annotatedTarget dcterms:title;
-    sssom:confidence 0.9; # TODO
+    sssom:confidence 0.9; # ⏳
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Title"@en; # https://docs.ddialliance.org/DDI-Lifecycle/dev/output/lifecycle40.ttl
     sssom:object_label "Title";
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcattitle> ; # 🤔
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcattitle> ; # ❓ Anchor stable?
     sssom:comment "We are mapping the `StudyUnit/Citation/Title` of DDI Lifecycle to the DC Terms `title` used in DCAT-AP" .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description>  a owl:Axiom;
@@ -94,10 +141,31 @@
     sssom:subject_label "Description"@en;
     sssom:object_label "Description";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctdescription> ;
-    sssom:comment "We are mapping the `StudyUnit/Citation/Description` of DDI Lifecycle to the DC Terms `description` used in DCAT-AP" .
+    sssom:comment "StudyUnit `Citation/Description` or `Citation/dcterms:description` → `dcterms:description` (Mekong catalogue binding uses dcterms children)." .
 
-  # https://github.com/Making-Sense-Info/Mekong/blob/main/cataloging/example.ttl#L22C43-L22C55
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:creator;
+    owl:annotatedTarget dcterms:creator;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Creator"@en;
+    sssom:object_label "creator";
+    sssom:comment "`StudyUnit/Citation/Creator` (CreatorName) → `dcterms:creator` / `foaf:Agent`." .
 
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:publisher;
+    owl:annotatedTarget dcterms:publisher;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Publisher"@en;
+    sssom:object_label "publisher";
+    sssom:comment "`StudyUnit/Citation/Publisher` (PublisherName) → `dcterms:publisher` / `foaf:Agent`." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint> ;
@@ -109,10 +177,57 @@
     sssom:confidence 0.8;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "ContactInformation"@en;
-    sssom:object_label "contact point"; # ❗️
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatcontactpoint> ;
-    sssom:comment "Using here the `ContactInformation` of an Organization" .
+    sssom:object_label "contact point";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctcreator--dctpublisher--dcatcontactpoint> ;
+    sssom:comment "Prefer structured `ContactInformation` → `dcat:contactPoint` when present." .
 
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:contributor;
+    owl:annotatedTarget dcat:contactPoint;
+    sssom:confidence 0.85;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Contributor"@en;
+    sssom:object_label "contact point";
+    sssom:comment "Mekong maps catalogue `contactPoint` to `Citation/Contributor` names → `dcat:contactPoint` / `vcard:fn` when no ContactInformation." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:language;
+    owl:annotatedTarget dcterms:language;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Language"@en;
+    sssom:object_label "language";
+    sssom:comment "`StudyUnit/Citation/Language` → `dcterms:language`." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:internationalIdentifier;
+    owl:annotatedTarget dcterms:identifier;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "InternationalIdentifier"@en;
+    sssom:object_label "identifier";
+    sssom:comment "`Citation/InternationalIdentifier/IdentifierContent` → `dcterms:identifier`." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:citation;
+    owl:annotatedTarget dcterms:source; # ❓ Representative; also conformsTo, accessRights, accrualPeriodicity, modified
+    sssom:confidence 0.85;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Citation dcterms children"@en;
+    sssom:object_label "dcterms passthrough";
+    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;
@@ -125,10 +240,21 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Keyword"@en;
     sssom:object_label "keyword";
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatkeyword> ;
-    sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/keyword-to-theme> ;
-    sssom:comment "The `StudyUnit/Coverage/TopicalCoverage/Keyword` maps to dcat:keyword when its value/range is a string" .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatkeyword--dcattheme> ;
+    sssom:comment "`StudyUnit/Coverage/TopicalCoverage/Keyword` (text + xml:lang) → `dcat:keyword`." .
 
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:subject;
+    owl:annotatedTarget dcat:theme;
+    sssom:confidence 0.95;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Subject"@en;
+    sssom:object_label "theme";
+    sssom:object_category <http://publications.europa.eu/resource/authority/data-theme/HEAL> ;
+    sssom:comment "`TopicalCoverage/Subject` + `controlledVocabularyURN` → `dcat:theme` (preferred theme binding)." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme> ;
@@ -137,14 +263,49 @@
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:keyword;
     owl:annotatedTarget dcat:theme;
-    sssom:confidence 1.0;
+    sssom:confidence 0.6; # ⏳ Legacy only — prefer subject-to-theme
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Keyword"@en;
-    sssom:object_label "keyword";
-    sssom:object_category <http://publications.europa.eu/resource/authority/data-theme/HEAL> ; # ❗️To be validated
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dcatkeyword> ;
-    sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/keyword-to-keyword> ;
-    sssom:comment "The `StudyUnit/Coverage/TopicalCoverage/Keyword` maps to `dcat:theme` when it contains a controlled vocabulary URI" .
+    sssom:object_label "theme";
+    sssom:object_category <http://publications.europa.eu/resource/authority/data-theme/HEAL> ;
+    sssom:see_also <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> ;
+    sssom:comment "Legacy: Keyword carrying a CV URI → `dcat:theme`. Prefer Subject + controlledVocabularyURN." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:spatialCoverage;
+    owl:annotatedTarget dcterms:spatial;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "SpatialCoverage"@en;
+    sssom:object_label "spatial";
+    sssom:comment "`Coverage/SpatialCoverage` → `dcterms:spatial` / `dcterms:Location` (label + CountryCode)." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:temporalCoverage;
+    owl:annotatedTarget dcterms:temporal;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "TemporalCoverage"@en;
+    sssom:object_label "temporal";
+    sssom:comment "`Coverage/TemporalCoverage/ReferenceDate` → `dcterms:temporal` / `PeriodOfTime` with `dcat:startDate`/`endDate`." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> ;
+    dcterms:created "2026-11-04"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:physicalInstance;
+    owl:annotatedTarget dcat:distribution;
+    sssom:confidence 0.95;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "PhysicalInstanceReference"@en;
+    sssom:object_label "distribution";
+    sssom:comment "`StudyUnit/PhysicalInstanceReference` → `dcat:distribution` (one Distribution per PhysicalInstance)." .
 
 # Distribution
 
@@ -167,7 +328,7 @@
   sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/description-to-description> ;
   dcterms:created "2026-10-19"^^xsd:date ;
   owl:annotatedProperty owl:equivalentClass ;
-  owl:annotatedSource dcterms:description ; # ???
+  owl:annotatedSource dcterms:description ; # ❓ Source should be lifecycle:description?
   owl:annotatedTarget dcterms:description ;
   sssom:confidence 0.9;
   sssom:mapping_justification semapv:ManualMappingCuration;
@@ -182,7 +343,7 @@
   sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution/format-to-format> ;
   dcterms:created "2026-10-19"^^xsd:date ;
   owl:annotatedProperty owl:equivalentClass ;
-  owl:annotatedSource dcterms:format ; # ???
+  owl:annotatedSource dcterms:format ; # ❓ Source should be a lifecycle term?
   owl:annotatedTarget dcterms:format ;
   sssom:confidence 0.9;
   sssom:mapping_justification semapv:ManualMappingCuration;
@@ -191,3 +352,213 @@
   sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctformat> ;
   sssom:see_also <https://docs.ddialliance.org/DDI-Lifecycle/3.3/xmlschema/schemas/dc_xsd/elements/any.html> ;
   sssom:comment "The `PhysicalInstance/Citation/format` maps to `dcterms:format" .
+
+# Variables
+# ⏳ This mapping set targets HealthDCAT-AP + CSVW (not core DCAT-AP). Review with health profile.
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup>
+    a owl:Axiom ;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup> ;
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-11-05"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:studyUnit;
+    owl:annotatedTarget csvw:TableGroup;
+    sssom:confidence 0.95;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "StudyUnit / Dataset"@en;
+    sssom:object_label "TableGroup";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ;
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/> ;
+    sssom:comment "One `csvw:TableGroup` per Dataset (StudyUnit). Aggregates LogicalRecords from all PhysicalInstances of the StudyUnit, even when Mekong emits one LogicalProduct per PI. HealthDCAT-AP R8 TableGroup holds one or more tables." .
+
+# Superseded by dataset-to-tablegroup (kept for history / redirects)
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalproduct-to-tablegroup>
+    a owl:Axiom ;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalproduct-to-tablegroup> ;
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:logicalProduct;
+    owl:annotatedTarget csvw:TableGroup;
+    sssom:confidence 0.3;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "LogicalProduct"@en;
+    sssom:object_label "TableGroup";
+    sssom:comment "Superseded: do not map one TableGroup per LogicalProduct. See dataset-to-tablegroup." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalrecord-to-table>  a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalrecord-to-table> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:logicalRecord; # ❓ LogicalRecord vs PhysicalStructure / RecordLayout?
+    owl:annotatedTarget csvw:Table;
+    sssom:confidence 0.9; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "LogicalRecord"@en;
+    sssom:object_label "Table";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `LogicalProduct/DataRelationship/LogicalRecord` maps to `csvw:Table`" . # ❓ Also LogicalRecordName → dcterms:title? (done in XSL, no SSSOM record yet)
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-column>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-column> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:variable;
+    owl:annotatedTarget csvw:Column;
+    sssom:confidence 0.9; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Variable"@en;
+    sssom:object_label "Column";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `LogicalRecord/VariablesInRecord` referenced `Variable` maps to `csvw:Column`" . # ❓ Fallback if VariablesInRecord empty: whole VariableScheme?
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:variableName;
+    owl:annotatedTarget csvw:name;
+    sssom:confidence 0.9; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "VariableName"@en;
+    sssom:object_label "name";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `Variable/VariableName` maps to `csvw:name`" . # ❓ Which lang if several String/@xml:lang? Prefer UserID?
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:label;
+    owl:annotatedTarget csvw:title; # ❓ CSVW often uses csvw:titles (plural) — title or titles?
+    sssom:confidence 0.9; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Label"@en;
+    sssom:object_label "title"; # ❓
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `Variable/Label` maps to `csvw:title`" .
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:description;
+    owl:annotatedTarget dcterms:description; # ❓ HealthDCAT examples use dcterms:description on Column — confirm vs csvw notes
+    sssom:confidence 0.9; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Description"@en;
+    sssom:object_label "Description";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `Variable/Description` maps to `dcterms:description` on the CSVW Column" .
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:recommendedDataType; # ❓ DDI CV DataType values → which xsd:* exactly?
+    owl:annotatedTarget csvw:datatype;
+    sssom:confidence 0.7; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "RecommendedDataType"@en;
+    sssom:object_label "datatype"; # ❓
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `Variable/VariableRepresentation/*/RecommendedDataType` maps to `csvw:datatype` (as an XSD datatype IRI)" . # ❓ Fallback from Text/Numeric/DateTime/CodeRepresentation if RecommendedDataType absent? CodeList ≠ datatype
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:conceptReference; # ❓ Concept URN vs external Concept URI vs DPV-PD?
+    owl:annotatedTarget csvw:propertyUrl;
+    sssom:confidence 0.5; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "ConceptReference"@en;
+    sssom:object_label "property URL"; # ❓ Label wording
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Column> ; # ⏳ Confirm release / anchor
+    sssom:comment "The `Variable/ConceptReference` maps to `csvw:propertyUrl` when a concept URI is available" . # ❓ Omit if absent — do not invent DPV-PD automatically
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/userid-to-identifier>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/userid-to-identifier> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:userId; # ❓ Which typeOfUserID when several? (e.g. ExampleID)
+    owl:annotatedTarget dcterms:identifier;
+    sssom:confidence 0.8; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "UserID"@en;
+    sssom:object_label "identifier"; # ❓ Optional? Overlaps with csvw:name?
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "The `Variable/UserID` maps to `dcterms:identifier` on the CSVW Column" .
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> ;
+    dcterms:created "2026-11-06"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:codeList;
+    owl:annotatedTarget healthdcatap:hasCodingSystem;
+    sssom:confidence 0.75; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "CodeList"@en;
+    sssom:object_label "coding system";
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
+    sssom:comment "CodeLists referenced by Variables of the StudyUnit’s LogicalRecords → `healthdcatap:hasCodingSystem` → `dct:Standard` (IRI = CodeList URN; `dct:identifier` = UserID; titles from Label/Name). Prefer Coding System NAL / Wikidata IRIs when the list is a known medical coding system; local Constances lists stay on the CodeList URN." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> ;
+    dcterms:created "2026-11-06"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:code;
+    owl:annotatedTarget healthdcatap:hasCodeValues;
+    sssom:confidence 0.7; # ⏳ R8 table says Literal; we emit skos:Concept
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Code"@en;
+    sssom:object_label "code values";
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
+    sssom:comment "`CodeList/Code` under Dataset-scoped CodeLists → `healthdcatap:hasCodeValues` → `skos:Concept` (IRI = Code URN; `skos:notation` = Value; `skos:prefLabel` from Category Label; `skos:inScheme` = CodeList). R8 Dataset table ranges Literal; Dedicate uses Concept so each code stays tied to its coding system." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass; # ❓ Not a class equivalence — property attachment rule
+    owl:annotatedSource lifecycle:studyUnit; # ❓ Source is StudyUnit but property is on dcat:Dataset
+    owl:annotatedTarget healthdcatap:hasVariables; # ⏳ Confirm HealthDCAT-AP namespace IRI (http://healthdataportal.eu/ns/health#)
+    sssom:confidence 0.8; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "StudyUnit"@en;
+    sssom:object_label "has variables"; # ❓ Label wording
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:see_also <https://healthdataeu.pages.code.europa.eu/healthdcat-ap/releases/release-7/changelog.html> ; # ⏳ Pin release (R7+ moved variables to Dataset)
+    sssom:comment "Dataset (from StudyUnit) has exactly one `healthdcatap:hasVariables` → TableGroup aggregating all LogicalRecords of its PhysicalInstances." .
+
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-hasstructureddata>    a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-hasstructureddata> ; # ⏳
+    pav:authoredBy "<http://id.making-sense.info/romain>";
+    dcterms:created "2026-10-29"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass; # ❓ Not a class equivalence — boolean presence rule
+    owl:annotatedSource lifecycle:variable; # ❓ Awkward subject: presence of Variable ⇒ boolean on Dataset
+    owl:annotatedTarget healthdcatap:hasStructuredData;
+    sssom:confidence 0.7; # ⏳
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Variable"@en;
+    sssom:object_label "has structured data"; # ❓ Label wording
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
+    sssom:comment "When `Variable` elements are present for the Dataset, `healthdcatap:hasStructuredData` is set to true" . # ❓ Omit vs false when no variables?

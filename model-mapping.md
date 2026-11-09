@@ -36,143 +36,545 @@ classDiagram
 
 The DCAT Recommendation defines the [Resource class](https://www.w3.org/TR/vocab-dcat-3/#Class:Resource) by: "This class carries properties common to all cataloged resources, including datasets and data services". This class is mainly useful to catalog resources that are not datasets or data services, so we may ignore it in this mapping exercice. However, it bears a great number of properties that are inherited by Dataset and DataService. These properties will be studied in the next section.
 
-## DCAT Dataset
+## DDI to HealthDCAT-AP
+
+Overview of how DDI Lifecycle projects onto HealthDCAT-AP / CSVW objects.
+
+Property-level detail follows in the following sections:
+
+- [Dataset](#dcat-dataset)
+- [Distribution](#dcat-distribution)
+- [variables / CSVW](#dataset-structure--variables-healthdcat-ap--csvw)
+
+```mermaid
+flowchart TB
+  SU["DDI StudyUnit<br/>Citation / Coverage"] ==>|1 : 1| DS["dcat:Dataset"]
+  SU -->|PhysicalInstanceReference| PI
+  DS -->|dcat:distribution| Dist
+  DS -->|healthdcatap:hasVariables| TG
+
+  PI["DDI PhysicalInstance"] ==>|1 : 1| Dist["dcat:Distribution"]
+  PI -->|DataRelationship| LR
+
+  SU -.->|one TG per Dataset| TG["csvw:TableGroup"]
+  TG -->|csvw:table| T
+
+  LR["DDI LogicalRecord"] ==>|1 : 1| T["csvw:Table"]
+  LR -->|VariablesInRecord| Var
+  T -->|csvw:column| Col
+
+  Var["DDI Variable"] ==>|1 : 1| Col["csvw:Column"]
+
+  classDef ddi fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a
+  classDef dcat fill:#dcfce7,stroke:#15803d,color:#14532d
+  class SU,PI,LR,Var ddi
+  class DS,Dist,TG,T,Col dcat
+```
+
+Organisation below follows HealthDCAT-AP Release 8 Dataset property tables (cardinality / EHDS requirements).
+
+✅ = XSL implements the mapping (emitted when the DDI source field is present); ❌ = not implemented yet. Missing DDI fields are omitted.
+
+### DCAT Dataset
 
 The DCAT Recommendation defines the [Dataset class](https://www.w3.org/TR/vocab-dcat-3/#Class:Dataset) as a "collection of data, published or curated by a single agent, and available for access or download in one or more representations".
 
-### Identification
+#### Identification
 
 ❗️TODO document how to identify an DCAT Dataset (its URI)
 
-### DDI Lifecycle
+#### DDI Lifecycle
 
-What DDI-L class corresponds to the DCAT Dataset?
+A DDI `StudyUnits` produces one `dcat:Dataset`.
 
-How do we obtain the Dataset properties from DDI-L metadata? We can start with the properties that are actually used (recommended or mandatory) in well-established profiles like [DCAT-AP](https://semiceu.github.io/DCAT-AP/releases/3.0.1/). These are:
+Bibliographic / coverage fields come from `Citation` and `Coverage`.
 
-| Property          | Range        | DCAT-AP status |
-| ----------------- | ------------ | -------------- |
-| dct:title         | rdfs:Literal | mandatory      |
-| dct:description   | rdfs:Literal | mandatory      |
-| dcat:contactPoint | vcard:Kind   | recommended    |
-| dcat:keyword      | rdfs:Literal | recommended    |
-| dcat:theme        | skos:Concept | recommended    |
+Linked PhysicalInstances become Distributions, LogicalRecords / Variables become the CSVW TableGroup (see [Dataset structure / variables](#dataset-structure--variables-healthdcat-ap--csvw)).
 
-#### `dcat:title`
+##### Mandatory
 
-The StudyUnit `Citation/Title` and `Citation/Description` could be use for generating the `dct:title` and `dct:description`
+Properties with cardinality requiring at least one value in HealthDCAT-AP R8 (or mandatory when `hasStructuredData` is true).
 
-Example: for a StudyUnit titled "National census 2026" we can have a Dataset with `dct:title` "Dataset for the National census 2026"
+###### `dct:title` ✅
 
-#### `dct:description`
+`Citation/Title/String` -> `dcterms:title` (multi-language).
 
-We can use the same logic as above for `dcat:title`.
+###### `dct:description` ✅
 
-#### `dcat:contactPoint`
+Prefers `Citation/dcterms:description`; also accepts classic `Citation/Description` (`Content` / `String`) -> `dcterms:description`.
 
-It is a `vcard:Kind`, so we could use `StudyUnit/Citation/Publisher/PublisherReference` which is a `Organization`, which contains a `ContactInformation`.
+###### `dct:identifier` ✅
 
-#### `dcat:keyword`
+`Citation/InternationalIdentifier/IdentifierContent` -> `dcterms:identifier`.
 
-The StudyUnit `Coverage/TopicalCoverage/Keyword` using the available multi-language string values.
+###### `dct:accessRights` ✅
 
-#### `dcat:theme`
+`Citation/dcterms:accessRights` -> `dcterms:accessRights`. Whole-value URIs, or catalogue strings `Label (https://…)`, become IRIs, otherwise kept as language-tagged literals.
 
-According to the [DCAT-AP specification for Dataset](https://semiceu.github.io/DCAT-AP/releases/3.0.1/#Dataset), his property should use at least one concept from the [Data Theme controlled vocabulary](https://publications.europa.eu/resource/authority/data-theme).
+###### `dcatap:applicableLegislation` ❌
 
-Here, we should use the the `HEAL` concept, which is defined by:
+No DDI Lifecycle binding yet (catalogue holds ELI URIs). Not emitted.
 
-> dataset theme covering the domain of health which includes health conditions, diseases, treatments, healthcare services, and health policies
+###### `healthdcatap:healthCategory` ❌
 
-The StudyUnit `Coverage/TopicalCoverage/Keyword` using the controlled vocabulary informations to produce a URI.
+EHDS Art. 51 CV. No StudyUnit field mapped; not emitted.
 
-The following diagram summarizes the decision process:
+###### `healthdcatap:hdab` ❌
 
-```mermaid
-stateDiagram-v2
+Health data access body (`healthdcatap:hdab`). Not emitted.
 
-state keyword_or_theme <<choice>>
-[*] --> ThemeOrKeyword
-ThemeOrKeyword --> keyword_or_theme
-keyword_or_theme --> Keyword : TopicalCoverage/Keyword only contains strings
-keyword_or_theme --> Theme : TopicalCoverage/Keyword contains a control vocabulary URI
-Keyword --> [*]
-Theme --> [*]
+###### `healthdcatap:hasStructuredData` ✅
+
+Derived: `true` when the StudyUnit’s PhysicalInstances expose variables via LogicalRecord / `VariablesInRecord`. Not read from a DDI boolean field.
+
+###### `healthdcatap:hasVariables` ✅
+
+When structured data is true: one `csvw:TableGroup` per Dataset (see [Dataset structure / variables](#dataset-structure--variables-healthdcat-ap--csvw)). Mandatory in HealthDCAT-AP whenever `hasStructuredData` is `true`.
+
+##### Recommended
+
+Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP "Reuse" E/A with optional cardinality).
+
+###### `dct:publisher` ✅
+
+`Citation/Publisher` (`PublisherName` / `OrganizationName`) -> `foaf:Agent` / `foaf:name`.
+
+###### `dcat:contactPoint` ✅
+
+Prefers structured `ContactInformation` -> `vcard:Kind`; else `Citation/Contributor` names -> `vcard:fn`.
+
+###### `dcat:distribution` ✅
+
+Each `PhysicalInstanceReference` -> `dcat:distribution` (one Distribution per PhysicalInstance).
+
+###### `dcat:keyword` ✅
+
+`Coverage/TopicalCoverage/Keyword` (text + `xml:lang`) -> `dcat:keyword`. Legacy Keyword carrying a CV URI still maps to `dcat:theme`.
+
+###### `dcat:theme` ✅
+
+`Coverage/TopicalCoverage/Subject` + `controlledVocabularyURN` -> `dcat:theme` IRI.
+
+###### `dct:language` ✅
+
+`Citation/Language` -> `dcterms:language` (IRI if URI-shaped, else literal).
+
+###### `dct:accrualPeriodicity` ✅
+
+`Citation/dcterms:accrualPeriodicity` -> `dcterms:accrualPeriodicity` (HealthDCAT-AP "frequency"). Same URI / `Label (URI)` rule as `accessRights`.
+
+###### `dct:spatial` ✅
+
+`Coverage/SpatialCoverage` -> blank `dcterms:Location` (`rdfs:label` from Description, `dcterms:identifier` from CountryCode).
+
+###### `dct:temporal` ✅
+
+`Coverage/TemporalCoverage/ReferenceDate` -> `dcterms:PeriodOfTime` with `dcat:startDate` / `dcat:endDate`.
+
+###### `dct:modified` ✅
+
+`Citation/dcterms:modified` -> `dcterms:modified`.
+
+###### `dct:conformsTo` ✅
+
+`Citation/dcterms:conformsTo` -> `dcterms:conformsTo`. Same URI / `Label (URI)` rule as `accessRights` (SNDS-TS keeps prose literals today).
+
+###### `dct:creator` ✅
+
+`Citation/Creator` -> `foaf:Agent` / `foaf:name`.
+
+###### `dct:type` ❌
+
+Dataset type CV. No StudyUnit mapping; not emitted.
+
+###### `dcat:version` ❌
+
+No StudyUnit field read by the XSL (`pi:DataFileVersion` on PhysicalInstance is out of scope for Dataset today).
+
+###### `dcat:temporalResolution` ❌
+
+Not mapped from DDI Coverage / Citation.
+
+###### `dct:issued` ❌
+
+Release date (`dct:issued`). Not mapped.
+
+###### `adms:identifier` ❌
+
+Other identifier. Not mapped.
+
+###### `dcat:inSeries` ❌
+
+Dataset series membership. Not mapped.
+
+##### Other
+
+Remaining HealthDCAT-AP Dataset properties (optional / profile extensions).
+
+###### `dct:source` ✅
+
+`Citation/dcterms:source` -> `dcterms:source`.
+
+###### `dct:provenance` ❌
+
+Not mapped (catalogue text exists upstream; no DDI Note / ProvenanceStatement binding yet).
+
+###### `dct:alternative` ❌
+
+Not mapped.
+
+###### `dcat:landingPage` ❌
+
+Not mapped (`foaf:page` / documentation also ❌).
+
+###### `foaf:page` ❌
+
+Documentation. Not mapped.
+
+###### `dcat:hasVersion` ❌
+
+Not mapped.
+
+###### `dcat:isReferencedBy` ❌
+
+Not mapped.
+
+###### `dcat:qualifiedRelation` ❌
+
+Not mapped.
+
+###### `prov:qualifiedAttribution` ❌
+
+Not mapped.
+
+###### `dcat:relation` ❌
+
+Related resource. Not mapped.
+
+###### `dcat:spatialResolutionInMeters` ❌
+
+Not mapped.
+
+###### `dcat:sample` ❌
+
+Not mapped.
+
+###### `prov:wasGeneratedBy` ❌
+
+Not mapped.
+
+###### `geodcatap:custodian` ❌
+
+Not mapped.
+
+###### `healthdcatap:analytics` ❌
+
+Not mapped.
+
+###### `healthdcatap:hdabCoordinator` ❌
+
+Not mapped.
+
+###### `healthdcatap:healthTheme` ❌
+
+Not mapped (distinct from `dcat:theme`).
+
+###### `healthdcatap:minTypicalAge` / `healthdcatap:maxTypicalAge` ❌
+
+Not mapped.
+
+###### `healthdcatap:numberOfRecords` ❌
+
+Not mapped.
+
+###### `healthdcatap:numberOfUniqueIndividuals` ❌
+
+Not mapped.
+
+###### `healthdcatap:populationCoverage` ❌
+
+Not mapped (possible future Universe / Description).
+
+###### `healthdcatap:retentionPeriod` ❌
+
+Not mapped.
+
+###### `healthdcatap:hasCodingSystem` ✅
+
+CodeLists referenced by `VariableRepresentation/CodeRepresentation/CodeListReference` on Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard` (+ `skos:ConceptScheme`). 
+
+Support:
+
+- IRI = CodeList URN
+- `dct:identifier` = `UserID`
+- titles / `skos:prefLabel` from Label (fallback CodeListName)
+
+HealthDCAT-AP R8 prefers the Coding System NAL (or Wikidata) for well-known medical systems (ICD-10, SNOMED,...).
+
+Local Constances lists stay on the DDI CodeList URN, do not invent NAL IRIs.
+
+###### `healthdcatap:hasCodeValues` ✅
+
+Each `CodeList/Code` under those CodeLists -> `healthdcatap:hasCodeValues` -> `skos:Concept`.
+
+Support:
+
+- IRI = Code URN
+- `skos:notation` = `Value`
+- `skos:prefLabel` from the referenced Category Label
+- `skos:inScheme` = CodeList
+- `dct:identifier` = Code `UserID` when present.
+
+R8 Dataset table ranges this property as Literal, Dedicate emits Concept so each code stays tied to its coding system (TEHDAS / current HDAP examples).
+
+❗️ Revisit if SHACL enforces Literal-only.
+
+###### `dpv:hasLegalBasis` ❌
+
+Not mapped.
+
+###### `dpv:hasPurpose` ❌
+
+Not mapped.
+
+###### `dpv:hasPersonalData` ❌
+
+HealthDCAT-AP "personal data". Not mapped.
+
+###### `dqv:hasQualityAnnotation` ❌
+
+Not mapped.
+
+###### `adms:versionNotes` ❌
+
+Not mapped.
+
+### DCAT Distribution
+
+The DCAT Recommendation defines the [Distribution class](https://www.w3.org/TR/vocab-dcat-3/#Class:Distribution) as a specific representation of a dataset (format, access, rights, etc.).
+
+#### DDI Lifecycle
+
+A PhysicalInstance produces one `dcat:Distribution`, linked from the StudyUnit Dataset via `dcat:distribution` (see Dataset § Recommended).
+
+##### Mandatory
+
+Properties with cardinality requiring at least one value in HealthDCAT-AP R8.
+
+###### `dcat:accessURL` ✅
+
+`PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set. Omitted when absent (SNDS-TS has no `DataFileURI` today -> Distributions are title-only).
+
+###### `dcatap:applicableLegislation` ❌
+
+ELI / legal resource on the Distribution. No PhysicalInstance binding, not emitted.
+
+##### Recommended
+
+###### `dct:title` ✅
+
+`Citation/Title/String` -> `dcterms:title`.
+
+###### `dct:description` ✅
+
+`Citation/Description` (`Content` / `String`) -> `dcterms:description`.
+
+Omitted when absent.
+
+###### `dct:format` ✅
+
+`Citation` format / DCTerms `format` -> `dcterms:format` (literal today).
+
+HealthDCAT-AP expects the EU file-type CV when applicable.
+
+Alternative DDI path not used yet: `PhysicalStructure/FileFormat` via RecordLayout.
+
+Omitted when absent.
+
+###### `dcat:downloadURL` ❌
+
+Direct download link. Not mapped (distinct from `accessURL`).
+
+###### `dcat:mediaType` ❌
+
+IANA media type. Not mapped.
+
+###### `dct:license` ❌
+
+Licence document on the Distribution. Not mapped.
+
+###### `dct:rights` ❌
+
+Rights statement. Not mapped.
+
+###### `dcatap:availability` ❌
+
+Planned-availability CV. Not mapped.
+
+###### `dcat:byteSize` ❌
+
+Not mapped.
+
+###### `spdx:checksum` ❌
+
+Checksum. Not mapped.
+
+###### `dcat:compressFormat` ❌
+
+Compression format. Not mapped.
+
+###### `dcat:packageFormat` ❌
+
+Packaging format. Not mapped.
+
+###### `dct:language` ❌
+
+Distribution language. Not mapped (Dataset language is mapped separately).
+
+###### `dct:modified` ❌
+
+Distribution modification date. `pi:DataFileVersion/@versionDate` can bu used?
+
+###### `dct:issued` ❌
+
+Release date. Not mapped.
+
+###### `dct:conformsTo` ❌
+
+Linked schemas / standards the Distribution conforms to (`linked schemas` in HealthDCAT-AP). Not mapped at Distribution level.
+
+###### `odrl:hasPolicy` ❌
+
+ODRL policy. Not mapped.
+
+###### `foaf:page` ❌
+
+Documentation. Not mapped.
+
+###### `dcat:accessService` ❌
+
+Link to a Data Service. Not mapped.
+
+###### `dcat:spatialResolutionInMeters` ❌
+
+Not mapped.
+
+###### `dcat:temporalResolution` ❌
+
+Not mapped.
+
+###### `adms:status` ❌
+
+Distribution-status CV. Not mapped.
+
+### DCAT Catalog
+
+Out of scope for now.
+
+A stub remains in the XSL (`Organization` -> Catalog title / description / publisher) and in the SSSOM `catalog` mapping set, but it is not part of the Constances / CASD delivery path and is not linked to Datasets via `dcat:dataset`.
+
+Revisit only if Dedicate must emit a standalone catalogue.
+
+### Dataset structure / variables (HealthDCAT-AP + CSVW)
+
+Core DCAT-AP does not describe dataset variables. HealthDCAT-AP does, via CSVW linked from the Dataset:
+
+- `healthdcatap:hasStructuredData` / `healthdcatap:hasVariables` on the Dataset (see Dataset § Mandatory)
+- `csvw:TableGroup` -> `csvw:Table` -> `csvw:Column`
+
+#### DDI Lifecycle attachment path
+
+```text
+StudyUnit                    ->  dcat:Dataset
+  + healthdcatap:hasVariables ->  one csvw:TableGroup per Dataset
+  PhysicalInstanceReference
+    PhysicalInstance         ->  dcat:Distribution
+      DataRelationshipReference
+        DataRelationship
+          LogicalRecord      ->  csvw:Table  (all records of the StudyUnit aggregated in that TableGroup)
+            VariablesInRecord / VariableUsedReference
+              Variable       ->  csvw:Column
 ```
 
-## DCAT Distribution
+#### Table Group
 
-The DCAT Recommendation defines the [Distribution class](https://www.w3.org/TR/vocab-dcat-3/#Class:Distribution) as follows:
+We produce one TableGroup per StudyUnit / Dataset (not one per LogicalProduct).
 
-"A specific representation of a dataset. A dataset might be available in multiple serializations that may differ in various ways, including natural language, media-type or format, schematic organization, temporal and spatial resolution, level of detail or profiles (which might specify any or all of the above)."
+##### Mandatory
 
-### DDI Lifecycle
+###### `csvw:table` ✅
 
-What DDI-L class corresponds to the DCAT Distribution?
+One `csvw:table` link per LogicalRecord aggregated under the StudyUnit’s PhysicalInstances.
 
-How do we obtain the Distribution properties from DDI-L metadata? As for the the dataset, we can start with properties used in DCAT-AP, which are:
+###### `dct:title` ✅
 
-| Property        | Range                 | DCAT-AP status |
-| --------------- | --------------------- | -------------- |
-| dcat:accessURL  | rdfs:Resource         | mandatory      |
-| dct:description | rdfs:Literal          | recommended    |
-| dct:format      | dct:MediaTypeOrExtent | recommended    |
+Built from the StudyUnit `Citation/Title` strings, suffixed with ` — variables` (multi-language support, suffix to discuss ❗️).
 
-> [!NOTE]  
-> DCAT-AP also recommmends the "availability" property, but this is an extension not defined in DCAT.
+#### Table
 
-How do we derive the property that links a dataset to a distribution?
+One LogicalRecord produces one `csvw:Table`.
 
-#### `dcat:accessURL`
+##### Mandatory
 
-The `PhysicalInstance` class in Lifecycle has a [`DataFileIdentification`](https://ddialliance.github.io/ddimodel-web/DDI-L-3.3/composite-types/DataFileIdentificationType/) field for which the documentation explains:
+###### `csvw:column` ✅
 
-> Identifies the data file documented in the physical instance and provides information about its location.
+One link per Variable referenced from `VariablesInRecord` / `VariableUsedReference`.
 
-More specifically, `DataFileIdentification` has a `DataFileURI` property.
+###### `dct:title` ✅
 
-#### `dct:description`
+`LogicalRecord/LogicalRecordName/String` -> `dcterms:title`.
 
-For this, we should probably use the [`Citation`](https://ddialliance.github.io/ddimodel-web/DDI-L-3.3/composite-types/CitationType/) property. It provides several "DC-like" fields and the possibility to add any Dublin Core terms with `DCTerms` ([here](https://docs.ddialliance.org/DDI-Lifecycle/3.3/xmlschema/schemas/dc_xsd/elements/any.html) is the XML schema doc for this).
+##### Recommended
 
-#### `dct:format`
+###### `csvw:url` ❌
 
-The most direct way to implement this is to use as mentionned earlier the `Citation` element.
+URL of the CSV file (synthetic / anonymised extract in HealthDCAT-AP usage notes). Not mapped.
 
-We could also consider the use of the `FileFormat` property of `PhysicalStructure`. The latter is linked to the `PhysicalInstance` through its `RecordLayout`.
+###### `csvw:keyword` ❌
 
-## DCAT Catalog
+Keywords on the table. Not mapped.
 
-The DCAT Recommendation defines the [Catalog](https://www.w3.org/TR/vocab-dcat-3/#Class:Catalog) as such:
+#### Column
 
-"A curated collection of metadata about resources."
+One DDI Variable produces one `csvw:Column` (Column IRI = Variable URN).
 
-With two usage notes:
+##### Mandatory
 
-"A Web-based data catalog is typically represented as a single instance of this class."
+###### `csvw:name` ✅
 
-"Datasets and data services are examples of resources in the context of a data catalog."
+`Variable/VariableName/String` -> `csvw:name` (first name string).
 
-### DDI Lifecycle
+###### `csvw:title` ✅
 
-[The DCAT-AP entry for Catalog](https://semiceu.github.io/DCAT-AP/releases/3.0.1/#Catalogue) defines these three mandatory properties:
+`Variable/Label/Content` -> `csvw:title` (multi-language).
 
-| Property        | Range        | DCAT-AP status |
-| --------------- | ------------ | -------------- |
-| dct:title       | rdfs:Literal | mandatory      |
-| dct:description | rdfs:Literal | mandatory      |
-| dct:publisher   | dct:Agent    | mandatory      |
+###### `dct:description` ✅
 
-The DDI Lifecycle `Organization` is a good starting point for these informations.
+`Variable/Description/Content` -> `dcterms:description`
 
-#### `dct:title`
+Omitted when DDI has no Description.
 
-Here, a generated text of the form: "Catalog for [Organization/OrganizationIdentification/OrganizationName]" would be a good fit.
+###### `csvw:datatype` ✅
 
-#### `dct:description`
+`VariableRepresentation/*/RecommendedDataType` via the XSL datatype map, with fallbacks from Text / Numeric / DateTime / CodeRepresentation -> XSD datatype.
 
-Same as above.
+Omitted when nothing can be inferred.
 
-#### `dct:publisher`
+##### Recommended
 
-Here use the relevant information from Organisation that corresponds to the `dct:publisher` property.
+###### `csvw:propertyUrl` ✅
+
+`Variable/ConceptReference/URN` when present -> `csvw:propertyUrl`.
+
+Omit if absent.
+
+##### Other
+
+###### `dct:identifier` ✅
+
+`Variable/UserID` -> `dcterms:identifier` (extra Dedicate binding, not listed on the HealthDCAT-AP R8 Column table).
+
+#### Open points
+
+- See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept).
+- Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).
