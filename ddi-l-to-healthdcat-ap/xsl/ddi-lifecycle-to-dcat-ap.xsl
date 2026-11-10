@@ -608,9 +608,24 @@
       <xsl:text> ;&#10;  csvw:title {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
     </xsl:for-each>
 
-    <xsl:for-each select="r:Description/r:Content">
-      <xsl:text> ;&#10;  dcterms:description {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
-    </xsl:for-each>
+    <!-- SHACL CSVWColumnShape: ≥1 dct:description (Dedicate #9). Prefer Description; else Label; else VariableName. -->
+    <xsl:variable name="descriptions" as="item()*"
+      select="r:Description/(r:Content | r:String)[normalize-space(.) ne '']"/>
+    <xsl:choose>
+      <xsl:when test="exists($descriptions)">
+        <xsl:for-each select="$descriptions">
+          <xsl:text> ;&#10;  dcterms:description {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:when test="exists(r:Label/r:Content[normalize-space(.) ne ''])">
+        <xsl:for-each select="r:Label/r:Content[normalize-space(.) ne '']">
+          <xsl:text> ;&#10;  dcterms:description {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:when test="$name">
+        <xsl:text> ;&#10;  dcterms:description {ded:literal($name)}</xsl:text>
+      </xsl:when>
+    </xsl:choose>
 
     <xsl:for-each select="r:UserID ! normalize-space(.)[. ne '']">
       <xsl:text> ;&#10;  dcterms:identifier {ded:literal(.)}</xsl:text>

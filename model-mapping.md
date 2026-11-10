@@ -550,9 +550,11 @@ One DDI Variable produces one `csvw:Column` (Column IRI = Variable URN).
 
 ###### `dct:description` ✅
 
-`Variable/Description/Content` -> `dcterms:description`
+Always emit at least one `dcterms:description` (HealthDCAT-AP R8 `CSVWColumnShape`, [Dedicate #9](https://github.com/Making-Sense-Info/Dedicate/issues/9)):
 
-Omitted when DDI has no Description.
+1. `Variable/Description` (`Content` / `String`) when present
+2. else `Variable/Label/Content` (same text as `csvw:title`)
+3. else `Variable/VariableName` (first string)
 
 ###### `csvw:datatype` ✅
 
@@ -580,5 +582,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). `csvw:datatype` form is settled (CSVW name literals - Dedicate #7).
+- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). Settled: `csvw:datatype` literals (#7) - Column `dct:description` always present with Label/Name fallback (#9).
 - Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).

@@ -43,9 +43,8 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
   Ref upstream: [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61)  
   Done: XSL map + representation fallbacks -> CSVW names, model-mapping + SSSOM updated
 
-- [ ] [#9 Column description](https://github.com/Making-Sense-Info/Dedicate/issues/9) - every Column ≥1 `dct:description`  
-  DDI: 576/785 Variables have Description; all have Label -> fallback Label / VariableName  
-  Doc + mapping + XSL: always emit description
+- [x] [#9 Column description](https://github.com/Making-Sense-Info/Dedicate/issues/9) - every Column ≥1 `dct:description`  
+  Done: Description -> else Label -> else VariableName, model-mapping + SSSOM updated
 
 - [ ] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8) - re-check after #7 + #9  
   Doc: Column SHACL checklist; XSL residual fixes if any

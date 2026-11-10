@@ -447,18 +447,19 @@
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description>    a owl:Axiom;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description> ; # ⏳
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description> ;
     pav:authoredBy "<http://id.making-sense.info/romain>";
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:description;
-    owl:annotatedTarget dcterms:description; # ❓ HealthDCAT examples use dcterms:description on Column — confirm vs csvw notes
-    sssom:confidence 0.9; # ⏳
+    owl:annotatedTarget dcterms:description;
+    sssom:confidence 0.95;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Description"@en;
     sssom:object_label "Description";
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
-    sssom:comment "The `Variable/Description` maps to `dcterms:description` on the CSVW Column" .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/9> ;
+    sssom:comment "CSVW Column always gets ≥1 dcterms:description (R8 SHACL). Prefer Variable/Description (Content|String); else Label/Content; else VariableName. Label remains csvw:title as well when used as fallback." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>    a owl:Axiom;
