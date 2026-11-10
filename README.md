@@ -23,3 +23,9 @@ A [first implementation](./ddi-l-to-healthdcat-ap/README.md) is available to pro
 - [EDDI 2024 presentation](https://zenodo.org/records/14823393) on "Mapping PhysicalInstance and DCAT" by Christophe Dzikowski, Insee
 
 This work is sponsored by [Making Sense](https://making-sense.info/), the [Constances Cohort](https://www.constances.fr/) and the [CASD](https://casd.eu/).
+
+## AI usage
+
+Some drafting and coding tasks may use large language models as assistive tools.
+
+Humans remain responsible for design choices, review, and what is committed to this repository.

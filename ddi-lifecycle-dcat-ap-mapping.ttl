@@ -19,7 +19,6 @@
 
 # Authorship / tooling (SSSOM)
 # - pav:authoredBy (= SSSOM author_id): human accountable for the mapping assertion
-# - sssom:mapping_tool: optional AI assistant used during curation (Cursor); does not replace the human author
 # - mapping_justification stays semapv:ManualMappingCuration when a human curates/validates the record
 #
 # Open points:
@@ -151,7 +150,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:creator;
@@ -165,7 +163,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:publisher;
@@ -193,7 +190,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:contributor;
@@ -207,7 +203,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:language;
@@ -221,7 +216,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:internationalIdentifier;
@@ -235,7 +229,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:citation;
@@ -263,7 +256,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:subject;
@@ -293,7 +285,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:spatialCoverage;
@@ -307,7 +298,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:temporalCoverage;
@@ -321,7 +311,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:physicalInstance;
@@ -385,7 +374,6 @@
     a owl:Axiom ;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-05"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:studyUnit;
@@ -541,7 +529,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-06"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:codeList;
@@ -556,7 +543,6 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-06"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:code;
