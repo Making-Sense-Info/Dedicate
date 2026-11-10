@@ -147,6 +147,8 @@ Prefers structured `ContactInformation` -> `vcard:Kind`; else `Citation/Contribu
 
 Each `PhysicalInstanceReference` -> `dcat:distribution` (one Distribution per PhysicalInstance).
 
+Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset emits ≥1 distribution ([Dedicate #10](https://github.com/Making-Sense-Info/Dedicate/issues/10)). No stub Distribution when PI is absent, treat as incomplete DDI. A Sparna message "missing distribution" can be misleading when `minCount` and `sh:node :Distribution_Shape` are merged (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real gaps are `Distribution_Shape` (e.g. `dcatap:applicableLegislation`, Priority B [#11](https://github.com/Making-Sense-Info/Dedicate/issues/11)).
+
 ###### `dcat:keyword` ✅
 
 `Coverage/TopicalCoverage/Keyword` (text + `xml:lang`) -> `dcat:keyword`. Legacy Keyword carrying a CV URI still maps to `dcat:theme`.
@@ -311,7 +313,7 @@ Support:
 
 HealthDCAT-AP R8 prefers the Coding System NAL (or Wikidata) for well-known medical systems (ICD-10, SNOMED,...).
 
-Local Constances lists stay on the DDI CodeList URN, do not invent NAL IRIs.
+Local / study-specific lists stay on the DDI CodeList URN; do not invent NAL IRIs.
 
 ###### `healthdcatap:hasCodeValues` ✅
 
@@ -461,7 +463,7 @@ Distribution-status CV. Not mapped.
 
 Out of scope for now.
 
-A stub remains in the XSL (`Organization` -> Catalog title / description / publisher) and in the SSSOM `catalog` mapping set, but it is not part of the Constances / CASD delivery path and is not linked to Datasets via `dcat:dataset`.
+A stub remains in the XSL (`Organization` -> Catalog title / description / publisher) and in the SSSOM `catalog` mapping set, but it is not on the Dedicate delivery path and is not linked to Datasets via `dcat:dataset`.
 
 Revisit only if Dedicate must emit a standalone catalogue.
 

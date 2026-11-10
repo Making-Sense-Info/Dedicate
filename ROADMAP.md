@@ -24,11 +24,12 @@ As R8 spec uses CSVW, we prefer full W3C CSVW conformance rather than a silent H
 | Full CSVW conformance | [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) | Product decision: full W3C CSVW vs documented HealthDCAT subset, wait before inventing structure |
 | CSVW Table -> column vs `tableSchema` | [#55](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/55) (comment added) | Keep current flatten until clarified, do not invent `tableSchema` yet |
 | CSVW Column datatype form | [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61) | Done in Dedicate (#7): emit CSVW name literals, revisit if R8 changes |
+| SHACL `dcat:distribution` message (minCount + node merged) | [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65) | Explains misleading "missing distribution" when `Distribution_Shape` fails, Dedicate #10 OK |
 | Distribution <-> Table link | [#62](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/62) | No RDF link to emit until the profile adds one |
 | Property table labels vs RDF IRIs | [#63](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/63) | Doc-only for us, predicates already use RDF names |
 | `csvw:url` / `propertyUrl` range | [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56) | Watch, we rarely emit these today |
 | Column.name cardinality changelog | [#57](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/57) | Watch, we already emit `csvw:name` on Columns |
-| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) | Future, CodeLists only at Dataset level for now |
+| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) | Future; CodeLists only at Dataset level in R8 today |
 | Mandatory `csvw:name` on Table | [#31](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/31) | Watch, we emit Table `dct:title` today |
 | Distribution usage (public / HDAB) | [#58](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/58) | Context for accessURL policy later |
 
@@ -52,15 +53,14 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal; was `skos:Concept`  
   Done: distinct Code/Value literals; `hasCodingSystem` stays `dct:Standard`; model-mapping + SSSOM updated
 
-- [ ] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10) - verify on SNDS-TS (every StudyUnit already has PI refs)  
-  If still failing: find which Dataset lacks `dcat:distribution`; only then decide stub vs invalid input  
-  Doc + mapping + XSL as needed
+- [x] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10)
+  Done: all fixture Datasets emit ≥1 `dcat:distribution`, no stub when PI absent. Misleading SHACL "missing distribution" = merged minCount+node (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real `Distribution_Shape` gaps e.g. #11 applicableLegislation
 
 ### Priority B - parked (DDI / catalogue content missing in DDI XML input)
 
-Needs Mekong catalogue enrichment or new DDI fields before Dedicate can emit SHACL-valid values:
+Needs catalogue enrichment into DDI, or new DDI fields, before Dedicate can emit SHACL-valid values:
 
-- [ ] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - not in DDI today (catalogue has it; not bound)
+- [ ] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - not in DDI today (may exist upstream of Dedicate, not bound)
 - [ ] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - no Dataset-level provenance in DDI (only variable labels containing “provenance”)
 - [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - catalogue row not bound; watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41) (dataset-type CV unfit for health)
 - [ ] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - catalogue values not in DDI
@@ -84,6 +84,5 @@ Needs Mekong catalogue enrichment or new DDI fields before Dedicate can emit SHA
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B fields: bind from Mekong `Catalogue_TS.xlsx` DCAT sheet into StudyUnit, or inject Dedicate defaults (e.g. EHDS ELI) in XSL?
-- [#10](https://github.com/Making-Sense-Info/Dedicate/issues/10): stub Distribution when StudyUnit has zero PI, or treat as invalid DDI input?
+- Priority B fields: bind catalogue DCAT fields into StudyUnit DDI, or inject Dedicate defaults (e.g. EHDS ELI) in XSL?
 - Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)

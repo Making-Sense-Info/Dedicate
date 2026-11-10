@@ -104,8 +104,8 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 
 - Group `snds-synth-hdh` with 3 StudyUnits: `BEN`, `DCIR`, `DECES`
 - 5 PhysicalInstances: `IR_BEN_R`, `IR_IBA_R`, `ER_PHA_F`, `ER_BIO_F`, `KI_ECD_R`
-- 5 LogicalProducts (one per PI, Mekong-like) / 5 LogicalRecords -> still **one TableGroup per StudyUnit** with N Tables
-- StudyUnit Citation/Coverage filled in Mekong catalogue style (`Creator`/`Publisher`/`Contributor`, `dcterms:*`, Subject/Keyword, spatial, temporal)
+- 5 LogicalProducts (one per PI) / 5 LogicalRecords -> still **one TableGroup per StudyUnit** with N Tables
+- StudyUnit Citation/Coverage filled with catalogue-style DCAT fields (`Creator`/`Publisher`/`Contributor`, `dcterms:*`, Subject/Keyword, spatial, temporal)
 - 24 variables (shared where the same column name appears on several tables)
 - 2 code lists (`BEN_SEX_COD`, Yes/No for `PHA_DEC_TOP`)
 
