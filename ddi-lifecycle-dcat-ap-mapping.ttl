@@ -26,7 +26,7 @@
 # - ❓ propertyUrl: ConceptReference URN vs Concept URI vs DPV-PD (do not invent)?
 # - ✅ RecommendedDataType → CSVW built-in name literal (string, integer, …); not XSD IRI (Dedicate #7 / upstream #61)
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
-# - ✅ hasCodeValues: R8 Dataset table ranges Literal; Dedicate emits skos:Concept (notation/prefLabel/inScheme) — confirm vs Literal-only
+# - ✅ hasCodeValues: R8 SHACL Literal — emit distinct Code/Value strings (Dedicate #12)
 # - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
 
 # --- Mapping sets --- #
@@ -523,7 +523,7 @@
     sssom:subject_label "CodeList"@en;
     sssom:object_label "coding system";
     sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
-    sssom:comment "CodeLists referenced by Variables of the StudyUnit’s LogicalRecords → `healthdcatap:hasCodingSystem` → `dct:Standard` (IRI = CodeList URN; `dct:identifier` = UserID; titles from Label/Name). Prefer Coding System NAL / Wikidata IRIs when the list is a known medical coding system; local Constances lists stay on the CodeList URN." .
+    sssom:comment "CodeLists referenced by Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard` (IRI = CodeList URN - `dct:identifier` = UserID - `dct:title` from Label/Name). Prefer Coding System NAL / Wikidata IRIs when the list is a known medical coding system" .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> ;
@@ -531,12 +531,13 @@
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:code;
     owl:annotatedTarget healthdcatap:hasCodeValues;
-    sssom:confidence 0.7; # ⏳ R8 table says Literal; we emit skos:Concept
+    sssom:confidence 0.95;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Code"@en;
     sssom:object_label "code values";
-    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
-    sssom:comment "`CodeList/Code` under Dataset-scoped CodeLists → `healthdcatap:hasCodeValues` → `skos:Concept` (IRI = Code URN; `skos:notation` = Value; `skos:prefLabel` from Category Label; `skos:inScheme` = CodeList). R8 Dataset table ranges Literal; Dedicate uses Concept so each code stays tied to its coding system." .
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/12> ;
+    sssom:comment "Distinct Code/Value strings from Dataset-scoped CodeLists -> `healthdcatap:hasCodeValues` Literals (R8 SHACL nodeKind Literal / Dedicate #12). No skos:Concept for now, link only via hasCodingSystem." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳

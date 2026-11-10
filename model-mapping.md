@@ -301,13 +301,13 @@ Not mapped.
 
 ###### `healthdcatap:hasCodingSystem` ✅
 
-CodeLists referenced by `VariableRepresentation/CodeRepresentation/CodeListReference` on Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard` (+ `skos:ConceptScheme`). 
+CodeLists referenced by `VariableRepresentation/CodeRepresentation/CodeListReference` on Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard`.
 
 Support:
 
 - IRI = CodeList URN
 - `dct:identifier` = `UserID`
-- titles / `skos:prefLabel` from Label (fallback CodeListName)
+- `dct:title` from Label (fallback CodeListName)
 
 HealthDCAT-AP R8 prefers the Coding System NAL (or Wikidata) for well-known medical systems (ICD-10, SNOMED,...).
 
@@ -315,19 +315,9 @@ Local Constances lists stay on the DDI CodeList URN, do not invent NAL IRIs.
 
 ###### `healthdcatap:hasCodeValues` ✅
 
-Each `CodeList/Code` under those CodeLists -> `healthdcatap:hasCodeValues` -> `skos:Concept`.
+Distinct `Code/Value` strings from those CodeLists -> `healthdcatap:hasCodeValues` as Literals ([Dedicate #12](https://github.com/Making-Sense-Info/Dedicate/issues/12) - R8 SHACL `nodeKind` Literal).
 
-Support:
-
-- IRI = Code URN
-- `skos:notation` = `Value`
-- `skos:prefLabel` from the referenced Category Label
-- `skos:inScheme` = CodeList
-- `dct:identifier` = Code `UserID` when present.
-
-R8 Dataset table ranges this property as Literal, Dedicate emits Concept so each code stays tied to its coding system (TEHDAS / current HDAP examples).
-
-❗️ Revisit if SHACL enforces Literal-only.
+Per-code `skos:Concept` resources are no longer emitted. Linkage code <-> scheme is only via `hasCodingSystem` (the CodeList / Standard), not via structured code nodes.
 
 ###### `dpv:hasLegalBasis` ❌
 
@@ -590,5 +580,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). Settled for Columns: #7 + #9 + #8 (`CSVWColumnShape`).
+- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`). Settled: Columns #7+#9+#8; `hasCodeValues` Literals #12.
 - Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).

@@ -8,7 +8,7 @@
 - [x] One `hasVariables` / TableGroup per Dataset (aggregate LogicalRecords of all PIs; not one TG per LogicalProduct)
 - [x] Mapping extension for variables (DDI Variable / LogicalRecord -> HealthDCAT-AP `hasVariables` + CSVW) in [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl)
 - [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
-- [x] Code lists -> HealthDCAT-AP `hasCodingSystem` / `hasCodeValues` (Dataset-scoped CodeList / Code) - see [#12](https://github.com/Making-Sense-Info/Dedicate/issues/12) for Literal vs Concept SHACL follow-up
+- [x] Code lists -> HealthDCAT-AP `hasCodingSystem` (`dct:Standard`) / `hasCodeValues` (Literals; [#12](https://github.com/Making-Sense-Info/Dedicate/issues/12))
 - [x] Optional SHACL validation in `run.sh` / `run.ps1` (Sparna jar + shapes URL / local cache)
 
 ## Spec tracker (HealthDCAT-AP upstream)
@@ -49,9 +49,8 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8)
   Done: Column SHACL checklist in model-mapping, XSL hardens name/title/datatype fallbacks for incomplete DDI
 
-- [ ] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal; we emit `skos:Concept`  
-  DDI: CodeLists / Codes present  
-  Doc + mapping + XSL: emit literals (keep `hasCodingSystem` -> Standard)
+- [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal; was `skos:Concept`  
+  Done: distinct Code/Value literals; `hasCodingSystem` stays `dct:Standard`; model-mapping + SSSOM updated
 
 - [ ] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10) - verify on SNDS-TS (every StudyUnit already has PI refs)  
   If still failing: find which Dataset lacks `dcat:distribution`; only then decide stub vs invalid input  
@@ -87,4 +86,4 @@ Needs Mekong catalogue enrichment or new DDI fields before Dedicate can emit SHA
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
 - Priority B fields: bind from Mekong `Catalogue_TS.xlsx` DCAT sheet into StudyUnit, or inject Dedicate defaults (e.g. EHDS ELI) in XSL?
 - [#10](https://github.com/Making-Sense-Info/Dedicate/issues/10): stub Distribution when StudyUnit has zero PI, or treat as invalid DDI input?
-- [#12](https://github.com/Making-Sense-Info/Dedicate/issues/12): Literal-only confirmed by SHACL; structured code <-> scheme stays only via `hasCodingSystem`
+- Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)
