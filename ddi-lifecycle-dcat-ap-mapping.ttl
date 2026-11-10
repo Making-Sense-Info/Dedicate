@@ -17,6 +17,11 @@
 # ⏳  Needs validation (proposal written; colleagues should confirm before locking)
 # =============================================================================
 
+# Authorship / tooling (SSSOM)
+# - pav:authoredBy (= SSSOM author_id): human accountable for the mapping assertion
+# - sssom:mapping_tool: optional AI assistant used during curation (Cursor); does not replace the human author
+# - mapping_justification stays semapv:ManualMappingCuration when a human curates/validates the record
+#
 # Open points:
 # - ❓ Is sssom:record_id useful as used here?
 # - ⏳ Whole file still needs a review pass
@@ -117,7 +122,7 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title>
     a owl:Axiom ;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/title-to-title> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>"; # ❓ Level-up? Use MS?
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass; # https://www.w3.org/TR/owl-ref/#equivalentClass-def
     owl:annotatedSource lifecycle:title;
@@ -131,7 +136,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description>  a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/description-to-description> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:description;
@@ -141,10 +146,12 @@
     sssom:subject_label "Description"@en;
     sssom:object_label "Description";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctdescription> ;
-    sssom:comment "StudyUnit `Citation/Description` or `Citation/dcterms:description` → `dcterms:description` (Mekong catalogue binding uses dcterms children)." .
+    sssom:comment "StudyUnit `Citation/Description` or `Citation/dcterms:description` → `dcterms:description`." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/creator-to-creator> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:creator;
@@ -157,6 +164,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/publisher-to-publisher> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:publisher;
@@ -169,7 +178,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:contactInformation;
@@ -183,6 +192,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:contributor;
@@ -191,10 +202,12 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Contributor"@en;
     sssom:object_label "contact point";
-    sssom:comment "Mekong maps catalogue `contactPoint` to `Citation/Contributor` names → `dcat:contactPoint` / `vcard:fn` when no ContactInformation." .
+    sssom:comment "`Citation/Contributor` names → `dcat:contactPoint` / `vcard:fn` when no ContactInformation." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:language;
@@ -207,6 +220,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:internationalIdentifier;
@@ -219,6 +234,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:citation;
@@ -231,7 +248,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:keyword;
@@ -245,6 +262,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:subject;
@@ -258,7 +277,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-14"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:keyword;
@@ -273,6 +292,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:spatialCoverage;
@@ -285,6 +306,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:temporalCoverage;
@@ -297,6 +320,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:physicalInstance;
@@ -359,7 +384,8 @@
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup>
     a owl:Axiom ;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/dataset-to-tablegroup> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-05"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:studyUnit;
@@ -370,7 +396,7 @@
     sssom:object_label "TableGroup";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ;
     sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/> ;
-    sssom:comment "One `csvw:TableGroup` per Dataset (StudyUnit). Aggregates LogicalRecords from all PhysicalInstances of the StudyUnit, even when Mekong emits one LogicalProduct per PI. HealthDCAT-AP R8 TableGroup holds one or more tables." .
+    sssom:comment "One `csvw:TableGroup` per Dataset (StudyUnit). Aggregates LogicalRecords from all PhysicalInstances of the StudyUnit (even when the DDI has one LogicalProduct per PhysicalInstance). HealthDCAT-AP R8 TableGroup holds one or more tables." .
 
 # Superseded by dataset-to-tablegroup (kept for history / redirects)
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalproduct-to-tablegroup>
@@ -388,7 +414,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalrecord-to-table>  a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/logicalrecord-to-table> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:logicalRecord; # ❓ LogicalRecord vs PhysicalStructure / RecordLayout?
@@ -403,7 +429,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-column>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-column> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:variable;
@@ -418,7 +444,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:variableName;
@@ -434,7 +460,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:label;
@@ -450,7 +476,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:description;
@@ -466,7 +492,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype> ;
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:recommendedDataType;
@@ -483,7 +509,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:conceptReference; # ❓ Concept URN vs external Concept URI vs DPV-PD?
@@ -499,7 +525,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/userid-to-identifier>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/userid-to-identifier> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:userId; # ❓ Which typeOfUserID when several? (e.g. ExampleID)
@@ -514,6 +540,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-06"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:codeList;
@@ -527,6 +555,8 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    sssom:mapping_tool "Cursor (https://cursor.com) — AI-assisted curation; human author remains accountable" ;
     dcterms:created "2026-11-06"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:code;
@@ -541,7 +571,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass; # ❓ Not a class equivalence — property attachment rule
     owl:annotatedSource lifecycle:studyUnit; # ❓ Source is StudyUnit but property is on dcat:Dataset
@@ -557,7 +587,7 @@
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-hasstructureddata>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variable-to-hasstructureddata> ; # ⏳
-    pav:authoredBy "<http://id.making-sense.info/romain>";
+    pav:authoredBy <http://id.making-sense.info/romain>;
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass; # ❓ Not a class equivalence — boolean presence rule
     owl:annotatedSource lifecycle:variable; # ❓ Awkward subject: presence of Variable ⇒ boolean on Dataset
