@@ -23,7 +23,7 @@ As R8 spec uses CSVW, we prefer full W3C CSVW conformance rather than a silent H
 | --- | --- | --- |
 | Full CSVW conformance | [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) | Product decision: full W3C CSVW vs documented HealthDCAT subset, wait before inventing structure |
 | CSVW Table -> column vs `tableSchema` | [#55](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/55) (comment added) | Keep current flatten until clarified, do not invent `tableSchema` yet |
-| CSVW Column datatype form | [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61) | Align XSL to SHACL literals now (`"string"`...), revisit if R8 changes |
+| CSVW Column datatype form | [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61) | Done in Dedicate (#7): emit CSVW name literals, revisit if R8 changes |
 | Distribution <-> Table link | [#62](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/62) | No RDF link to emit until the profile adds one |
 | Property table labels vs RDF IRIs | [#63](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/63) | Doc-only for us, predicates already use RDF names |
 | `csvw:url` / `propertyUrl` range | [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56) | Watch, we rarely emit these today |
@@ -39,10 +39,9 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 
 ### Priority A - fix now (DDI already enough / XSL-only)
 
-- [ ] [#7 Column datatype](https://github.com/Making-Sense-Info/Dedicate/issues/7) - SHACL wants `csvw:datatype` literal (`"string"`, `"integer"`, …), not `xsd:decimal`  
+- [x] [#7 Column datatype](https://github.com/Making-Sense-Info/Dedicate/issues/7) - SHACL wants `csvw:datatype` literal (`"string"`, `"integer"`, …), not `xsd:decimal`  
   Ref upstream: [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61)  
-  DDI: `RecommendedDataType` / Text|Numeric|DateTime|CodeRepresentation present  
-  Doc + mapping + XSL: map to CSVW built-in name literals
+  Done: XSL map + representation fallbacks -> CSVW names, model-mapping + SSSOM updated
 
 - [ ] [#9 Column description](https://github.com/Making-Sense-Info/Dedicate/issues/9) - every Column ≥1 `dct:description`  
   DDI: 576/785 Variables have Description; all have Label -> fallback Label / VariableName  

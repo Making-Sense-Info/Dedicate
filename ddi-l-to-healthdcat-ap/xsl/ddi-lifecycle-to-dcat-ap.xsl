@@ -37,20 +37,21 @@
          | l:CodeList | l:Code | l:CategoryScheme | l:Category"
     use="normalize-space(r:URN)"/>
 
-  <!-- DDI RecommendedDataType → XSD datatype QName-as-Turtle -->
+  <!-- DDI RecommendedDataType → CSVW built-in datatype name (HealthDCAT-AP R8 SHACL: literal, not XSD IRI)
+       Ref: Dedicate #7, upstream #61. Names from W3C CSVW §6.6. -->
   <xsl:variable name="ded:datatype-map" as="map(xs:string, xs:string)" select="map{
-      'String'          : 'xsd:string',
-      'Numeric'         : 'xsd:decimal',
-      'Float'           : 'xsd:decimal',
-      'Double'          : 'xsd:decimal',
-      'Decimal'         : 'xsd:decimal',
-      'Integer'         : 'xsd:integer',
-      'UnsignedInt'     : 'xsd:integer',
-      'Long'            : 'xsd:integer',
-      'Date'            : 'xsd:date',
-      'DateTime'        : 'xsd:dateTime',
-      'Boolean'         : 'xsd:boolean',
-      'BooleanNumeric'  : 'xsd:boolean'
+      'String'          : 'string',
+      'Numeric'         : 'decimal',
+      'Float'           : 'float',
+      'Double'          : 'double',
+      'Decimal'         : 'decimal',
+      'Integer'         : 'integer',
+      'UnsignedInt'     : 'unsignedInt',
+      'Long'            : 'long',
+      'Date'            : 'date',
+      'DateTime'        : 'dateTime',
+      'Boolean'         : 'boolean',
+      'BooleanNumeric'  : 'boolean'
     }"/>
 
   <!-- ===================================================================== -->
@@ -616,7 +617,7 @@
     </xsl:for-each>
 
     <xsl:if test="$datatype">
-      <xsl:text> ;&#10;  csvw:datatype {$datatype}</xsl:text>
+      <xsl:text> ;&#10;  csvw:datatype {ded:literal($datatype)}</xsl:text>
     </xsl:if>
 
     <xsl:for-each select="r:ConceptReference[normalize-space(r:URN)][1]/r:URN ! normalize-space(.)">
@@ -675,6 +676,7 @@
     <xsl:sequence select="ded:literal($text, ())"/>
   </xsl:function>
 
+  <!-- Returns a CSVW built-in name (e.g. string, integer), or empty if unknown -->
   <xsl:function name="ded:map-datatype" as="xs:string?">
     <xsl:param name="variable" as="element(l:Variable)"/>
     <xsl:variable name="rdt" as="xs:string?"
@@ -682,10 +684,10 @@
     <xsl:sequence select="
         if (exists($rdt) and map:contains($ded:datatype-map, $rdt))
         then $ded:datatype-map($rdt)
-        else if ($variable/l:VariableRepresentation/r:TextRepresentation) then 'xsd:string'
-        else if ($variable/l:VariableRepresentation/r:NumericRepresentation) then 'xsd:decimal'
-        else if ($variable/l:VariableRepresentation/r:DateTimeRepresentation) then 'xsd:dateTime'
-        else if ($variable/l:VariableRepresentation/r:CodeRepresentation) then 'xsd:string'
+        else if ($variable/l:VariableRepresentation/r:TextRepresentation) then 'string'
+        else if ($variable/l:VariableRepresentation/r:NumericRepresentation) then 'decimal'
+        else if ($variable/l:VariableRepresentation/r:DateTimeRepresentation) then 'dateTime'
+        else if ($variable/l:VariableRepresentation/r:CodeRepresentation) then 'string'
         else ()
       "/>
   </xsl:function>

@@ -24,7 +24,7 @@
 # - ✅ Variables: one TableGroup per Dataset (aggregates LogicalRecords of the StudyUnit's PIs); not one TG per LogicalProduct
 # - ❓ Variables: VariablesInRecord only, or VariableScheme fallback?
 # - ❓ propertyUrl: ConceptReference URN vs Concept URI vs DPV-PD (do not invent)?
-# - ❓ RecommendedDataType → exact xsd:* table (+ representation-class fallback)?
+# - ✅ RecommendedDataType → CSVW built-in name literal (string, integer, …); not XSD IRI (Dedicate #7 / upstream #61)
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
 # - ✅ hasCodeValues: R8 Dataset table ranges Literal; Dedicate emits skos:Concept (notation/prefLabel/inScheme) — confirm vs Literal-only
 # - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
@@ -462,18 +462,20 @@
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>    a owl:Axiom;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype> ; # ⏳
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype> ;
     pav:authoredBy "<http://id.making-sense.info/romain>";
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
-    owl:annotatedSource lifecycle:recommendedDataType; # ❓ DDI CV DataType values → which xsd:* exactly?
+    owl:annotatedSource lifecycle:recommendedDataType;
     owl:annotatedTarget csvw:datatype;
-    sssom:confidence 0.7; # ⏳
+    sssom:confidence 0.9;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "RecommendedDataType"@en;
-    sssom:object_label "datatype"; # ❓
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
-    sssom:comment "The `Variable/VariableRepresentation/*/RecommendedDataType` maps to `csvw:datatype` (as an XSD datatype IRI)" . # ❓ Fallback from Text/Numeric/DateTime/CodeRepresentation if RecommendedDataType absent? CodeList ≠ datatype
+    sssom:object_label "datatype";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/7> ,
+      <https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61> ;
+    sssom:comment "VariableRepresentation/*/RecommendedDataType → csvw:datatype as a CSVW built-in name literal (string, integer, decimal, float, double, unsignedInt, long, date, dateTime, boolean). Fallbacks: Text|CodeRepresentation→string, Numeric→decimal, DateTime→dateTime. Not an XSD IRI (R8 SHACL)." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl>    a owl:Axiom;

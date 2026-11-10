@@ -556,7 +556,11 @@ Omitted when DDI has no Description.
 
 ###### `csvw:datatype` ✅
 
-`VariableRepresentation/*/RecommendedDataType` via the XSL datatype map, with fallbacks from Text / Numeric / DateTime / CodeRepresentation -> XSD datatype.
+`VariableRepresentation/*/RecommendedDataType` via the XSL datatype map, with fallbacks from Text / Numeric / DateTime / CodeRepresentation.
+
+Emitted as a CSVW built-in name literal (`"string"`, `"integer"`, `"decimal"`, `"dateTime"`,...), not an XSD IRI.
+
+HealthDCAT-AP R8 SHACL `CSVWColumnShape` expects a Literal ([Dedicate #7](https://github.com/Making-Sense-Info/Dedicate/issues/7), upstream [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61)).
 
 Omitted when nothing can be inferred.
 
@@ -576,5 +580,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `RecommendedDataType`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept).
+- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). `csvw:datatype` form is settled (CSVW name literals - Dedicate #7).
 - Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).
