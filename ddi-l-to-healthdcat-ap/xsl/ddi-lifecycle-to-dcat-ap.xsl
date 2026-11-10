@@ -589,26 +589,40 @@
     <xsl:apply-templates select="$variables" mode="column"/>
   </xsl:template>
 
+  <!-- CSVWColumnShape (R8 / Dedicate #8): name 1..1, title ≥1, description ≥1, datatype 1..1 (literals); propertyUrl 0..1 IRI -->
   <xsl:template match="l:Variable" mode="column">
     <xsl:variable name="col-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:column:', .)"/>
-    <xsl:variable name="name" as="xs:string?"
-      select="normalize-space((l:VariableName/r:String)[1])[. ne '']"/>
-    <xsl:variable name="datatype" as="xs:string?"
-      select="ded:map-datatype(.)"/>
+    <xsl:variable name="name" as="xs:string"
+      select="
+        (
+          normalize-space((l:VariableName/r:String)[1])[. ne ''],
+          normalize-space((r:UserID)[1])[. ne ''],
+          replace($col-uri, '^.+[/:]', '')
+        )[1]
+      "/>
+    <xsl:variable name="datatype" as="xs:string"
+      select="(ded:map-datatype(.), 'string')[1]"/>
+    <xsl:variable name="titles" as="item()*"
+      select="r:Label/r:Content[normalize-space(.) ne '']"/>
 
     <xsl:text>{ded:iri($col-uri)}&#10;</xsl:text>
     <xsl:text>  a csvw:Column</xsl:text>
 
-    <xsl:if test="$name">
-      <xsl:text> ;&#10;  csvw:name {ded:literal($name)}</xsl:text>
-    </xsl:if>
+    <xsl:text> ;&#10;  csvw:name {ded:literal($name)}</xsl:text>
 
-    <xsl:for-each select="r:Label/r:Content">
-      <xsl:text> ;&#10;  csvw:title {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
-    </xsl:for-each>
+    <xsl:choose>
+      <xsl:when test="exists($titles)">
+        <xsl:for-each select="$titles">
+          <xsl:text> ;&#10;  csvw:title {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text> ;&#10;  csvw:title {ded:literal($name)}</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
 
-    <!-- SHACL CSVWColumnShape: ≥1 dct:description (Dedicate #9). Prefer Description; else Label; else VariableName. -->
+    <!-- Prefer Description; else Label; else name (#9). -->
     <xsl:variable name="descriptions" as="item()*"
       select="r:Description/(r:Content | r:String)[normalize-space(.) ne '']"/>
     <xsl:choose>
@@ -617,23 +631,21 @@
           <xsl:text> ;&#10;  dcterms:description {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
         </xsl:for-each>
       </xsl:when>
-      <xsl:when test="exists(r:Label/r:Content[normalize-space(.) ne ''])">
-        <xsl:for-each select="r:Label/r:Content[normalize-space(.) ne '']">
+      <xsl:when test="exists($titles)">
+        <xsl:for-each select="$titles">
           <xsl:text> ;&#10;  dcterms:description {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
         </xsl:for-each>
       </xsl:when>
-      <xsl:when test="$name">
+      <xsl:otherwise>
         <xsl:text> ;&#10;  dcterms:description {ded:literal($name)}</xsl:text>
-      </xsl:when>
+      </xsl:otherwise>
     </xsl:choose>
 
     <xsl:for-each select="r:UserID ! normalize-space(.)[. ne '']">
       <xsl:text> ;&#10;  dcterms:identifier {ded:literal(.)}</xsl:text>
     </xsl:for-each>
 
-    <xsl:if test="$datatype">
-      <xsl:text> ;&#10;  csvw:datatype {ded:literal($datatype)}</xsl:text>
-    </xsl:if>
+    <xsl:text> ;&#10;  csvw:datatype {ded:literal($datatype)}</xsl:text>
 
     <xsl:for-each select="r:ConceptReference[normalize-space(r:URN)][1]/r:URN ! normalize-space(.)">
       <xsl:text> ;&#10;  csvw:propertyUrl {ded:iri(.)}</xsl:text>

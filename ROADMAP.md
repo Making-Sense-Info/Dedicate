@@ -46,8 +46,8 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#9 Column description](https://github.com/Making-Sense-Info/Dedicate/issues/9) - every Column ≥1 `dct:description`  
   Done: Description -> else Label -> else VariableName, model-mapping + SSSOM updated
 
-- [ ] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8) - re-check after #7 + #9  
-  Doc: Column SHACL checklist; XSL residual fixes if any
+- [x] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8)
+  Done: Column SHACL checklist in model-mapping, XSL hardens name/title/datatype fallbacks for incomplete DDI
 
 - [ ] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal; we emit `skos:Concept`  
   DDI: CodeLists / Codes present  

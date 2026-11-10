@@ -114,6 +114,7 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 - One `dcat:Dataset` per StudyUnit, one `dcat:Distribution` per linked PhysicalInstance
 - StudyUnit `Citation` / `Coverage` -> Dataset properties (`title`, `description`, `creator`, `publisher`, `contactPoint`, `language`, `identifier`, `source`, `conformsTo`, `accessRights`, `accrualPeriodicity`, `modified`, `keyword`, `theme`, `spatial`, `temporal`)
 - `healthdcatap:hasVariables` -> one CSVW `TableGroup` per Dataset, with one `csvw:Table` per LogicalRecord of the StudyUnit’s PhysicalInstances
+- Columns follow R8 SHACL `CSVWColumnShape` (name / title / description / datatype literals). See the [CSVW conformance note](../model-mapping.md#conformance-note-shacl-vs-prose-vs-w3c-csvw) in `model-mapping.md`
 - `healthdcatap:hasCodingSystem` / `hasCodeValues` from CodeLists referenced by the Dataset’s variables (`dct:Standard` + `skos:Concept`)
 - Missing DDI fields are omitted (no hard failure)
 - Optional SHACL HTML + Turtle reports when `--shacl-jar` is set

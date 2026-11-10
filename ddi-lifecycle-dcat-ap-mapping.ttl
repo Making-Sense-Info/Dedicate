@@ -417,33 +417,35 @@
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name>    a owl:Axiom;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name> ; # ⏳
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/variablename-to-name> ;
     pav:authoredBy "<http://id.making-sense.info/romain>";
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:variableName;
     owl:annotatedTarget csvw:name;
-    sssom:confidence 0.9; # ⏳
+    sssom:confidence 0.95;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "VariableName"@en;
     sssom:object_label "name";
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
-    sssom:comment "The `Variable/VariableName` maps to `csvw:name`" . # ❓ Which lang if several String/@xml:lang? Prefer UserID?
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/8> ;
+    sssom:comment "csvw:name 1..1 Literal (CSVWColumnShape). Prefer VariableName/String[1]; else UserID; else last segment of Column IRI." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title>    a owl:Axiom;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title> ; # ⏳
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/label-to-title> ;
     pav:authoredBy "<http://id.making-sense.info/romain>";
     dcterms:created "2026-10-29"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:label;
-    owl:annotatedTarget csvw:title; # ❓ CSVW often uses csvw:titles (plural) — title or titles?
-    sssom:confidence 0.9; # ⏳
+    owl:annotatedTarget csvw:title; # ❓ HealthDCAT uses csvw:title (singular); W3C CSVW often uses csvw:titles
+    sssom:confidence 0.95;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Label"@en;
-    sssom:object_label "title"; # ❓
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ; # ❓ Anchor stable?
-    sssom:comment "The `Variable/Label` maps to `csvw:title`" .
+    sssom:object_label "title";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/8> ;
+    sssom:comment "csvw:title ≥1 Literal (CSVWColumnShape). Variable/Label/Content; if absent, reuse resolved csvw:name." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/description-to-description>    a owl:Axiom;
@@ -459,7 +461,7 @@
     sssom:object_label "Description";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/9> ;
-    sssom:comment "CSVW Column always gets ≥1 dcterms:description (R8 SHACL). Prefer Variable/Description (Content|String); else Label/Content; else VariableName. Label remains csvw:title as well when used as fallback." .
+    sssom:comment "CSVW Column always gets ≥1 dcterms:description (R8 SHACL / #8+#9). Prefer Variable/Description (Content|String); else Label/Content; else resolved csvw:name." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/recommendeddatatype-to-datatype>    a owl:Axiom;
@@ -476,7 +478,7 @@
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dataset-structure--variables-healthdcat-ap--csvw> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/7> ,
       <https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61> ;
-    sssom:comment "VariableRepresentation/*/RecommendedDataType → csvw:datatype as a CSVW built-in name literal (string, integer, decimal, float, double, unsignedInt, long, date, dateTime, boolean). Fallbacks: Text|CodeRepresentation→string, Numeric→decimal, DateTime→dateTime. Not an XSD IRI (R8 SHACL)." .
+    sssom:comment "csvw:datatype 1..1 Literal (CSVWColumnShape / #7+#8). RecommendedDataType → CSVW built-in name (string, integer, decimal, float, double, unsignedInt, long, date, dateTime, boolean). Fallbacks: Text|CodeRepresentation→string, Numeric→decimal, DateTime→dateTime; else string. Not an XSD IRI." .
 
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/conceptreference-to-propertyurl>    a owl:Axiom;

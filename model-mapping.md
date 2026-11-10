@@ -480,7 +480,15 @@ Revisit only if Dedicate must emit a standalone catalogue.
 Core DCAT-AP does not describe dataset variables. HealthDCAT-AP does, via CSVW linked from the Dataset:
 
 - `healthdcatap:hasStructuredData` / `healthdcatap:hasVariables` on the Dataset (see Dataset § Mandatory)
-- `csvw:TableGroup` -> `csvw:Table` -> `csvw:Column`
+- `csvw:TableGroup` -> `csvw:Table` -> `csvw:Column` (R8 flatten today; no `tableSchema` yet)
+
+#### Conformance note (SHACL vs prose vs W3C CSVW)
+
+Dedicate’s Column output is written to pass the R8 non-public SHACL `CSVWColumnShape` (exactly one `csvw:name` and `csvw:datatype` as literals, ≥1 `csvw:title` and `dct:description`, optional `csvw:propertyUrl` IRI). See [Dedicate #7](https://github.com/Making-Sense-Info/Dedicate/issues/7), [#9](https://github.com/Making-Sense-Info/Dedicate/issues/9), [#8](https://github.com/Making-Sense-Info/Dedicate/issues/8).
+
+That is **not** the same as claiming every constraint is spelled out the same way in the HealthDCAT-AP R8 HTML property tables (prose / examples can be quieter or diverge from the shapes). Where they conflict, we follow SHACL rules, and we track upstream mismatches.
+
+Separately, we share the product stance that if the profile uses CSVW, it should respect W3C CSVW properly (full structure / datatypes / ranges), not a silent HealthDCAT-only dialect. It is tracked in upstream [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) (with #55, #61, #56,...). Until that lands, Dedicate stays on the R8 flatten (`Table -> column`) and does not invent `tableSchema`.
 
 #### DDI Lifecycle attachment path
 
@@ -542,35 +550,35 @@ One DDI Variable produces one `csvw:Column` (Column IRI = Variable URN).
 
 ###### `csvw:name` ✅
 
-`Variable/VariableName/String` -> `csvw:name` (first name string).
+1. `Variable/VariableName/String` (first)
+2. else first `UserID`
+3. else last segment of the Column IRI
 
 ###### `csvw:title` ✅
 
-`Variable/Label/Content` -> `csvw:title` (multi-language).
+`Variable/Label/Content` (multi-language). If no Label, reuse `csvw:name`.
 
 ###### `dct:description` ✅
 
-Always emit at least one `dcterms:description` (HealthDCAT-AP R8 `CSVWColumnShape`, [Dedicate #9](https://github.com/Making-Sense-Info/Dedicate/issues/9)):
+Always emit at least one `dcterms:description` ([Dedicate #9](https://github.com/Making-Sense-Info/Dedicate/issues/9)):
 
 1. `Variable/Description` (`Content` / `String`) when present
 2. else `Variable/Label/Content` (same text as `csvw:title`)
-3. else `Variable/VariableName` (first string)
+3. else the resolved `csvw:name`
 
 ###### `csvw:datatype` ✅
 
-`VariableRepresentation/*/RecommendedDataType` via the XSL datatype map, with fallbacks from Text / Numeric / DateTime / CodeRepresentation.
+Always emit exactly one CSVW built-in name literal (`"string"`, `"integer"`, `"decimal"`, `"dateTime"`,...) — not an XSD IRI ([Dedicate #7](https://github.com/Making-Sense-Info/Dedicate/issues/7), upstream [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61)).
 
-Emitted as a CSVW built-in name literal (`"string"`, `"integer"`, `"decimal"`, `"dateTime"`,...), not an XSD IRI.
-
-HealthDCAT-AP R8 SHACL `CSVWColumnShape` expects a Literal ([Dedicate #7](https://github.com/Making-Sense-Info/Dedicate/issues/7), upstream [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61)).
-
-Omitted when nothing can be inferred.
+1. `VariableRepresentation/*/RecommendedDataType` via the XSL map
+2. else Text / CodeRepresentation → `"string"`, Numeric → `"decimal"`, DateTime → `"dateTime"`
+3. else `"string"`
 
 ##### Recommended
 
 ###### `csvw:propertyUrl` ✅
 
-`Variable/ConceptReference/URN` when present -> `csvw:propertyUrl`.
+`Variable/ConceptReference/URN` when present -> `csvw:propertyUrl` (at most one IRI).
 
 Omit if absent.
 
@@ -582,5 +590,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). Settled: `csvw:datatype` literals (#7) - Column `dct:description` always present with Label/Name fallback (#9).
+- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`, `hasCodeValues` Literal vs Concept). Settled for Columns: #7 + #9 + #8 (`CSVWColumnShape`).
 - Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).
