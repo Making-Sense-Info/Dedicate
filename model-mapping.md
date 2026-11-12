@@ -242,7 +242,7 @@ Remaining HealthDCAT-AP Dataset properties (optional / profile extensions).
 
 ###### `dct:provenance` ✅
 
-`Citation/dcterms:provenance` -> `dcterms:provenance` (language-tagged literals). Same Citation dcterms passthrough as `source` / `accessRights` ([Dedicate #13](https://github.com/Making-Sense-Info/Dedicate/issues/13)).
+`Citation/dcterms:provenance` (prose, optional `xml:lang`) -> one `dcterms:provenance` blank `dcterms:ProvenanceStatement` with `rdfs:label` language-tagged per Citation value (HealthDCAT-AP R8 range / SHACL `BlankNodeOrIRI`; R8 example uses `rdfs:label`). Not emitted as a bare Literal ([Dedicate #13](https://github.com/Making-Sense-Info/Dedicate/issues/13)).
 
 ###### `dct:alternative` ❌
 

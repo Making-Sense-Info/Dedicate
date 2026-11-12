@@ -228,12 +228,14 @@
     </xsl:for-each>
 
     <!-- Other dcterms:* under Citation (source, conformsTo, accessRights, …).
-         Whole-value URI, or catalogue "Label (http://…)" → IRI; else literal. -->
+         Whole-value URI, or catalogue "Label (http://…)" → IRI; else literal.
+         provenance is handled separately (ProvenanceStatement blank). -->
     <xsl:for-each-group
       select="r:Citation/*[
           namespace-uri() eq 'http://purl.org/dc/terms/'
           and local-name() = $ded:citation-dcterms
           and local-name() ne 'description'
+          and local-name() ne 'provenance'
         ]"
       group-by="local-name() || '|' || ded:dcterms-object-key(.)">
       <xsl:variable name="prop" as="xs:string" select="'dcterms:' || local-name()"/>
@@ -254,6 +256,24 @@
         </xsl:choose>
       </xsl:if>
     </xsl:for-each-group>
+
+    <!-- HealthDCAT-AP: dct:provenance → dct:ProvenanceStatement (BlankNodeOrIRI), not a Literal.
+         Catalogue / DDI keep prose in Citation/dcterms:provenance; wrap as R8 example (rdfs:label). -->
+    <xsl:variable name="provenance-nodes" as="element()*"
+      select="r:Citation/*[
+          namespace-uri() eq 'http://purl.org/dc/terms/'
+          and local-name() eq 'provenance'
+          and normalize-space(.)
+        ]"/>
+    <xsl:if test="exists($provenance-nodes)">
+      <xsl:text> ;&#10;  dcterms:provenance [&#10;</xsl:text>
+      <xsl:text>    a dcterms:ProvenanceStatement</xsl:text>
+      <xsl:for-each-group select="$provenance-nodes"
+        group-by="normalize-space(@xml:lang) || '|' || normalize-space(.)">
+        <xsl:text> ;&#10;    rdfs:label {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+      </xsl:for-each-group>
+      <xsl:text>&#10;  ]</xsl:text>
+    </xsl:if>
 
     <!-- theme = Subject (+ optional controlledVocabularyURN); keyword = Keyword text -->
     <xsl:for-each-group

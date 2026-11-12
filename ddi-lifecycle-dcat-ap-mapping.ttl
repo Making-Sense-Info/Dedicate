@@ -63,6 +63,7 @@
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/internationalidentifier-to-identifier>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-dcterms-passthrough>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-provenance-to-provenancestatement>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/subject-to-theme>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-theme>
@@ -238,13 +239,26 @@
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:citation;
-    owl:annotatedTarget dcterms:source; # ❓ Representative; also conformsTo, accessRights, accrualPeriodicity, modified, provenance
+    owl:annotatedTarget dcterms:source; # ❓ Representative; also conformsTo, accessRights, accrualPeriodicity, modified
     sssom:confidence 0.85;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Citation dcterms children"@en;
     sssom:object_label "dcterms passthrough";
+    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal. Provenance is separate (see citation-provenance-to-provenancestatement)." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-provenance-to-provenancestatement> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/citation-provenance-to-provenancestatement> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    dcterms:created "2026-11-12"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:citation;
+    owl:annotatedTarget dcterms:provenance;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "Citation dcterms:provenance"@en;
+    sssom:object_label "provenance statement";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/issues/13> ;
-    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified|provenance` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal (Dedicate #13 for provenance)." .
+    sssom:comment "`Citation/dcterms:provenance` prose -> one Dataset `dcterms:provenance` / `dcterms:ProvenanceStatement` blank with `rdfs:label`@lang (HealthDCAT-AP R8 range; not a Literal). Dedicate #13." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;
