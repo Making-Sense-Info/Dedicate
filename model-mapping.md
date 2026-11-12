@@ -91,6 +91,26 @@ Bibliographic / coverage fields come from `Citation` and `Coverage`.
 
 Linked PhysicalInstances become Distributions, LogicalRecords / Variables become the CSVW TableGroup (see [Dataset structure / variables](#dataset-structure--variables-healthdcat-ap--csvw)).
 
+##### StudyUnit `UserAttributePair` language contract
+
+Priority B catalogue fields that have no dedicated DDI Lifecycle element are carried as StudyUnit `UserAttributePair`. DDI does not put `xml:lang` on `AttributeValue`, so language for RDF literals must be encoded in `AttributeKey`.
+
+Input convention (reference sample `in/ddil-example.xml`):
+
+| Situation | `AttributeKey` | `AttributeValue` | Expected RDF |
+| --- | --- | --- | --- |
+| One language / language-neutral | plain property key, e.g. `dpv:hasLegalBasis` | text (no `xml:lang`) | literal or IRI with no language tag |
+| Several languages | `property@fr`, `property@en`,... | one pair per language | same predicate, language-tagged literals |
+
+Rules for the XSL (when Priority B emit is implemented):
+
+1. Split `AttributeKey` on the last `@` only when the suffix is a well-formed language tag (letters, optionally `-` + further subtags, e.g. `fr`, `en`, `en-GB`).
+2. Predicate = the part before that `@`, `xml:lang` / Turtle `@lang` = the suffix.
+3. Fallback: no `@`, empty suffix, or malformed tag -> treat the whole string as the predicate and emit without language tag (do not invent a default language).
+4. Do not read language from `AttributeValue` attributes.
+
+Applies to multilingual UAP-backed fields such as `dcatap:applicableLegislation`, `healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfRecords`, `dqv:hasQualityAnnotation`, and publisher-type style keys like `dct:type (éditeur)`. Language-neutral keys in the sample stay plain (`healthdcatap:healthCategory`, `dpv:hasLegalBasis`, `healthdcatap:numberOfUniqueIndividuals`, `dcat:version`, optional `healthdcatap:hasCodingSystem` as catalogue prose).
+
 ##### Mandatory
 
 Properties with cardinality requiring at least one value in HealthDCAT-AP R8 (or mandatory when `hasStructuredData` is true).
@@ -113,15 +133,15 @@ Prefers `Citation/dcterms:description`; also accepts classic `Citation/Descripti
 
 ###### `dcatap:applicableLegislation` ❌
 
-No DDI Lifecycle binding yet (catalogue holds ELI URIs). Not emitted.
+StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when multilingual; see [UAP language contract](#studyunit-userattributepair-language-contract)). Catalogue often holds ELI URIs. XSL emit TODO.
 
 ###### `healthdcatap:healthCategory` ❌
 
-EHDS Art. 51 CV. No StudyUnit field mapped; not emitted.
+EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory` (plain key in the reference sample). XSL emit TODO.
 
 ###### `healthdcatap:hdab` ❌
 
-Health data access body (`healthdcatap:hdab`). Not emitted.
+Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang` when multilingual). XSL emit TODO.
 
 ###### `healthdcatap:hasStructuredData` ✅
 
@@ -179,7 +199,7 @@ Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset e
 
 ###### `dct:conformsTo` ✅
 
-`Citation/dcterms:conformsTo` -> `dcterms:conformsTo`. Same URI / `Label (URI)` rule as `accessRights` (SNDS-TS keeps prose literals today).
+`Citation/dcterms:conformsTo` -> `dcterms:conformsTo`. Same URI / `Label (URI)` rule as `accessRights` (reference sample may keep prose literals today).
 
 ###### `dct:creator` ✅
 
@@ -191,11 +211,11 @@ Dataset type CV. No StudyUnit mapping; not emitted.
 
 ###### `dcat:version` ❌
 
-No StudyUnit field read by the XSL (`pi:DataFileVersion` on PhysicalInstance is out of scope for Dataset today).
+StudyUnit `UserAttributePair` key `dcat:version` (plain in the reference sample). `pi:DataFileVersion` on PhysicalInstance remains out of scope for Dataset today. XSL emit TODO.
 
 ###### `dcat:temporalResolution` ❌
 
-Not mapped from DDI Coverage / Citation.
+StudyUnit `UserAttributePair` key `dcat:temporalResolution` (+ `@lang` when multilingual). Not read from Coverage / Citation. XSL emit TODO.
 
 ###### `dct:issued` ❌
 
@@ -323,19 +343,19 @@ Per-code `skos:Concept` resources are no longer emitted. Linkage code <-> scheme
 
 ###### `dpv:hasLegalBasis` ❌
 
-Not mapped.
+StudyUnit `UserAttributePair` key `dpv:hasLegalBasis` (plain / language-neutral in the reference sample). XSL emit TODO.
 
 ###### `dpv:hasPurpose` ❌
 
-Not mapped.
+StudyUnit `UserAttributePair` key `dpv:hasPurpose` (+ `@lang` when multilingual). XSL emit TODO.
 
 ###### `dpv:hasPersonalData` ❌
 
-HealthDCAT-AP "personal data". Not mapped.
+HealthDCAT-AP "personal data". StudyUnit `UserAttributePair` key `dpv:hasPersonalData` (+ `@lang` when multilingual). XSL emit TODO.
 
 ###### `dqv:hasQualityAnnotation` ❌
 
-Not mapped.
+StudyUnit `UserAttributePair` key `dqv:hasQualityAnnotation` (+ `@lang` when multilingual). XSL emit TODO.
 
 ###### `adms:versionNotes` ❌
 
@@ -355,7 +375,7 @@ Properties with cardinality requiring at least one value in HealthDCAT-AP R8.
 
 ###### `dcat:accessURL` ✅
 
-`PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set. Omitted when absent (SNDS-TS has no `DataFileURI` today -> Distributions are title-only).
+`PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set. Omitted when absent (reference sample may have no `DataFileURI` -> Distributions are title-only).
 
 ###### `dcatap:applicableLegislation` ❌
 
@@ -478,7 +498,7 @@ Core DCAT-AP does not describe dataset variables. HealthDCAT-AP does, via CSVW l
 
 Dedicate’s Column output is written to pass the R8 non-public SHACL `CSVWColumnShape` (exactly one `csvw:name` and `csvw:datatype` as literals, ≥1 `csvw:title` and `dct:description`, optional `csvw:propertyUrl` IRI). See [Dedicate #7](https://github.com/Making-Sense-Info/Dedicate/issues/7), [#9](https://github.com/Making-Sense-Info/Dedicate/issues/9), [#8](https://github.com/Making-Sense-Info/Dedicate/issues/8).
 
-That is **not** the same as claiming every constraint is spelled out the same way in the HealthDCAT-AP R8 HTML property tables (prose / examples can be quieter or diverge from the shapes). Where they conflict, we follow SHACL rules, and we track upstream mismatches.
+That is not the same as claiming every constraint is spelled out the same way in the HealthDCAT-AP R8 HTML property tables (prose / examples can be quieter or diverge from the shapes). Where they conflict, we follow SHACL rules, and we track upstream mismatches.
 
 Separately, we share the product stance that if the profile uses CSVW, it should respect W3C CSVW properly (full structure / datatypes / ranges), not a silent HealthDCAT-only dialect. It is tracked in upstream [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) (with #55, #61, #56,...). Until that lands, Dedicate stays on the R8 flatten (`Table -> column`) and does not invent `tableSchema`.
 

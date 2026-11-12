@@ -6,8 +6,11 @@
   https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante
   Domains/tables: BENEFICIAIRE (IR_BEN_R, IR_IBA_R), DCIR (ER_PHA_F, ER_BIO_F),
   Causes de décès (KI_ECD_R). Variable subsets only.
-  StudyUnit Citation/Coverage shaped like Mekong catalogue DCAT enrichment.
-  One LogicalProduct per PhysicalInstance (Mekong-like); Dedicate still emits one TableGroup per Dataset.
+  StudyUnit Citation/Coverage plus UserAttributePair for Priority B HealthDCAT fields
+  (values are synthetic). Bilingual UAPs use AttributeKey suffixes @fr / @en;
+  a single occurrence keeps a plain key (no xml:lang on AttributeValue).
+  This file is the reference DDI input for the repository.
+  One LogicalProduct per PhysicalInstance; Dedicate still emits one TableGroup per Dataset.
   Hand-authored metadata for Dedicate demos — not an official SNDS or HDH DDI product.
 -->
 <DDIInstance xmlns="ddi:instance:3_3" xmlns:dcterms="http://purl.org/dc/terms/" isUniversallyUnique="true">
@@ -900,6 +903,94 @@
    <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
       <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:5e2be0b9-4ae5-53f1-88ed-d6df0fa26649:1.0.0</r:URN>
       <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">BEN</r:UserID>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:healthCategory</r:AttributeKey>
+         <r:AttributeValue>HRAD : Healthcare-related administrative data, including on dispensations, reimbursement claims and reimbursements (https://hdeu-dcat.data.health.europa.eu/resource/authority/healthcategories/HRAD)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@fr</r:AttributeKey>
+         <r:AttributeValue>Règlement (UE) 2025/327 sur l'espace européen des données de santé (http://data.europa.eu/eli/reg/2025/327/oj) ; règlement (UE) 2016/679 (RGPD, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@en</r:AttributeKey>
+         <r:AttributeValue>Regulation (EU) 2025/327 on the European Health Data Space (http://data.europa.eu/eli/reg/2025/327/oj); Regulation (EU) 2016/679 (GDPR, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@fr</r:AttributeKey>
+         <r:AttributeValue>Organisme d'accès fictif (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@en</r:AttributeKey>
+         <r:AttributeValue>Fictional health data access body (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@fr</r:AttributeKey>
+         <r:AttributeValue>Infrastructure de recherche (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@en</r:AttributeKey>
+         <r:AttributeValue>Research infrastructure (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@fr</r:AttributeKey>
+         <r:AttributeValue>Année (référentiel bénéficiaires)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@en</r:AttributeKey>
+         <r:AttributeValue>Year (beneficiary reference tables)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasLegalBasis</r:AttributeKey>
+         <r:AttributeValue>Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@fr</r:AttributeKey>
+         <r:AttributeValue>Démonstration de métadonnées / recherche méthodologique</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@en</r:AttributeKey>
+         <r:AttributeValue>Metadata demonstration / methodological research</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@fr</r:AttributeKey>
+         <r:AttributeValue>Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@en</r:AttributeKey>
+         <r:AttributeValue>No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@fr</r:AttributeKey>
+         <r:AttributeValue>50 patients fictifs du jeu SNDS synthétique HDH (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@en</r:AttributeKey>
+         <r:AttributeValue>50 fictional patients from the HDH synthetic SNDS (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfUniqueIndividuals</r:AttributeKey>
+         <r:AttributeValue>50</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@fr</r:AttributeKey>
+         <r:AttributeValue>Environ 50 lignes par table de référence (IR_BEN_R / IR_IBA_R)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@en</r:AttributeKey>
+         <r:AttributeValue>About 50 rows per beneficiary reference table (IR_BEN_R / IR_IBA_R)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@fr</r:AttributeKey>
+         <r:AttributeValue>Évaluation QUANTUM non réalisée (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@en</r:AttributeKey>
+         <r:AttributeValue>QUANTUM assessment not performed (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:version</r:AttributeKey>
+         <r:AttributeValue>1.0.0</r:AttributeValue>
+      </r:UserAttributePair>
       <r:Citation xmlns:r="ddi:reusable:3_3">
          <r:Title>
             <r:String xml:lang="en">Beneficiaries</r:String>
@@ -977,6 +1068,98 @@
    <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
       <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:f28b08e7-be75-5817-93cc-017a71777ae4:1.0.0</r:URN>
       <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">DCIR</r:UserID>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:healthCategory</r:AttributeKey>
+         <r:AttributeValue>HRAD : Healthcare-related administrative data, including on dispensations, reimbursement claims and reimbursements (https://hdeu-dcat.data.health.europa.eu/resource/authority/healthcategories/HRAD)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@fr</r:AttributeKey>
+         <r:AttributeValue>Règlement (UE) 2025/327 sur l'espace européen des données de santé (http://data.europa.eu/eli/reg/2025/327/oj) ; règlement (UE) 2016/679 (RGPD, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@en</r:AttributeKey>
+         <r:AttributeValue>Regulation (EU) 2025/327 on the European Health Data Space (http://data.europa.eu/eli/reg/2025/327/oj); Regulation (EU) 2016/679 (GDPR, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@fr</r:AttributeKey>
+         <r:AttributeValue>Organisme d'accès fictif (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@en</r:AttributeKey>
+         <r:AttributeValue>Fictional health data access body (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@fr</r:AttributeKey>
+         <r:AttributeValue>Infrastructure de recherche (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@en</r:AttributeKey>
+         <r:AttributeValue>Research infrastructure (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@fr</r:AttributeKey>
+         <r:AttributeValue>Jour (dates de soins), mois (flux DCIR)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@en</r:AttributeKey>
+         <r:AttributeValue>Day (care dates), month (DCIR feed)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasLegalBasis</r:AttributeKey>
+         <r:AttributeValue>Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@fr</r:AttributeKey>
+         <r:AttributeValue>Démonstration de métadonnées / recherche méthodologique</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@en</r:AttributeKey>
+         <r:AttributeValue>Metadata demonstration / methodological research</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@fr</r:AttributeKey>
+         <r:AttributeValue>Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@en</r:AttributeKey>
+         <r:AttributeValue>No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@fr</r:AttributeKey>
+         <r:AttributeValue>50 patients fictifs du jeu SNDS synthétique HDH (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@en</r:AttributeKey>
+         <r:AttributeValue>50 fictional patients from the HDH synthetic SNDS (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfUniqueIndividuals</r:AttributeKey>
+         <r:AttributeValue>50</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@fr</r:AttributeKey>
+         <r:AttributeValue>Quelques centaines de lignes de prestations (ER_PHA_F / ER_BIO_F) dans le jeu synthétique</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@en</r:AttributeKey>
+         <r:AttributeValue>A few hundred claim rows (ER_PHA_F / ER_BIO_F) in the synthetic sample</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hasCodingSystem</r:AttributeKey>
+         <r:AttributeValue>CIP13, ATC, NABM</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@fr</r:AttributeKey>
+         <r:AttributeValue>Évaluation QUANTUM non réalisée (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@en</r:AttributeKey>
+         <r:AttributeValue>QUANTUM assessment not performed (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:version</r:AttributeKey>
+         <r:AttributeValue>1.0.0</r:AttributeValue>
+      </r:UserAttributePair>
       <r:Citation xmlns:r="ddi:reusable:3_3">
          <r:Title>
             <r:String xml:lang="en">Ambulatory care claims (DCIR)</r:String>
@@ -1056,6 +1239,98 @@
    <s:StudyUnit xmlns:s="ddi:studyunit:3_3" isUniversallyUnique="true">
       <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:ad3b7fcc-1d84-5af9-8527-fd222c6ee382:1.0.0</r:URN>
       <r:UserID xmlns:r="ddi:reusable:3_3" typeOfUserID="ExampleID">DECES</r:UserID>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:healthCategory</r:AttributeKey>
+         <r:AttributeValue>HRAD : Healthcare-related administrative data, including on dispensations, reimbursement claims and reimbursements (https://hdeu-dcat.data.health.europa.eu/resource/authority/healthcategories/HRAD)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@fr</r:AttributeKey>
+         <r:AttributeValue>Règlement (UE) 2025/327 sur l'espace européen des données de santé (http://data.europa.eu/eli/reg/2025/327/oj) ; règlement (UE) 2016/679 (RGPD, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcatap:applicableLegislation@en</r:AttributeKey>
+         <r:AttributeValue>Regulation (EU) 2025/327 on the European Health Data Space (http://data.europa.eu/eli/reg/2025/327/oj); Regulation (EU) 2016/679 (GDPR, http://data.europa.eu/eli/reg/2016/679/oj)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@fr</r:AttributeKey>
+         <r:AttributeValue>Organisme d'accès fictif (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hdab@en</r:AttributeKey>
+         <r:AttributeValue>Fictional health data access body (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@fr</r:AttributeKey>
+         <r:AttributeValue>Infrastructure de recherche (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dct:type (éditeur)@en</r:AttributeKey>
+         <r:AttributeValue>Research infrastructure (https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/research-infra)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@fr</r:AttributeKey>
+         <r:AttributeValue>Année (causes de décès)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:temporalResolution@en</r:AttributeKey>
+         <r:AttributeValue>Year (causes of death)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasLegalBasis</r:AttributeKey>
+         <r:AttributeValue>Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@fr</r:AttributeKey>
+         <r:AttributeValue>Démonstration de métadonnées / recherche méthodologique</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPurpose@en</r:AttributeKey>
+         <r:AttributeValue>Metadata demonstration / methodological research</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@fr</r:AttributeKey>
+         <r:AttributeValue>Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dpv:hasPersonalData@en</r:AttributeKey>
+         <r:AttributeValue>No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@fr</r:AttributeKey>
+         <r:AttributeValue>50 patients fictifs du jeu SNDS synthétique HDH (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:populationCoverage@en</r:AttributeKey>
+         <r:AttributeValue>50 fictional patients from the HDH synthetic SNDS (data.gouv.fr)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfUniqueIndividuals</r:AttributeKey>
+         <r:AttributeValue>50</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@fr</r:AttributeKey>
+         <r:AttributeValue>Environ 50 lignes (KI_ECD_R) dans le jeu synthétique</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:numberOfRecords@en</r:AttributeKey>
+         <r:AttributeValue>About 50 rows (KI_ECD_R) in the synthetic sample</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>healthdcatap:hasCodingSystem</r:AttributeKey>
+         <r:AttributeValue>CIM-10 / ICD-10</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@fr</r:AttributeKey>
+         <r:AttributeValue>Évaluation QUANTUM non réalisée (exemple Dedicate)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dqv:hasQualityAnnotation@en</r:AttributeKey>
+         <r:AttributeValue>QUANTUM assessment not performed (Dedicate sample)</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>dcat:version</r:AttributeKey>
+         <r:AttributeValue>1.0.0</r:AttributeValue>
+      </r:UserAttributePair>
       <r:Citation xmlns:r="ddi:reusable:3_3">
          <r:Title>
             <r:String xml:lang="en">Causes of death</r:String>

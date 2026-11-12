@@ -56,17 +56,21 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10)
   Done: all fixture Datasets emit ≥1 `dcat:distribution`, no stub when PI absent. Misleading SHACL "missing distribution" = merged minCount+node (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real `Distribution_Shape` gaps e.g. #11 applicableLegislation
 
-### Priority B - parked (DDI / catalogue content missing in DDI XML input)
+### Priority B - catalogue enrichment in DDI (StudyUnit `UserAttributePair`)
 
-Needs catalogue enrichment into DDI, or new DDI fields, before Dedicate can emit SHACL-valid values:
+Reference DDI input [`in/ddil-example.xml`](./ddi-l-to-healthdcat-ap/in/ddil-example.xml) carries Priority B catalogue fields as StudyUnit `UserAttributePair`. Full input / emit contract (including `@lang` on `AttributeKey` and XSL fallback without language): [model-mapping.md — UAP language contract](./model-mapping.md#studyunit-userattributepair-language-contract).
 
-- [ ] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - not in DDI today (may exist upstream of Dedicate, not bound)
-- [ ] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - no Dataset-level provenance in DDI (only variable labels containing “provenance”)
-- [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - catalogue row not bound; watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41) (dataset-type CV unfit for health)
-- [ ] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - catalogue values not in DDI
-- [ ] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - not in DDI
+To get language-tagged RDF for multilingual UAP fields, the DDI input must use `property@fr` / `property@en` (etc.), a single occurrence stays a plain key. The XSL will parse the suffix and attach `@lang` on literals, missing or malformed suffix will be emited without language.
+
+Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `healthdcatap:hasCodingSystem` (optional per StudyUnit), `dqv:hasQualityAnnotation`, `dcat:version`.
+
+- [ ] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - in DDI as UserAttributePair, XSL emit TODO
+- [ ] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - still missing from enrichment pairs
+- [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher type as `dct:type (éditeur)` pair, dataset-type CV still watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
+- [ ] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - in DDI as UserAttributePair, XSL emit TODO
+- [ ] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - in DDI as UserAttributePair, XSL emit TODO
 - [ ] [#17 `vcard:hasEmail` / `hasURL`](https://github.com/Making-Sense-Info/Dedicate/issues/17) - Contributor name only, no ContactInformation / Email
-- [ ] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - needs Agent contactPoint (+ description); blocked on same contact data as #17; also upstream publisher-type [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44)
+- [ ] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - needs Agent contactPoint (+ description), blocked on same contact data as #17; also upstream publisher-type [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44)
 
 ## Other backlog
 
@@ -79,10 +83,9 @@ Needs catalogue enrichment into DDI, or new DDI fields, before Dedicate can emit
 
 - Use [SSSOM](https://mapping-commons.github.io/sssom/dev/) to express the mappings
 - Generate the XSL (or other runtime) from a richer executable SSSOM (today the TTL is curated spec; XSL is hand-written)
-- CI: run `./run.sh … --shacl-jar … --shapes <R8 non-public URL>` on `in/ddil-example.xml` / `SNDS-TS.xml`
 
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B fields: bind catalogue DCAT fields into StudyUnit DDI, or inject Dedicate defaults (e.g. EHDS ELI) in XSL?
+- Priority B: parse StudyUnit `UserAttributePair` in XSL, strip `AttributeKey@lang` per [UAP language contract](./model-mapping.md#studyunit-userattributepair-language-contract), label/URI split for `Label (https://…)` values, defaults only as fallback
 - Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)
