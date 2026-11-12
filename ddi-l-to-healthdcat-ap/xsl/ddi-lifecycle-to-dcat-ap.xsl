@@ -33,7 +33,8 @@
 
   <!-- Priority B UserAttributePair keys we emit today (IRI objects from Label (URI) / embedded URLs) -->
   <xsl:variable name="ded:uap-iri-keys" as="xs:string*" select="(
-      'dcatap:applicableLegislation'
+      'dcatap:applicableLegislation',
+      'healthdcatap:healthCategory'
     )"/>
 
   <!-- Fast URN → element lookup -->
@@ -174,11 +175,13 @@
     <xsl:variable name="tablegroup-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:tablegroup:', .) || '/variables'"/>
 
-    <!-- Priority B UAPs on this StudyUnit (#11 applicableLegislation) -->
+    <!-- Priority B UAPs on this StudyUnit (#11 applicableLegislation, #15 healthCategory) -->
     <xsl:variable name="uaps" as="element(r:UserAttributePair)*"
       select="r:UserAttributePair"/>
     <xsl:variable name="legislation-uris" as="xs:string*"
       select="ded:uap-iris($uaps, 'dcatap:applicableLegislation')"/>
+    <xsl:variable name="health-category-uris" as="xs:string*"
+      select="ded:uap-iris($uaps, 'healthdcatap:healthCategory')"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -288,9 +291,12 @@
       <xsl:text> ;&#10;  healthdcatap:hasCodeValues {ded:literal(.)}</xsl:text>
     </xsl:for-each>
 
-    <!-- Priority B: applicableLegislation (IRI) — Dedicate #11 -->
+    <!-- Priority B: applicableLegislation / healthCategory (IRI) — Dedicate #11 #15 -->
     <xsl:for-each select="$legislation-uris">
       <xsl:text> ;&#10;  dcatap:applicableLegislation {ded:iri(.)}</xsl:text>
+    </xsl:for-each>
+    <xsl:for-each select="$health-category-uris">
+      <xsl:text> ;&#10;  healthdcatap:healthCategory {ded:iri(.)}</xsl:text>
     </xsl:for-each>
 
     <xsl:text> .&#10;&#10;</xsl:text>

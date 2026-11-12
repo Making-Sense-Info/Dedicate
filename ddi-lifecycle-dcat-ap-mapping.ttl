@@ -33,7 +33,7 @@
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
 # - ✅ hasCodeValues: R8 SHACL Literal — emit distinct Code/Value strings (Dedicate #12)
 # - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
-# - ✅ Priority B UAP (#11): AttributeKey(@lang) → applicableLegislation IRIs (Dataset + Distribution); other UAP keys still parked
+# - ✅ Priority B UAP (#11 #15): AttributeKey(@lang) → applicableLegislation / healthCategory IRIs; other UAP keys still parked
 
 # --- Mapping sets --- #
 
@@ -72,6 +72,7 @@
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-applicablelegislation>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory>
   ) .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution> a sssom:MappingSet ;
@@ -573,7 +574,7 @@
       <https://github.com/Making-Sense-Info/Dedicate/issues/12> ;
     sssom:comment "Distinct Code/Value strings from Dataset-scoped CodeLists -> `healthdcatap:hasCodeValues` Literals (R8 SHACL nodeKind Literal / Dedicate #12). No skos:Concept for now, link only via hasCodingSystem." .
 
-# Priority B — StudyUnit UserAttributePair (#11)
+# Priority B — StudyUnit UserAttributePair (#11 #15)
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-applicablelegislation> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-applicablelegislation> ;
@@ -589,6 +590,21 @@
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/11> ;
     sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `dcatap:applicableLegislation` (+ optional `@lang`) → `dcatap:applicableLegislation` IRIs. Extract all http(s) URIs from the value (multi-ELI catalogue strings); dedupe across language variants. Omit when no URI is found." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    dcterms:created "2026-11-12"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:userAttributePair;
+    owl:annotatedTarget healthdcatap:healthCategory;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "UserAttributePair healthCategory"@en;
+    sssom:object_label "health category";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/15> ;
+    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `healthdcatap:healthCategory` → `healthdcatap:healthCategory` IRI (whole-value URI or embedded http(s) in `Label (URI)`). Dedicate #15." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳

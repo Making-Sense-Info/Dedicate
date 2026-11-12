@@ -110,7 +110,7 @@ Rules for the XSL:
 4. Do not read language from `AttributeValue` attributes.
 5. Value → object: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL in the string → IRI (deduped). Language on the key is ignored for IRI objects. Prose with no URI is omitted for IRI-ranged properties.
 
-Emitted today: `dcatap:applicableLegislation`. Other UAP keys in the sample (`healthdcatap:healthCategory`, `healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
+Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`. Other UAP keys in the sample (`healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
 
 ##### Mandatory
 
@@ -136,9 +136,9 @@ Prefers `Citation/dcterms:description`; also accepts classic `Citation/Descripti
 
 StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when multilingual; see [UAP language contract](#studyunit-userattributepair-language-contract)). Extract all `http(s)` URIs from the value (multi-ELI catalogue strings), dedupe across language variants -> Dataset `dcatap:applicableLegislation` IRIs. Same IRIs are copied onto each Distribution of that Dataset ([Dedicate #11](https://github.com/Making-Sense-Info/Dedicate/issues/11)). Omitted when no URI is found.
 
-###### `healthdcatap:healthCategory` ❌
+###### `healthdcatap:healthCategory` ✅
 
-EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory` (plain key in the reference sample). XSL emit TODO.
+EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory` -> `healthdcatap:healthCategory` IRI (whole-value URI or embedded URL). [Dedicate #15](https://github.com/Making-Sense-Info/Dedicate/issues/15).
 
 ###### `healthdcatap:hdab` ❌
 
