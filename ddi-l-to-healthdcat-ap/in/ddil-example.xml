@@ -1029,6 +1029,8 @@
          <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+         <dcterms:provenance xml:lang="fr">Jeu synthétique public HDH (data.gouv.fr, Licence Ouverte 2.0) : tables de référence bénéficiaires dérivées du schéma publié, métadonnées Dedicate d’exemple.</dcterms:provenance>
+         <dcterms:provenance xml:lang="en">Public HDH synthetic dataset (data.gouv.fr, Open Licence 2.0): beneficiary reference tables derived from the published schema; Dedicate sample metadata.</dcterms:provenance>
       </r:Citation>
       <r:Coverage xmlns:r="ddi:reusable:3_3">
          <r:TopicalCoverage isUniversallyUnique="true">
@@ -1198,6 +1200,8 @@
          <dcterms:accrualPeriodicity xml:lang="fr">mensuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">monthly</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+         <dcterms:provenance xml:lang="fr">Jeu synthétique public HDH (data.gouv.fr, Licence Ouverte 2.0) : tables de prestations pharmacie et biologie dérivées du schéma publié, métadonnées Dedicate d’exemple.</dcterms:provenance>
+         <dcterms:provenance xml:lang="en">Public HDH synthetic dataset (data.gouv.fr, Open Licence 2.0): pharmacy and biology claim tables derived from the published schema; Dedicate sample metadata.</dcterms:provenance>
       </r:Citation>
       <r:Coverage xmlns:r="ddi:reusable:3_3">
          <r:TopicalCoverage isUniversallyUnique="true">
@@ -1369,6 +1373,8 @@
          <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
+         <dcterms:provenance xml:lang="fr">Jeu synthétique public HDH (data.gouv.fr, Licence Ouverte 2.0) : tables de causes de décès dérivées du schéma publié, métadonnées Dedicate d’exemple.</dcterms:provenance>
+         <dcterms:provenance xml:lang="en">Public HDH synthetic dataset (data.gouv.fr, Open Licence 2.0): causes-of-death tables derived from the published schema; Dedicate sample metadata.</dcterms:provenance>
       </r:Citation>
       <r:Coverage xmlns:r="ddi:reusable:3_3">
          <r:TopicalCoverage isUniversallyUnique="true">
