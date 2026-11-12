@@ -37,6 +37,11 @@
       'healthdcatap:healthCategory'
     )"/>
 
+  <!-- Priority B UserAttributePair keys → foaf:Agent blank + foaf:name (lang from AttributeKey@lang) -->
+  <xsl:variable name="ded:uap-agent-keys" as="xs:string*" select="(
+      'healthdcatap:hdab'
+    )"/>
+
   <!-- Fast URN → element lookup -->
   <xsl:key name="by-urn"
     match="pi:PhysicalInstance | l:Variable | l:DataRelationship | l:LogicalProduct | l:LogicalRecord
@@ -175,13 +180,15 @@
     <xsl:variable name="tablegroup-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:tablegroup:', .) || '/variables'"/>
 
-    <!-- Priority B UAPs on this StudyUnit (#11 applicableLegislation, #15 healthCategory) -->
+    <!-- Priority B UAPs (#11 applicableLegislation, #15 healthCategory, #16 hdab) -->
     <xsl:variable name="uaps" as="element(r:UserAttributePair)*"
       select="r:UserAttributePair"/>
     <xsl:variable name="legislation-uris" as="xs:string*"
       select="ded:uap-iris($uaps, 'dcatap:applicableLegislation')"/>
     <xsl:variable name="health-category-uris" as="xs:string*"
       select="ded:uap-iris($uaps, 'healthdcatap:healthCategory')"/>
+    <xsl:variable name="hdab-pairs" as="element(r:UserAttributePair)*"
+      select="$uaps[ded:uap-base-key(normalize-space(r:AttributeKey)) = $ded:uap-agent-keys]"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -291,13 +298,27 @@
       <xsl:text> ;&#10;  healthdcatap:hasCodeValues {ded:literal(.)}</xsl:text>
     </xsl:for-each>
 
-    <!-- Priority B: applicableLegislation / healthCategory (IRI) — Dedicate #11 #15 -->
+    <!-- Priority B: applicableLegislation / healthCategory (IRI), hdab (Agent) — #11 #15 #16 -->
     <xsl:for-each select="$legislation-uris">
       <xsl:text> ;&#10;  dcatap:applicableLegislation {ded:iri(.)}</xsl:text>
     </xsl:for-each>
     <xsl:for-each select="$health-category-uris">
       <xsl:text> ;&#10;  healthdcatap:healthCategory {ded:iri(.)}</xsl:text>
     </xsl:for-each>
+    <xsl:if test="exists($hdab-pairs)">
+      <xsl:text> ;&#10;  healthdcatap:hdab [&#10;</xsl:text>
+      <xsl:text>    a foaf:Agent</xsl:text>
+      <xsl:for-each-group select="$hdab-pairs" group-by="
+          ded:uap-lang(normalize-space(r:AttributeKey)) || '|' || normalize-space(r:AttributeValue)">
+        <xsl:variable name="name" as="xs:string" select="normalize-space(r:AttributeValue)"/>
+        <xsl:variable name="lang" as="xs:string?"
+          select="ded:uap-lang(normalize-space(r:AttributeKey))"/>
+        <xsl:if test="$name">
+          <xsl:text> ;&#10;    foaf:name {ded:literal($name, $lang)}</xsl:text>
+        </xsl:if>
+      </xsl:for-each-group>
+      <xsl:text>&#10;  ]</xsl:text>
+    </xsl:if>
 
     <xsl:text> .&#10;&#10;</xsl:text>
 

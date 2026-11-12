@@ -68,7 +68,7 @@ Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `he
 - [ ] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - still missing from enrichment pairs
 - [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher type as `dct:type (éditeur)` pair, dataset-type CV still watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
 - [x] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - UAP -> healthCategory IRI; model-mapping + SSSOM + XSL
-- [ ] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - in DDI as UserAttributePair, XSL emit TODO
+- [x] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - UAP -> `foaf:Agent` + `foaf:name`@lang; model-mapping + SSSOM + XSL (Agent contact still #17/#18)
 - [ ] [#17 `vcard:hasEmail` / `hasURL`](https://github.com/Making-Sense-Info/Dedicate/issues/17) - Contributor name only, no ContactInformation / Email
 - [ ] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - needs Agent contactPoint (+ description), blocked on same contact data as #17; also upstream publisher-type [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44)
 
@@ -87,5 +87,5 @@ Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `he
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B remaining UAP keys (#16 hdab, temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse UAP `@lang` / URI extract helpers already in XSL
+- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse UAP `@lang` / URI extract helpers already in XSL
 - Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)

@@ -110,7 +110,9 @@ Rules for the XSL:
 4. Do not read language from `AttributeValue` attributes.
 5. Value → object: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL in the string → IRI (deduped). Language on the key is ignored for IRI objects. Prose with no URI is omitted for IRI-ranged properties.
 
-Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`. Other UAP keys in the sample (`healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
+Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
+
+Agent-ranged UAP values (`hdab`): prose becomes `foaf:name` with language from `AttributeKey@lang` (no URI required).
 
 ##### Mandatory
 
@@ -140,9 +142,9 @@ StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when
 
 EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory` -> `healthdcatap:healthCategory` IRI (whole-value URI or embedded URL). [Dedicate #15](https://github.com/Making-Sense-Info/Dedicate/issues/15).
 
-###### `healthdcatap:hdab` ❌
+###### `healthdcatap:hdab` ✅
 
-Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang` when multilingual). XSL emit TODO.
+Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged per pair ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent contact / publisher-type enrichment remains [#17](https://github.com/Making-Sense-Info/Dedicate/issues/17) / [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
 
 ###### `healthdcatap:hasStructuredData` ✅
 
