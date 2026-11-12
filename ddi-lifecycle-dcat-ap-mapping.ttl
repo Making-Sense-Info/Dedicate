@@ -238,12 +238,13 @@
     dcterms:created "2026-11-04"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
     owl:annotatedSource lifecycle:citation;
-    owl:annotatedTarget dcterms:source; # ❓ Representative; also conformsTo, accessRights, accrualPeriodicity, modified
+    owl:annotatedTarget dcterms:source; # ❓ Representative; also conformsTo, accessRights, accrualPeriodicity, modified, provenance
     sssom:confidence 0.85;
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Citation dcterms children"@en;
     sssom:object_label "dcterms passthrough";
-    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal." .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/issues/13> ;
+    sssom:comment "`Citation/dcterms:source|conformsTo|accessRights|accrualPeriodicity|modified|provenance` -> same properties on Dataset. Whole-value URIs or catalogue `Label (https://…)` -> IRI; else language-tagged literal (Dedicate #13 for provenance)." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/keyword-to-keyword> ;

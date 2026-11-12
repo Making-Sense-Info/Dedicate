@@ -240,9 +240,9 @@ Remaining HealthDCAT-AP Dataset properties (optional / profile extensions).
 
 `Citation/dcterms:source` -> `dcterms:source`.
 
-###### `dct:provenance` ❌
+###### `dct:provenance` ✅
 
-Not mapped (catalogue text exists upstream; no DDI Note / ProvenanceStatement binding yet).
+`Citation/dcterms:provenance` -> `dcterms:provenance` (language-tagged literals). Same Citation dcterms passthrough as `source` / `accessRights` ([Dedicate #13](https://github.com/Making-Sense-Info/Dedicate/issues/13)).
 
 ###### `dct:alternative` ❌
 

@@ -28,7 +28,8 @@
 
   <!-- dcterms children Mekong may put under StudyUnit/Citation -->
   <xsl:variable name="ded:citation-dcterms" as="xs:string*" select="(
-      'description', 'source', 'conformsTo', 'accessRights', 'accrualPeriodicity', 'modified'
+      'description', 'source', 'conformsTo', 'accessRights', 'accrualPeriodicity',
+      'modified', 'provenance'
     )"/>
 
   <!-- Priority B UserAttributePair keys we emit today (IRI objects from Label (URI) / embedded URLs) -->

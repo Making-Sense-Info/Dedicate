@@ -112,7 +112,7 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 ## What you get
 
 - One `dcat:Dataset` per StudyUnit, one `dcat:Distribution` per linked PhysicalInstance
-- StudyUnit `Citation` / `Coverage` -> Dataset properties (`title`, `description`, `creator`, `publisher`, `contactPoint`, `language`, `identifier`, `source`, `conformsTo`, `accessRights`, `accrualPeriodicity`, `modified`, `keyword`, `theme`, `spatial`, `temporal`)
+- StudyUnit `Citation` / `Coverage` -> Dataset properties (`title`, `description`, `creator`, `publisher`, `contactPoint`, `language`, `identifier`, `source`, `conformsTo`, `accessRights`, `accrualPeriodicity`, `modified`, `provenance`, `keyword`, `theme`, `spatial`, `temporal`)
 - StudyUnit `UserAttributePair` (Priority B): reference input uses `AttributeKey@fr` / `@en` when multilingual, plain key when unique (no `xml:lang` on `AttributeValue`). XSL emits `dcatap:applicableLegislation` (Dataset + Distribution IRIs), `healthdcatap:healthCategory` (IRI), `healthdcatap:hdab` (`foaf:Agent` + names). See [UAP language contract](../model-mapping.md#studyunit-userattributepair-language-contract). Other UAP keys stay parked.
 - `healthdcatap:hasVariables` -> one CSVW `TableGroup` per Dataset, with one `csvw:Table` per LogicalRecord of the StudyUnit’s PhysicalInstances
 - Columns follow R8 SHACL `CSVWColumnShape` (name / title / description / datatype literals). See the [CSVW conformance note](../model-mapping.md#conformance-note-shacl-vs-prose-vs-w3c-csvw) in `model-mapping.md`
