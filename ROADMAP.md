@@ -60,11 +60,11 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 
 Reference DDI input [`in/ddil-example.xml`](./ddi-l-to-healthdcat-ap/in/ddil-example.xml) carries Priority B catalogue fields as StudyUnit `UserAttributePair`. Full input / emit contract (including `@lang` on `AttributeKey` and XSL fallback without language): [model-mapping.md — UAP language contract](./model-mapping.md#studyunit-userattributepair-language-contract).
 
-To get language-tagged RDF for multilingual UAP fields, the DDI input must use `property@fr` / `property@en` (etc.), a single occurrence stays a plain key. The XSL will parse the suffix and attach `@lang` on literals, missing or malformed suffix will be emited without language.
+To get language-tagged RDF for multilingual UAP fields, the DDI input must use `property@fr` / `property@en` (etc.), a single occurrence stays a plain key. The XSL parses the suffix and attaches `@lang` on literals, missing or malformed suffix will emit without language. IRI-ranged UAP values ignore language on the key.
 
 Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `healthdcatap:hasCodingSystem` (optional per StudyUnit), `dqv:hasQualityAnnotation`, `dcat:version`.
 
-- [ ] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - in DDI as UserAttributePair, XSL emit TODO
+- [x] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - UAP -> Dataset + Distribution IRIs (multi-ELI extract); model-mapping + SSSOM + XSL
 - [ ] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - still missing from enrichment pairs
 - [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher type as `dct:type (éditeur)` pair, dataset-type CV still watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
 - [ ] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - in DDI as UserAttributePair, XSL emit TODO
@@ -87,5 +87,5 @@ Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `he
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B: parse StudyUnit `UserAttributePair` in XSL, strip `AttributeKey@lang` per [UAP language contract](./model-mapping.md#studyunit-userattributepair-language-contract), label/URI split for `Label (https://…)` values, defaults only as fallback
+- Priority B remaining UAP keys (#15 healthCategory, #16 hdab, temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse UAP `@lang` / URI extract helpers already in XSL
 - Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)

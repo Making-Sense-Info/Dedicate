@@ -102,14 +102,15 @@ Input convention (reference sample `in/ddil-example.xml`):
 | One language / language-neutral | plain property key, e.g. `dpv:hasLegalBasis` | text (no `xml:lang`) | literal or IRI with no language tag |
 | Several languages | `property@fr`, `property@en`,... | one pair per language | same predicate, language-tagged literals |
 
-Rules for the XSL (when Priority B emit is implemented):
+Rules for the XSL:
 
 1. Split `AttributeKey` on the last `@` only when the suffix is a well-formed language tag (letters, optionally `-` + further subtags, e.g. `fr`, `en`, `en-GB`).
-2. Predicate = the part before that `@`, `xml:lang` / Turtle `@lang` = the suffix.
-3. Fallback: no `@`, empty suffix, or malformed tag -> treat the whole string as the predicate and emit without language tag (do not invent a default language).
+2. Predicate = the part before that `@`; language for literals = the suffix.
+3. Fallback: no `@`, empty suffix, or malformed tag → treat the whole string as the predicate and emit without language tag (do not invent a default language).
 4. Do not read language from `AttributeValue` attributes.
+5. Value → object: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL in the string → IRI (deduped). Language on the key is ignored for IRI objects. Prose with no URI is omitted for IRI-ranged properties.
 
-Applies to multilingual UAP-backed fields such as `dcatap:applicableLegislation`, `healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfRecords`, `dqv:hasQualityAnnotation`, and publisher-type style keys like `dct:type (éditeur)`. Language-neutral keys in the sample stay plain (`healthdcatap:healthCategory`, `dpv:hasLegalBasis`, `healthdcatap:numberOfUniqueIndividuals`, `dcat:version`, optional `healthdcatap:hasCodingSystem` as catalogue prose).
+Emitted today: `dcatap:applicableLegislation`. Other UAP keys in the sample (`healthdcatap:healthCategory`, `healthdcatap:hdab`, `dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
 
 ##### Mandatory
 
@@ -131,9 +132,9 @@ Prefers `Citation/dcterms:description`; also accepts classic `Citation/Descripti
 
 `Citation/dcterms:accessRights` -> `dcterms:accessRights`. Whole-value URIs, or catalogue strings `Label (https://…)`, become IRIs, otherwise kept as language-tagged literals.
 
-###### `dcatap:applicableLegislation` ❌
+###### `dcatap:applicableLegislation` ✅
 
-StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when multilingual; see [UAP language contract](#studyunit-userattributepair-language-contract)). Catalogue often holds ELI URIs. XSL emit TODO.
+StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when multilingual; see [UAP language contract](#studyunit-userattributepair-language-contract)). Extract all `http(s)` URIs from the value (multi-ELI catalogue strings), dedupe across language variants -> Dataset `dcatap:applicableLegislation` IRIs. Same IRIs are copied onto each Distribution of that Dataset ([Dedicate #11](https://github.com/Making-Sense-Info/Dedicate/issues/11)). Omitted when no URI is found.
 
 ###### `healthdcatap:healthCategory` ❌
 
@@ -167,7 +168,7 @@ Prefers structured `ContactInformation` -> `vcard:Kind`; else `Citation/Contribu
 
 Each `PhysicalInstanceReference` -> `dcat:distribution` (one Distribution per PhysicalInstance).
 
-Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset emits ≥1 distribution ([Dedicate #10](https://github.com/Making-Sense-Info/Dedicate/issues/10)). No stub Distribution when PI is absent, treat as incomplete DDI. A Sparna message "missing distribution" can be misleading when `minCount` and `sh:node :Distribution_Shape` are merged (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real gaps are `Distribution_Shape` (e.g. `dcatap:applicableLegislation`, Priority B [#11](https://github.com/Making-Sense-Info/Dedicate/issues/11)).
+Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset emits ≥1 distribution ([Dedicate #10](https://github.com/Making-Sense-Info/Dedicate/issues/10)). No stub Distribution when PI is absent, treat as incomplete DDI. A Sparna message "missing distribution" can be misleading when `minCount` and `sh:node :Distribution_Shape` are merged (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). `dcatap:applicableLegislation` on Distribution is filled from the StudyUnit UAP ([#11](https://github.com/Making-Sense-Info/Dedicate/issues/11)).
 
 ###### `dcat:keyword` ✅
 
@@ -377,9 +378,9 @@ Properties with cardinality requiring at least one value in HealthDCAT-AP R8.
 
 `PhysicalInstance/DataFileIdentification/DataFileURI` -> `dcat:accessURL`. Relative paths are resolved against the XSL `base-uri` param when set. Omitted when absent (reference sample may have no `DataFileURI` -> Distributions are title-only).
 
-###### `dcatap:applicableLegislation` ❌
+###### `dcatap:applicableLegislation` ✅
 
-ELI / legal resource on the Distribution. No PhysicalInstance binding, not emitted.
+ELI / legal resource on the Distribution. Copied from the parent StudyUnit UAP `dcatap:applicableLegislation` IRIs (same extraction as Dataset; [Dedicate #11](https://github.com/Making-Sense-Info/Dedicate/issues/11)). No PhysicalInstance-level UAP yet.
 
 ##### Recommended
 

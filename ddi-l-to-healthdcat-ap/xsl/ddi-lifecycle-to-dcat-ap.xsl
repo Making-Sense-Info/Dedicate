@@ -31,6 +31,11 @@
       'description', 'source', 'conformsTo', 'accessRights', 'accrualPeriodicity', 'modified'
     )"/>
 
+  <!-- Priority B UserAttributePair keys we emit today (IRI objects from Label (URI) / embedded URLs) -->
+  <xsl:variable name="ded:uap-iri-keys" as="xs:string*" select="(
+      'dcatap:applicableLegislation'
+    )"/>
+
   <!-- Fast URN → element lookup -->
   <xsl:key name="by-urn"
     match="pi:PhysicalInstance | l:Variable | l:DataRelationship | l:LogicalProduct | l:LogicalRecord
@@ -61,6 +66,7 @@
   <xsl:template match="/">
     <xsl:text>@prefix csvw: &lt;http://www.w3.org/ns/csvw#&gt; .&#10;</xsl:text>
     <xsl:text>@prefix dcat: &lt;http://www.w3.org/ns/dcat#&gt; .&#10;</xsl:text>
+    <xsl:text>@prefix dcatap: &lt;http://data.europa.eu/r5r/&gt; .&#10;</xsl:text>
     <xsl:text>@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .&#10;</xsl:text>
     <xsl:text>@prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .&#10;</xsl:text>
     <xsl:text>@prefix healthdcatap: &lt;http://healthdataportal.eu/ns/health#&gt; .&#10;</xsl:text>
@@ -167,6 +173,12 @@
     <!-- One TableGroup per Dataset (HealthDCAT-AP idiom), not per LogicalProduct -->
     <xsl:variable name="tablegroup-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:tablegroup:', .) || '/variables'"/>
+
+    <!-- Priority B UAPs on this StudyUnit (#11 applicableLegislation) -->
+    <xsl:variable name="uaps" as="element(r:UserAttributePair)*"
+      select="r:UserAttributePair"/>
+    <xsl:variable name="legislation-uris" as="xs:string*"
+      select="ded:uap-iris($uaps, 'dcatap:applicableLegislation')"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -276,9 +288,16 @@
       <xsl:text> ;&#10;  healthdcatap:hasCodeValues {ded:literal(.)}</xsl:text>
     </xsl:for-each>
 
+    <!-- Priority B: applicableLegislation (IRI) — Dedicate #11 -->
+    <xsl:for-each select="$legislation-uris">
+      <xsl:text> ;&#10;  dcatap:applicableLegislation {ded:iri(.)}</xsl:text>
+    </xsl:for-each>
+
     <xsl:text> .&#10;&#10;</xsl:text>
 
-    <xsl:apply-templates select="$pis" mode="distribution"/>
+    <xsl:apply-templates select="$pis" mode="distribution">
+      <xsl:with-param name="applicable-legislation" select="$legislation-uris"/>
+    </xsl:apply-templates>
 
     <xsl:apply-templates select="$code-lists" mode="coding-system"/>
 
@@ -426,6 +445,7 @@
   <!-- ===================================================================== -->
 
   <xsl:template match="pi:PhysicalInstance" mode="distribution">
+    <xsl:param name="applicable-legislation" as="xs:string*" select="()"/>
     <xsl:variable name="dist-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:distribution:', .)"/>
 
@@ -458,6 +478,11 @@
       | r:Citation/r:DCTerms/*[local-name() eq 'format']
       ) ! normalize-space(.)[. ne '']">
       <xsl:text> ;&#10;  dcterms:format {ded:literal(.)}</xsl:text>
+    </xsl:for-each>
+
+    <!-- Same StudyUnit UAP legislation on each Distribution (HealthDCAT Distribution_Shape / #11) -->
+    <xsl:for-each select="$applicable-legislation">
+      <xsl:text> ;&#10;  dcatap:applicableLegislation {ded:iri(.)}</xsl:text>
     </xsl:for-each>
 
     <xsl:text> .&#10;&#10;</xsl:text>
@@ -697,6 +722,52 @@
         if (matches($t, '\(https?://[^)\s]+\)'))
         then replace($t, '^.*?\((https?://[^)\s]+)\).*$', '$1')
         else ()
+      "/>
+  </xsl:function>
+
+  <!-- All http(s) URIs in a catalogue string (multi-ELI applicableLegislation, etc.) -->
+  <xsl:function name="ded:extract-uris" as="xs:string*">
+    <xsl:param name="text" as="xs:string?"/>
+    <xsl:variable name="t" as="xs:string" select="string(($text, '')[1])"/>
+    <xsl:sequence select="
+        distinct-values(
+          analyze-string($t, 'https?://[^\s\)\]&gt;,;]+')/*:match ! string(.)
+        )
+      "/>
+  </xsl:function>
+
+  <!-- AttributeKey → predicate: strip trailing @lang when well-formed BCP 47 -->
+  <xsl:function name="ded:uap-base-key" as="xs:string">
+    <xsl:param name="key" as="xs:string"/>
+    <xsl:sequence select="
+        if (matches($key, '^.+@[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$'))
+        then replace($key, '^(.+)@([A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*)$', '$1')
+        else $key
+      "/>
+  </xsl:function>
+
+  <xsl:function name="ded:uap-lang" as="xs:string?">
+    <xsl:param name="key" as="xs:string"/>
+    <xsl:sequence select="
+        if (matches($key, '^.+@[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$'))
+        then replace($key, '^(.+)@([A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*)$', '$2')
+        else ()
+      "/>
+  </xsl:function>
+
+  <!-- Distinct IRIs from UAPs whose base key matches (whole-value URI or embedded http(s)) -->
+  <xsl:function name="ded:uap-iris" as="xs:string*">
+    <xsl:param name="pairs" as="element(r:UserAttributePair)*"/>
+    <xsl:param name="base-key" as="xs:string"/>
+    <xsl:sequence select="
+        distinct-values(
+          for $p in $pairs[ded:uap-base-key(normalize-space(r:AttributeKey)) eq $base-key]
+          return
+            let $val := normalize-space($p/r:AttributeValue)
+            return
+              if (matches($val, '^(https?|urn):', 'i')) then $val
+              else ded:extract-uris($val)
+        )
       "/>
   </xsl:function>
 
