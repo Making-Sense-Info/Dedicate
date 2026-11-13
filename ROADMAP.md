@@ -58,11 +58,9 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 
 ### Priority B - catalogue enrichment in DDI (StudyUnit `UserAttributePair`)
 
-Reference DDI input [`in/ddil-example.xml`](./ddi-l-to-healthdcat-ap/in/ddil-example.xml) carries Priority B catalogue fields as StudyUnit `UserAttributePair`. Full input / emit contract (including `@lang` on `AttributeKey` and XSL fallback without language): [model-mapping.md — UAP language contract](./model-mapping.md#studyunit-userattributepair-language-contract).
+Reference DDI input [`in/ddil-example.xml`](./ddi-l-to-healthdcat-ap/in/ddil-example.xml) carries Priority B catalogue fields as StudyUnit `UserAttributePair` with Colectica `extension:CustomField` JSON (`Description` = property name, `MultilingualStringValue` = values). Same shape as Mekong parking / `SNDS-TS.xml`. Full contract: [model-mapping.md — UAP contract](./model-mapping.md#studyunit-userattributepair-contract-colectica-customfield-json).
 
-To get language-tagged RDF for multilingual UAP fields, the DDI input must use `property@fr` / `property@en` (etc.), a single occurrence stays a plain key. The XSL parses the suffix and attaches `@lang` on literals, missing or malformed suffix will emit without language. IRI-ranged UAP values ignore language on the key.
-
-Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `healthdcatap:hasCodingSystem` (optional per StudyUnit), `dqv:hasQualityAnnotation`, `dcat:version`.
+Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `healthdcatap:hasCodingSystem` (optional per StudyUnit), `dqv:hasQualityAnnotation`, `dcat:version`.
 
 - [x] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - UAP -> Dataset + Distribution IRIs (multi-ELI extract); model-mapping + SSSOM + XSL
 - [x] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - `Citation/dcterms:provenance` -> `dct:ProvenanceStatement` blank + `rdfs:label`@lang (not Literal); sample + model-mapping + SSSOM + XSL
@@ -87,5 +85,5 @@ Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `he
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse UAP `@lang` / URI extract helpers already in XSL
+- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse CustomField JSON / URI extract helpers already in XSL
 - Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)

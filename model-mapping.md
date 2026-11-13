@@ -91,28 +91,43 @@ Bibliographic / coverage fields come from `Citation` and `Coverage`.
 
 Linked PhysicalInstances become Distributions, LogicalRecords / Variables become the CSVW TableGroup (see [Dataset structure / variables](#dataset-structure--variables-healthdcat-ap--csvw)).
 
-##### StudyUnit `UserAttributePair` language contract
+##### StudyUnit `UserAttributePair` contract (JSON CustomField)
 
-Priority B catalogue fields that have no dedicated DDI Lifecycle element are carried as StudyUnit `UserAttributePair`. DDI does not put `xml:lang` on `AttributeValue`, so language for RDF literals must be encoded in `AttributeKey`.
+Priority B catalogue fields that have no dedicated DDI Lifecycle element are carried as StudyUnit `UserAttributePair`. The expected input (reference sample `in/ddil-example.xml`) is one pair per property:
 
-Input convention (reference sample `in/ddil-example.xml`):
+| Field | Content |
+| --- | --- |
+| `AttributeKey` | always `extension:CustomField` |
+| `AttributeValue` | JSON object (Colectica multilingual CustomField, `ValueType` = `1`) |
 
-| Situation | `AttributeKey` | `AttributeValue` | Expected RDF |
-| --- | --- | --- | --- |
-| One language / language-neutral | plain property key, e.g. `dpv:hasLegalBasis` | text (no `xml:lang`) | literal or IRI with no language tag |
-| Several languages | `property@fr`, `property@en`,... | one pair per language | same predicate, language-tagged literals |
+JSON shape:
+
+```json
+{
+  "ValueType": 1,
+  "Title": { "en": "…", "fr": "…" },
+  "Description": { "en": "dcatap:applicableLegislation", "fr": "dcatap:applicableLegislation" },
+  "MultilingualStringValue": { "en": "…", "fr": "…" }
+}
+```
+
+| JSON field | Role for Dedicate |
+| --- | --- |
+| `Description.en` / `.fr` | HealthDCAT / DCAT property name (same string in both langs). Predicate for mapping. |
+| `Title.*` | Human label only (ignored by the XSL). |
+| `MultilingualStringValue.*` | Value text per language (`en`, `fr`, …). |
 
 Rules for the XSL:
 
-1. Split `AttributeKey` on the last `@` only when the suffix is a well-formed language tag (letters, optionally `-` + further subtags, e.g. `fr`, `en`, `en-GB`).
-2. Predicate = the part before that `@`; language for literals = the suffix.
-3. Fallback: no `@`, empty suffix, or malformed tag → treat the whole string as the predicate and emit without language tag (do not invent a default language).
-4. Do not read language from `AttributeValue` attributes.
-5. Value → object: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL in the string → IRI (deduped). Language on the key is ignored for IRI objects. Prose with no URI is omitted for IRI-ranged properties.
+1. If `AttributeKey` is `extension:CustomField` and `AttributeValue` parses as JSON with `Description` + `MultilingualStringValue`, use that contract.
+2. Property key = first non-empty of `Description.en`, `Description.fr`, then any other `Description` entry.
+3. For language-tagged literals (e.g. `hdab` / `foaf:name`), emit one value per `MultilingualStringValue` entry using the map key as `@lang`.
+4. For IRI-ranged properties, scan every `MultilingualStringValue` string: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL → IRI (deduped across languages). Prose with no URI is omitted.
+5. Legacy fallback (not used in the reference sample): plain `AttributeKey` = property name, optional `property@lang` suffix, raw `AttributeValue` text — same emit rules as before.
 
 Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
 
-Agent-ranged UAP values (`hdab`): prose becomes `foaf:name` with language from `AttributeKey@lang` (no URI required).
+Agent-ranged UAP values (`hdab`): each `MultilingualStringValue` entry becomes `foaf:name` with that language (no URI required).
 
 ##### Mandatory
 
@@ -136,15 +151,15 @@ Prefers `Citation/dcterms:description`; also accepts classic `Citation/Descripti
 
 ###### `dcatap:applicableLegislation` ✅
 
-StudyUnit `UserAttributePair` key `dcatap:applicableLegislation` (+ `@lang` when multilingual; see [UAP language contract](#studyunit-userattributepair-language-contract)). Extract all `http(s)` URIs from the value (multi-ELI catalogue strings), dedupe across language variants -> Dataset `dcatap:applicableLegislation` IRIs. Same IRIs are copied onto each Distribution of that Dataset ([Dedicate #11](https://github.com/Making-Sense-Info/Dedicate/issues/11)). Omitted when no URI is found.
+StudyUnit `UserAttributePair` CustomField whose `Description` is `dcatap:applicableLegislation` (see [UAP contract](#studyunit-userattributepair-contract-colectica-customfield-json)). Extract all `http(s)` URIs from `MultilingualStringValue` (multi-ELI catalogue strings), dedupe across languages -> Dataset `dcatap:applicableLegislation` IRIs. Same IRIs are copied onto each Distribution of that Dataset ([Dedicate #11](https://github.com/Making-Sense-Info/Dedicate/issues/11)). Omitted when no URI is found.
 
 ###### `healthdcatap:healthCategory` ✅
 
-EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory` -> `healthdcatap:healthCategory` IRI (whole-value URI or embedded URL). [Dedicate #15](https://github.com/Making-Sense-Info/Dedicate/issues/15).
+EHDS Art. 51 CV. StudyUnit CustomField `Description` `healthdcatap:healthCategory` -> `healthdcatap:healthCategory` IRI (whole-value URI or embedded URL in `MultilingualStringValue`). [Dedicate #15](https://github.com/Making-Sense-Info/Dedicate/issues/15).
 
 ###### `healthdcatap:hdab` ✅
 
-Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged per pair ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent `cv:contactPoint` on hdab (HealthAgent_Shape) is not emitted yet; publisher Agent contact is [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
+Health data access body. StudyUnit CustomField `Description` `healthdcatap:hdab` → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each `MultilingualStringValue` entry ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent `cv:contactPoint` on hdab (HealthAgent_Shape) is not emitted yet; publisher Agent contact is [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
 
 ###### `healthdcatap:hasStructuredData` ✅
 
@@ -214,11 +229,11 @@ Dataset type CV. No StudyUnit mapping; not emitted.
 
 ###### `dcat:version` ❌
 
-StudyUnit `UserAttributePair` key `dcat:version` (plain in the reference sample). `pi:DataFileVersion` on PhysicalInstance remains out of scope for Dataset today. XSL emit TODO.
+StudyUnit CustomField `Description` `dcat:version`. `pi:DataFileVersion` on PhysicalInstance remains out of scope for Dataset today. XSL emit TODO.
 
 ###### `dcat:temporalResolution` ❌
 
-StudyUnit `UserAttributePair` key `dcat:temporalResolution` (+ `@lang` when multilingual). Not read from Coverage / Citation. XSL emit TODO.
+StudyUnit CustomField `Description` `dcat:temporalResolution`. Not read from Coverage / Citation. XSL emit TODO.
 
 ###### `dct:issued` ❌
 
@@ -346,19 +361,19 @@ Per-code `skos:Concept` resources are no longer emitted. Linkage code <-> scheme
 
 ###### `dpv:hasLegalBasis` ❌
 
-StudyUnit `UserAttributePair` key `dpv:hasLegalBasis` (plain / language-neutral in the reference sample). XSL emit TODO.
+StudyUnit CustomField `Description` `dpv:hasLegalBasis`. XSL emit TODO.
 
 ###### `dpv:hasPurpose` ❌
 
-StudyUnit `UserAttributePair` key `dpv:hasPurpose` (+ `@lang` when multilingual). XSL emit TODO.
+StudyUnit CustomField `Description` `dpv:hasPurpose`. XSL emit TODO.
 
 ###### `dpv:hasPersonalData` ❌
 
-HealthDCAT-AP "personal data". StudyUnit `UserAttributePair` key `dpv:hasPersonalData` (+ `@lang` when multilingual). XSL emit TODO.
+HealthDCAT-AP "personal data". StudyUnit CustomField `Description` `dpv:hasPersonalData`. XSL emit TODO.
 
 ###### `dqv:hasQualityAnnotation` ❌
 
-StudyUnit `UserAttributePair` key `dqv:hasQualityAnnotation` (+ `@lang` when multilingual). XSL emit TODO.
+StudyUnit CustomField `Description` `dqv:hasQualityAnnotation`. XSL emit TODO.
 
 ###### `adms:versionNotes` ❌
 

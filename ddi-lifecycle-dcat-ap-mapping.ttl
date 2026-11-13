@@ -33,7 +33,7 @@
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
 # - ✅ hasCodeValues: R8 SHACL Literal — emit distinct Code/Value strings (Dedicate #12)
 # - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
-# - ✅ Priority B UAP (#11 #15 #16): AttributeKey(@lang) → applicableLegislation / healthCategory IRIs + hdab Agent; other UAP keys still parked
+# - ✅ Priority B UAP (#11 #15 #16): extension:CustomField JSON (Description + MultilingualStringValue) → applicableLegislation / healthCategory IRIs + hdab Agent; other UAP keys still parked
 
 # --- Mapping sets --- #
 
@@ -608,7 +608,7 @@
     sssom:object_label "applicable legislation";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/11> ;
-    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `dcatap:applicableLegislation` (+ optional `@lang`) → `dcatap:applicableLegislation` IRIs. Extract all http(s) URIs from the value (multi-ELI catalogue strings); dedupe across language variants. Omit when no URI is found." .
+    sssom:comment "StudyUnit `UserAttributePair` / Colectica `extension:CustomField` whose `Description` is `dcatap:applicableLegislation` → `dcatap:applicableLegislation` IRIs. Extract all http(s) URIs from `MultilingualStringValue`; dedupe across languages. Omit when no URI is found." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory> ;
@@ -623,7 +623,7 @@
     sssom:object_label "health category";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/15> ;
-    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `healthdcatap:healthCategory` → `healthdcatap:healthCategory` IRI (whole-value URI or embedded http(s) in `Label (URI)`). Dedicate #15." .
+    sssom:comment "StudyUnit CustomField `Description` `healthdcatap:healthCategory` → `healthdcatap:healthCategory` IRI (whole-value URI or embedded http(s) in `MultilingualStringValue`). Dedicate #15." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-hdab> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-hdab> ;
@@ -638,7 +638,7 @@
     sssom:object_label "health data access body";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/16> ;
-    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each pair. Dedicate #16. hdab `cv:contactPoint` (HealthAgent_Shape) still parked; publisher Agent contact is #18." .
+    sssom:comment "StudyUnit CustomField `Description` `healthdcatap:hdab` → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` from each `MultilingualStringValue` lang. Dedicate #16. hdab `cv:contactPoint` (HealthAgent_Shape) still parked; publisher Agent contact is #18." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳

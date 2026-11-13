@@ -190,7 +190,7 @@
     <xsl:variable name="health-category-uris" as="xs:string*"
       select="ded:uap-iris($uaps, 'healthdcatap:healthCategory')"/>
     <xsl:variable name="hdab-pairs" as="element(r:UserAttributePair)*"
-      select="$uaps[ded:uap-base-key(normalize-space(r:AttributeKey)) = $ded:uap-agent-keys]"/>
+      select="$uaps[ded:uap-property-key(.) = $ded:uap-agent-keys]"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -330,11 +330,14 @@
     <xsl:if test="exists($hdab-pairs)">
       <xsl:text> ;&#10;  healthdcatap:hdab [&#10;</xsl:text>
       <xsl:text>    a foaf:Agent</xsl:text>
-      <xsl:for-each-group select="$hdab-pairs" group-by="
-          ded:uap-lang(normalize-space(r:AttributeKey)) || '|' || normalize-space(r:AttributeValue)">
-        <xsl:variable name="name" as="xs:string" select="normalize-space(r:AttributeValue)"/>
+      <xsl:for-each-group
+        select="
+          for $p in $hdab-pairs return ded:uap-value-entries($p)"
+        group-by="string((.?lang, '')[1]) || '|' || normalize-space(string((.?value, '')[1]))">
+        <xsl:variable name="name" as="xs:string"
+          select="normalize-space(string((.?value, '')[1]))"/>
         <xsl:variable name="lang" as="xs:string?"
-          select="ded:uap-lang(normalize-space(r:AttributeKey))"/>
+          select="normalize-space(string((.?lang, '')[1]))[. ne '']"/>
         <xsl:if test="$name">
           <xsl:text> ;&#10;    foaf:name {ded:literal($name, $lang)}</xsl:text>
         </xsl:if>
@@ -843,7 +846,7 @@
       "/>
   </xsl:function>
 
-  <!-- AttributeKey → predicate: strip trailing @lang when well-formed BCP 47 -->
+  <!-- Legacy AttributeKey → predicate: strip trailing @lang when well-formed BCP 47 -->
   <xsl:function name="ded:uap-base-key" as="xs:string">
     <xsl:param name="key" as="xs:string"/>
     <xsl:sequence select="
@@ -862,18 +865,95 @@
       "/>
   </xsl:function>
 
-  <!-- Distinct IRIs from UAPs whose base key matches (whole-value URI or embedded http(s)) -->
+  <!-- Colectica CustomField JSON (AttributeKey = extension:CustomField) → map(*), else empty -->
+  <xsl:function name="ded:uap-json-map" as="map(*)?">
+    <xsl:param name="pair" as="element()"/>
+    <xsl:variable name="akey" as="xs:string" select="normalize-space($pair/r:AttributeKey)"/>
+    <xsl:variable name="raw" as="xs:string" select="normalize-space($pair/r:AttributeValue)"/>
+    <xsl:choose>
+      <xsl:when test="$akey eq 'extension:CustomField' and starts-with($raw, '{')">
+        <xsl:try>
+          <xsl:variable name="parsed" select="parse-json($raw)"/>
+          <xsl:sequence select="if ($parsed instance of map(*)) then $parsed else ()"/>
+          <xsl:catch>
+            <xsl:sequence select="()"/>
+          </xsl:catch>
+        </xsl:try>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- Property name: CustomField Description.en|fr, else legacy AttributeKey (sans @lang) -->
+  <xsl:function name="ded:uap-property-key" as="xs:string">
+    <xsl:param name="pair" as="element()"/>
+    <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+    <xsl:choose>
+      <xsl:when test="exists($j)">
+        <xsl:variable name="desc" select="$j?Description"/>
+        <xsl:sequence select="
+            if ($desc instance of map(*)) then
+              normalize-space(string((
+                $desc?en, $desc?fr, $desc?*
+              )[normalize-space(string(.)) ne ''][1]))
+            else ''
+          "/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="ded:uap-base-key(normalize-space($pair/r:AttributeKey))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- Value entries as maps {lang?, value}. CustomField → MultilingualStringValue; legacy → one entry. -->
+  <xsl:function name="ded:uap-value-entries" as="map(*)*">
+    <xsl:param name="pair" as="element()"/>
+    <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+    <xsl:choose>
+      <xsl:when test="exists($j)">
+        <xsl:variable name="msv" select="$j?MultilingualStringValue"/>
+        <xsl:sequence select="
+            if ($msv instance of map(*)) then
+              for $lang in map:keys($msv)
+              return
+                if (normalize-space(string($msv($lang))) ne '') then
+                  map{
+                    'lang': string($lang),
+                    'value': normalize-space(string($msv($lang)))
+                  }
+                else ()
+            else ()
+          "/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="val" as="xs:string"
+          select="normalize-space($pair/r:AttributeValue)"/>
+        <xsl:sequence select="
+            if ($val ne '') then
+              map{
+                'lang': ded:uap-lang(normalize-space($pair/r:AttributeKey)),
+                'value': $val
+              }
+            else ()
+          "/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
+  <!-- Distinct IRIs from UAPs whose property key matches (whole-value URI or embedded http(s)) -->
   <xsl:function name="ded:uap-iris" as="xs:string*">
     <xsl:param name="pairs" as="element(r:UserAttributePair)*"/>
     <xsl:param name="base-key" as="xs:string"/>
     <xsl:sequence select="
         distinct-values(
-          for $p in $pairs[ded:uap-base-key(normalize-space(r:AttributeKey)) eq $base-key]
+          for $p in $pairs[ded:uap-property-key(.) eq $base-key],
+              $e in ded:uap-value-entries($p)
           return
-            let $val := normalize-space($p/r:AttributeValue)
-            return
-              if (matches($val, '^(https?|urn):', 'i')) then $val
-              else ded:extract-uris($val)
+            if (matches(normalize-space(string($e?value)), '^(https?|urn):', 'i'))
+            then normalize-space(string($e?value))
+            else ded:extract-uris(normalize-space(string($e?value)))
         )
       "/>
   </xsl:function>
