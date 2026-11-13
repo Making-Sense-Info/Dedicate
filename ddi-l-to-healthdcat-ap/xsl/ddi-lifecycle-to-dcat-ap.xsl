@@ -289,8 +289,8 @@
 
     <!-- contactPoint: ContactInformation if present, else Contributor names (Mekong DCAT binding) -->
     <xsl:choose>
-      <xsl:when test="exists(.//r:ContactInformation)">
-        <xsl:apply-templates select="(.//r:ContactInformation)[1]" mode="contact-point"/>
+      <xsl:when test="exists(.//*[local-name() eq 'ContactInformation'])">
+        <xsl:apply-templates select="(.//*[local-name() eq 'ContactInformation'])[1]" mode="contact-point"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="r:Citation/r:Contributor[1]" mode="contact-from-contributor"/>
@@ -457,21 +457,34 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="r:ContactInformation" mode="contact-point">
-    <xsl:variable name="fn" as="xs:string?"
-      select="normalize-space((
+  <!-- ContactInformation → vcard:Kind with hasEmail / hasURL IRIs (Dedicate #17).
+       Accepts reusable or archive children: Email(/InternetEmail), URL. -->
+  <xsl:template match="*[local-name() eq 'ContactInformation']" mode="contact-point">
+    <xsl:variable name="fn-strings" as="element(r:String)*"
+      select="
           r:IndividualName/r:FullName/r:String
         | r:IndividualName/r:String
         | r:OrganizationName/r:String
-      )[1])[. ne '']"/>
+        | *[local-name() eq 'LocationName']//r:String
+      "/>
     <xsl:variable name="email" as="xs:string?"
-      select="normalize-space(r:Email)[. ne '']"/>
+      select="normalize-space((
+          *[local-name() eq 'Email']/*[local-name() eq 'InternetEmail']
+        | *[local-name() eq 'Email']
+      )[normalize-space(.) ne ''][1])[. ne '']"/>
+    <xsl:variable name="url" as="xs:string?"
+      select="normalize-space(*[local-name() eq 'URL'][1])[. ne '']"/>
     <xsl:text> ;&#10;  dcat:contactPoint [&#10;    a vcard:Kind</xsl:text>
-    <xsl:if test="$fn">
-      <xsl:text> ;&#10;    vcard:fn {ded:literal($fn)}</xsl:text>
-    </xsl:if>
+    <xsl:for-each select="$fn-strings[normalize-space(.) ne '']">
+      <xsl:text> ;&#10;    vcard:fn {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+    </xsl:for-each>
     <xsl:if test="$email">
-      <xsl:text> ;&#10;    vcard:hasEmail {ded:iri('mailto:' || $email)}</xsl:text>
+      <xsl:text> ;&#10;    vcard:hasEmail {ded:iri(
+        if (matches($email, '^mailto:', 'i')) then $email else 'mailto:' || $email
+      )}</xsl:text>
+    </xsl:if>
+    <xsl:if test="$url">
+      <xsl:text> ;&#10;    vcard:hasURL {ded:iri($url)}</xsl:text>
     </xsl:if>
     <xsl:text>&#10;  ]</xsl:text>
   </xsl:template>
@@ -479,11 +492,21 @@
   <xsl:template match="r:Contributor" mode="contact-from-contributor">
     <xsl:variable name="names" as="element(r:String)*"
       select="r:ContributorName/r:String | r:OrganizationName/r:String"/>
+    <xsl:variable name="email-names" as="element(r:String)*"
+      select="$names[matches(normalize-space(.), '^[^@\s]+@[^@\s]+\.[^@\s]+$')]"/>
+    <xsl:variable name="fn-names" as="element(r:String)*"
+      select="$names except $email-names"/>
     <xsl:if test="exists($names)">
       <xsl:text> ;&#10;  dcat:contactPoint [&#10;    a vcard:Kind</xsl:text>
-      <xsl:for-each select="$names">
+      <xsl:for-each select="$fn-names">
         <xsl:text> ;&#10;    vcard:fn {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
       </xsl:for-each>
+      <!-- Mekong may store the catalogue contact email as ContributorName text -->
+      <xsl:if test="exists($email-names)">
+        <xsl:variable name="email" as="xs:string"
+          select="normalize-space($email-names[1])"/>
+        <xsl:text> ;&#10;    vcard:hasEmail {ded:iri('mailto:' || $email)}</xsl:text>
+      </xsl:if>
       <xsl:text>&#10;  ]</xsl:text>
     </xsl:if>
   </xsl:template>

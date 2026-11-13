@@ -164,7 +164,7 @@ Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP "
 
 ###### `dcat:contactPoint` ✅
 
-Prefers structured `ContactInformation` -> `vcard:Kind`; else `Citation/Contributor` names -> `vcard:fn`.
+Prefers structured `ContactInformation` -> `vcard:Kind` with `vcard:hasEmail` (`mailto:` IRI from `Email` / `InternetEmail`) and/or `vcard:hasURL` (IRI from `URL`) when present ([Dedicate #17](https://github.com/Making-Sense-Info/Dedicate/issues/17)). Else `Citation/Contributor` names -> `vcard:fn`; if a Contributor name looks like an email, emit `vcard:hasEmail` instead of (or in addition to) `fn`.
 
 ###### `dcat:distribution` ✅
 

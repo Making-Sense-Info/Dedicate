@@ -191,8 +191,9 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "ContactInformation"@en;
     sssom:object_label "contact point";
-    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctcreator--dctpublisher--dcatcontactpoint> ;
-    sssom:comment "Prefer structured `ContactInformation` → `dcat:contactPoint` when present." .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#dctcreator--dctpublisher--dcatcontactpoint> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/17> ;
+    sssom:comment "Prefer structured `ContactInformation` → `dcat:contactPoint` / `vcard:Kind` when present. `Email`/`InternetEmail` → `vcard:hasEmail` (mailto: IRI); `URL` → `vcard:hasURL` IRI." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contributor-to-contactpoint> ;
@@ -205,7 +206,8 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Contributor"@en;
     sssom:object_label "contact point";
-    sssom:comment "`Citation/Contributor` names → `dcat:contactPoint` / `vcard:fn` when no ContactInformation." .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/issues/17> ;
+    sssom:comment "`Citation/Contributor` names → `dcat:contactPoint` / `vcard:fn` when no ContactInformation; email-shaped names → `vcard:hasEmail`." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/language-to-language> ;

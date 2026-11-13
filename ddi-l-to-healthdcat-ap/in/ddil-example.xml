@@ -9,6 +9,7 @@
   StudyUnit Citation/Coverage plus UserAttributePair for Priority B HealthDCAT fields
   (values are synthetic). Bilingual UAPs use AttributeKey suffixes @fr / @en;
   a single occurrence keeps a plain key (no xml:lang on AttributeValue).
+  Citation/Contributor carries ContactInformation (Email/URL) for Dataset contactPoint.
   This file is the reference DDI input for the repository.
   One LogicalProduct per PhysicalInstance; Dedicate still emits one TableGroup per Dataset.
   Hand-authored metadata for Dedicate demos — not an official SNDS or HDH DDI product.
@@ -1010,9 +1011,20 @@
          </r:Publisher>
          <r:Contributor>
             <r:ContributorName>
-               <r:String xml:lang="fr">contact@example.org</r:String>
-               <r:String xml:lang="en">contact@example.org</r:String>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
             </r:ContributorName>
+            <!-- Structured contact for Dataset dcat:contactPoint (Dedicate #17); Email/URL under ContactInformation -->
+            <r:ContactInformation>
+               <r:OrganizationName>
+                  <r:String xml:lang="fr">Health Data Hub</r:String>
+                  <r:String xml:lang="en">Health Data Hub</r:String>
+               </r:OrganizationName>
+               <r:Email>
+                  <r:InternetEmail>contact@example.org</r:InternetEmail>
+               </r:Email>
+               <r:URL>https://www.health-data-hub.fr</r:URL>
+            </r:ContactInformation>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
@@ -1181,9 +1193,19 @@
          </r:Publisher>
          <r:Contributor>
             <r:ContributorName>
-               <r:String xml:lang="fr">contact@example.org</r:String>
-               <r:String xml:lang="en">contact@example.org</r:String>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
             </r:ContributorName>
+            <r:ContactInformation>
+               <r:OrganizationName>
+                  <r:String xml:lang="fr">Health Data Hub</r:String>
+                  <r:String xml:lang="en">Health Data Hub</r:String>
+               </r:OrganizationName>
+               <r:Email>
+                  <r:InternetEmail>contact@example.org</r:InternetEmail>
+               </r:Email>
+               <r:URL>https://www.health-data-hub.fr</r:URL>
+            </r:ContactInformation>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
@@ -1354,9 +1376,19 @@
          </r:Publisher>
          <r:Contributor>
             <r:ContributorName>
-               <r:String xml:lang="fr">contact@example.org</r:String>
-               <r:String xml:lang="en">contact@example.org</r:String>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
             </r:ContributorName>
+            <r:ContactInformation>
+               <r:OrganizationName>
+                  <r:String xml:lang="fr">Health Data Hub</r:String>
+                  <r:String xml:lang="en">Health Data Hub</r:String>
+               </r:OrganizationName>
+               <r:Email>
+                  <r:InternetEmail>contact@example.org</r:InternetEmail>
+               </r:Email>
+               <r:URL>https://www.health-data-hub.fr</r:URL>
+            </r:ContactInformation>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
