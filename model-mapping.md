@@ -144,7 +144,7 @@ EHDS Art. 51 CV. StudyUnit `UserAttributePair` key `healthdcatap:healthCategory`
 
 ###### `healthdcatap:hdab` ✅
 
-Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged per pair ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent contact / publisher-type enrichment remains [#17](https://github.com/Making-Sense-Info/Dedicate/issues/17) / [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
+Health data access body. StudyUnit `UserAttributePair` key `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged per pair ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent `cv:contactPoint` on hdab (HealthAgent_Shape) is not emitted yet; publisher Agent contact is [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
 
 ###### `healthdcatap:hasStructuredData` ✅
 
@@ -160,11 +160,11 @@ Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP "
 
 ###### `dct:publisher` ✅
 
-`Citation/Publisher` (`PublisherName` / `OrganizationName`) -> `foaf:Agent` / `foaf:name`.
+`Citation/Publisher` (`PublisherName` / `OrganizationName`) -> `foaf:Agent` / `foaf:name`. When `ContactInformation` is present (under Publisher, else Citation / StudyUnit), also emit exactly one `cv:contactPoint` / `cv:ContactPoint` with `cv:email` (Literal) and/or `cv:contactPage` (IRI from `URL`) for `HealthPublisherAgent_Shape` ([Dedicate #18](https://github.com/Making-Sense-Info/Dedicate/issues/18)). Optional publisher `dct:description` is not mapped yet.
 
 ###### `dcat:contactPoint` ✅
 
-Prefers structured `ContactInformation` -> `vcard:Kind` with `vcard:hasEmail` (`mailto:` IRI from `Email` / `InternetEmail`) and/or `vcard:hasURL` (IRI from `URL`) when present ([Dedicate #17](https://github.com/Making-Sense-Info/Dedicate/issues/17)). Else `Citation/Contributor` names -> `vcard:fn`; if a Contributor name looks like an email, emit `vcard:hasEmail` instead of (or in addition to) `fn`.
+Prefers structured `ContactInformation` -> `vcard:Kind` with `vcard:hasEmail` (`mailto:` IRI from `Email` / `InternetEmail`) and/or `vcard:hasURL` (IRI from `URL`) when present ([Dedicate #17](https://github.com/Making-Sense-Info/Dedicate/issues/17)). Else `Citation/Contributor` names -> `vcard:fn`; if a Contributor name looks like an email, emit `vcard:hasEmail` instead of (or in addition to) `fn`. Reference sample keeps `ContactInformation` under `Publisher` (shared with [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18)).
 
 ###### `dcat:distribution` ✅
 

@@ -178,7 +178,8 @@
     sssom:mapping_justification semapv:ManualMappingCuration;
     sssom:subject_label "Publisher"@en;
     sssom:object_label "publisher";
-    sssom:comment "`StudyUnit/Citation/Publisher` (PublisherName) → `dcterms:publisher` / `foaf:Agent`." .
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/issues/18> ;
+    sssom:comment "`StudyUnit/Citation/Publisher` (PublisherName) → `dcterms:publisher` / `foaf:Agent`. `ContactInformation` Email/URL → `cv:contactPoint` / `cv:ContactPoint` (`cv:email` Literal, `cv:contactPage` IRI) for HealthPublisherAgent_Shape." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/contactinformation-to-contactpoint> ;
@@ -637,7 +638,7 @@
     sssom:object_label "health data access body";
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://github.com/Making-Sense-Info/Dedicate/issues/16> ;
-    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each pair. Dedicate #16. Contact enrichment for Agent remains #17/#18." .
+    sssom:comment "StudyUnit `UserAttributePair` with `AttributeKey` `healthdcatap:hdab` (+ `@lang`) → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each pair. Dedicate #16. hdab `cv:contactPoint` (HealthAgent_Shape) still parked; publisher Agent contact is #18." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳

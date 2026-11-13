@@ -72,6 +72,7 @@
 
   <xsl:template match="/">
     <xsl:text>@prefix csvw: &lt;http://www.w3.org/ns/csvw#&gt; .&#10;</xsl:text>
+    <xsl:text>@prefix cv: &lt;http://data.europa.eu/m8g/&gt; .&#10;</xsl:text>
     <xsl:text>@prefix dcat: &lt;http://www.w3.org/ns/dcat#&gt; .&#10;</xsl:text>
     <xsl:text>@prefix dcatap: &lt;http://data.europa.eu/r5r/&gt; .&#10;</xsl:text>
     <xsl:text>@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .&#10;</xsl:text>
@@ -375,12 +376,47 @@
   <xsl:template match="r:Publisher" mode="dataset-publisher">
     <xsl:variable name="names" as="element(r:String)*"
       select="r:PublisherName/r:String | r:OrganizationName/r:String"/>
-    <xsl:if test="exists($names)">
+    <!-- HealthPublisherAgent_Shape: exactly one cv:contactPoint (Dedicate #18).
+         Prefer ContactInformation under Publisher, else Citation / StudyUnit. -->
+    <xsl:variable name="contact" as="element()?"
+      select="(
+          *[local-name() eq 'ContactInformation']
+        | parent::r:Citation/*[local-name() eq 'ContactInformation']
+        | parent::r:Citation/r:Contributor/*[local-name() eq 'ContactInformation']
+        | ancestor::s:StudyUnit[1]//*[local-name() eq 'ContactInformation']
+      )[1]"/>
+    <xsl:if test="exists($names) or exists($contact)">
       <xsl:text> ;&#10;  dcterms:publisher [&#10;    a foaf:Agent</xsl:text>
       <xsl:for-each select="$names">
         <xsl:text> ;&#10;    foaf:name {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
       </xsl:for-each>
+      <xsl:apply-templates select="$contact" mode="agent-cv-contact"/>
       <xsl:text>&#10;  ]</xsl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- ContactInformation → cv:contactPoint / cv:ContactPoint (email Literal, contactPage IRI) -->
+  <xsl:template match="*[local-name() eq 'ContactInformation']" mode="agent-cv-contact">
+    <xsl:variable name="email" as="xs:string?"
+      select="normalize-space((
+          *[local-name() eq 'Email']/*[local-name() eq 'InternetEmail']
+        | *[local-name() eq 'Email']
+      )[normalize-space(.) ne ''][1])[. ne '']"/>
+    <xsl:variable name="email-lit" as="xs:string?"
+      select="if ($email) then
+        normalize-space(replace($email, '^mailto:', '', 'i'))[. ne '']
+      else ()"/>
+    <xsl:variable name="url" as="xs:string?"
+      select="normalize-space(*[local-name() eq 'URL'][1])[. ne '']"/>
+    <xsl:if test="$email-lit or $url">
+      <xsl:text> ;&#10;    cv:contactPoint [&#10;      a cv:ContactPoint</xsl:text>
+      <xsl:if test="$email-lit">
+        <xsl:text> ;&#10;      cv:email {ded:literal($email-lit)}</xsl:text>
+      </xsl:if>
+      <xsl:if test="$url">
+        <xsl:text> ;&#10;      cv:contactPage {ded:iri($url)}</xsl:text>
+      </xsl:if>
+      <xsl:text>&#10;    ]</xsl:text>
     </xsl:if>
   </xsl:template>
 

@@ -70,7 +70,7 @@ Keys present: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `he
 - [x] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - UAP -> healthCategory IRI; model-mapping + SSSOM + XSL
 - [x] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - UAP -> `foaf:Agent` + `foaf:name`@lang; model-mapping + SSSOM + XSL (Agent contact still #17/#18)
 - [x] [#17 `vcard:hasEmail` / `hasURL`](https://github.com/Making-Sense-Info/Dedicate/issues/17) - `ContactInformation` Email/URL -> `vcard:hasEmail` / `hasURL` IRIs on Dataset `dcat:contactPoint`; sample + model-mapping + SSSOM + XSL (Contributor email-shaped name fallback)
-- [ ] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - needs Agent `cv:contactPoint` (+ description); contact data now in sample (#17); also upstream publisher-type [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44)
+- [x] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - Publisher `ContactInformation` -> Agent `cv:contactPoint` / `cv:ContactPoint` (`cv:email` Literal, `cv:contactPage` IRI); sample under Publisher; model-mapping + SSSOM + XSL. Optional `dct:description` / publisher-type upstream [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44) still open; hdab Agent contact still parked
 
 ## Other backlog
 

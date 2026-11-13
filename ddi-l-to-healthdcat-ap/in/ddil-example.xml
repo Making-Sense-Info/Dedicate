@@ -9,7 +9,8 @@
   StudyUnit Citation/Coverage plus UserAttributePair for Priority B HealthDCAT fields
   (values are synthetic). Bilingual UAPs use AttributeKey suffixes @fr / @en;
   a single occurrence keeps a plain key (no xml:lang on AttributeValue).
-  Citation/Contributor carries ContactInformation (Email/URL) for Dataset contactPoint.
+  Citation/Publisher carries ContactInformation (Email/URL) for Dataset contactPoint
+  and publisher Agent cv:contactPoint.
   This file is the reference DDI input for the repository.
   One LogicalProduct per PhysicalInstance; Dedicate still emits one TableGroup per Dataset.
   Hand-authored metadata for Dedicate demos — not an official SNDS or HDH DDI product.
@@ -1008,13 +1009,7 @@
                <r:String xml:lang="fr">Health Data Hub</r:String>
                <r:String xml:lang="en">Health Data Hub</r:String>
             </r:PublisherName>
-         </r:Publisher>
-         <r:Contributor>
-            <r:ContributorName>
-               <r:String xml:lang="fr">Health Data Hub</r:String>
-               <r:String xml:lang="en">Health Data Hub</r:String>
-            </r:ContributorName>
-            <!-- Structured contact for Dataset dcat:contactPoint (Dedicate #17); Email/URL under ContactInformation -->
+            <!-- Contact for Dataset dcat:contactPoint (#17) and publisher Agent cv:contactPoint (#18) -->
             <r:ContactInformation>
                <r:OrganizationName>
                   <r:String xml:lang="fr">Health Data Hub</r:String>
@@ -1025,6 +1020,12 @@
                </r:Email>
                <r:URL>https://www.health-data-hub.fr</r:URL>
             </r:ContactInformation>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:ContributorName>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
@@ -1190,12 +1191,7 @@
                <r:String xml:lang="fr">Health Data Hub</r:String>
                <r:String xml:lang="en">Health Data Hub</r:String>
             </r:PublisherName>
-         </r:Publisher>
-         <r:Contributor>
-            <r:ContributorName>
-               <r:String xml:lang="fr">Health Data Hub</r:String>
-               <r:String xml:lang="en">Health Data Hub</r:String>
-            </r:ContributorName>
+            <!-- Contact for Dataset dcat:contactPoint (#17) and publisher Agent cv:contactPoint (#18) -->
             <r:ContactInformation>
                <r:OrganizationName>
                   <r:String xml:lang="fr">Health Data Hub</r:String>
@@ -1206,6 +1202,12 @@
                </r:Email>
                <r:URL>https://www.health-data-hub.fr</r:URL>
             </r:ContactInformation>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:ContributorName>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
@@ -1373,12 +1375,7 @@
                <r:String xml:lang="fr">Health Data Hub</r:String>
                <r:String xml:lang="en">Health Data Hub</r:String>
             </r:PublisherName>
-         </r:Publisher>
-         <r:Contributor>
-            <r:ContributorName>
-               <r:String xml:lang="fr">Health Data Hub</r:String>
-               <r:String xml:lang="en">Health Data Hub</r:String>
-            </r:ContributorName>
+            <!-- Contact for Dataset dcat:contactPoint (#17) and publisher Agent cv:contactPoint (#18) -->
             <r:ContactInformation>
                <r:OrganizationName>
                   <r:String xml:lang="fr">Health Data Hub</r:String>
@@ -1389,6 +1386,12 @@
                </r:Email>
                <r:URL>https://www.health-data-hub.fr</r:URL>
             </r:ContactInformation>
+         </r:Publisher>
+         <r:Contributor>
+            <r:ContributorName>
+               <r:String xml:lang="fr">Health Data Hub</r:String>
+               <r:String xml:lang="en">Health Data Hub</r:String>
+            </r:ContributorName>
          </r:Contributor>
          <r:Language>fr</r:Language>
          <r:InternationalIdentifier>
