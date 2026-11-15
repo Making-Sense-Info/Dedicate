@@ -14,7 +14,7 @@ export const fr: Dict = {
   'tab.conformity': 'Conformité',
   'tab.turtle': 'Turtle',
   'tab.hierarchy': 'Hiérarchie',
-  'tab.graphTable': 'Graphe-tables',
+  'tab.graphTable': 'Graphe',
   'tab.bubbles': 'Bulles',
 
   'home.tagline':
