@@ -140,7 +140,7 @@ Workflow [`.github/workflows/dedicator.yml`](../.github/workflows/dedicator.yml)
 
 1. Build the web app on PR/push
 2. On push to `main`/`master`: build & push `ghcr.io/<owner>/dedicator` (JDK + Saxon + Sparna + UI)
-3. Optional: if repository secret `FLY_API_TOKEN` is set (personal Fly account is fine — no Making Sense Fly org needed), deploy with [fly.toml](./fly.toml). CI builds/pushes `ghcr.io/<org>/dedicator` (private OK), then **re-tags that image to `registry.fly.io/dedicator`** and deploys with `--image` (Fly cannot pull private org GHCR with a personal token; GHA can). Creates the Fly app on first deploy if missing. Optional repo variable `FLY_ORG`.
+3. Optional: if repository secret `FLY_API_TOKEN` is set (personal Fly account is fine), deploy with [fly.toml](./fly.toml). CI builds the web once, caches the Sparna jar, builds the image with prebuilt `dist` (`WEB_MODE=compiled`), pushes **in one go** to `ghcr.io/<org>/dedicator` and `registry.fly.io/dedicator:<sha>` (Fly registry login via your token), then `fly deploy --image`. Subsequent runs reuse GHA BuildKit cache + jar cache — first run is the slow one. Optional repo variable `FLY_ORG`.
 
 ```bash
 # local create + deploy (from repo root)

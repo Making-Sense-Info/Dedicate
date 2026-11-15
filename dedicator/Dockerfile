@@ -1,34 +1,58 @@
 # syntax=docker/dockerfile:1
 # Build from repository root:
 #   docker build -f dedicator/Dockerfile -t dedicator .
+# CI can skip the Node stage with:
+#   --build-arg WEB_MODE=compiled   (expects dedicator/web/dist already built)
+
+ARG WEB_MODE=build
 
 FROM node:22-bookworm AS web-build
 WORKDIR /web
 COPY dedicator/web/package.json dedicator/web/yarn.lock ./
-RUN yarn install --frozen-lockfile
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    yarn install --frozen-lockfile
 COPY dedicator/web/ ./
-RUN yarn build
+RUN yarn build \
+  && mkdir -p /out \
+  && cp -a /web/dist /out/dist
+
+FROM busybox:1.36 AS web-compiled
+COPY dedicator/web/dist /out/dist
+
+FROM web-${WEB_MODE} AS web-final
 
 FROM eclipse-temurin:17-jre-jammy AS runtime
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends python3 python3-pip python3-venv curl unzip ca-certificates \
+  && apt-get install -y --no-install-recommends python3 python3-pip python3-venv curl ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
+# Python deps early (stable layer)
+COPY dedicator/api/requirements.txt /tmp/requirements.txt
+RUN python3 -m venv /opt/venv \
+  && /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt \
+  && rm /tmp/requirements.txt
+
+# Sparna jar: prefer context copy (CI cache / local jars/), else download once
+ENV SHACL_JAR=/opt/jars/shacl-play-app-0.12.5-onejar.jar
+COPY dedicator/jars/ /tmp/jars/
+RUN mkdir -p /opt/jars \
+  && if [ -f /tmp/jars/shacl-play-app-0.12.5-onejar.jar ]; then \
+       cp /tmp/jars/shacl-play-app-0.12.5-onejar.jar "$SHACL_JAR"; \
+     else \
+       curl -fsSL -L -o "$SHACL_JAR" \
+         https://github.com/sparna-git/shacl-play/releases/download/0.12.5/shacl-play-app-0.12.5-onejar.jar; \
+     fi \
+  && rm -rf /tmp/jars \
+  && test -f "$SHACL_JAR"
+
 COPY ddi-l-to-healthdcat-ap /app/ddi-l-to-healthdcat-ap
 COPY dedicator/api /app/dedicator/api
-COPY --from=web-build /web/dist /app/dedicator/web/dist
+COPY --from=web-final /out/dist /app/dedicator/web/dist
 
-RUN chmod +x /app/dedicator/api/invoke.sh /app/ddi-l-to-healthdcat-ap/run.sh \
-  && python3 -m venv /opt/venv \
-  && /opt/venv/bin/pip install --no-cache-dir -r /app/dedicator/api/requirements.txt
-
-ENV SHACL_JAR=/opt/jars/shacl-play-app-0.12.5-onejar.jar
 ENV SHACL_SHAPES=https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl
-RUN mkdir -p /opt/jars \
-  && curl -fsSL -L -o "$SHACL_JAR" \
-    https://github.com/sparna-git/shacl-play/releases/download/0.12.5/shacl-play-app-0.12.5-onejar.jar \
+RUN chmod +x /app/dedicator/api/invoke.sh /app/ddi-l-to-healthdcat-ap/run.sh \
   && printf '%s\n' '<root/>' > /tmp/warm.xml \
   && bash /app/dedicator/api/invoke.sh \
        --input /tmp/warm.xml \

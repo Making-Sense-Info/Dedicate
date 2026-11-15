@@ -18,6 +18,10 @@ permissions:
   contents: read
   packages: write
 
+env:
+  SPARNA_JAR: shacl-play-app-0.12.5-onejar.jar
+  SPARNA_URL: https://github.com/sparna-git/shacl-play/releases/download/0.12.5/shacl-play-app-0.12.5-onejar.jar
+
 jobs:
   build-web:
     runs-on: ubuntu-latest
@@ -33,6 +37,12 @@ jobs:
           cache-dependency-path: dedicator/web/yarn.lock
       - run: yarn install --frozen-lockfile
       - run: yarn build
+      - uses: actions/upload-artifact@v7
+        if: github.event_name != 'pull_request'
+        with:
+          name: web-dist
+          path: dedicator/web/dist
+          retention-days: 2
 
   publish-image:
     needs: build-web
@@ -41,67 +51,94 @@ jobs:
     outputs:
       image: ${{ steps.meta.outputs.image }}
       sha: ${{ steps.meta.outputs.sha }}
+      fly_image: ${{ steps.meta.outputs.fly_image }}
+      push_fly: ${{ steps.meta.outputs.push_fly }}
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
+        with:
+          name: web-dist
+          path: dedicator/web/dist
+
+      - name: Cache Sparna jar
+        uses: actions/cache@v6
+        with:
+          path: dedicator/jars/${{ env.SPARNA_JAR }}
+          key: sparna-${{ env.SPARNA_JAR }}
+
+      - name: Ensure Sparna jar
+        run: |
+          set -euo pipefail
+          mkdir -p dedicator/jars
+          if [ ! -f "dedicator/jars/${SPARNA_JAR}" ]; then
+            curl -fsSL -L -o "dedicator/jars/${SPARNA_JAR}" "${SPARNA_URL}"
+          fi
+          ls -lh "dedicator/jars/${SPARNA_JAR}"
+
       - uses: docker/setup-buildx-action@v4
       - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Image tags
         id: meta
         run: |
-          # OCI/Docker repository names must be lowercase (org may be mixed-case)
+          set -euo pipefail
           owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
           image="ghcr.io/${owner}/dedicator"
           sha="${GITHUB_SHA::12}"
+          tags="${image}:latest,${image}:${sha}"
+          push_fly=false
+          fly_image=""
+          if [ -n "${FLY_API_TOKEN:-}" ]; then
+            APP="$(awk -F'"' '/^app[[:space:]]*=/ {print $2; exit}' dedicator/fly.toml)"
+            fly_image="registry.fly.io/${APP}:${sha}"
+            tags="${tags},${fly_image}"
+            push_fly=true
+          fi
           echo "image=${image}" >> "$GITHUB_OUTPUT"
           echo "sha=${sha}" >> "$GITHUB_OUTPUT"
-          echo "tags=${image}:latest,${image}:${sha}" >> "$GITHUB_OUTPUT"
+          echo "tags=${tags}" >> "$GITHUB_OUTPUT"
+          echo "fly_image=${fly_image}" >> "$GITHUB_OUTPUT"
+          echo "push_fly=${push_fly}" >> "$GITHUB_OUTPUT"
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+        if: env.FLY_API_TOKEN != ''
+      - name: Login Fly registry
+        if: env.FLY_API_TOKEN != ''
+        run: flyctl auth docker
+
       - uses: docker/build-push-action@v7
         with:
           context: .
           file: dedicator/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          build-args: |
+            WEB_MODE=compiled
+          cache-from: type=gha,scope=dedicator
+          cache-to: type=gha,mode=max,scope=dedicator
 
   deploy-fly:
     needs: publish-image
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && needs.publish-image.outputs.push_fly == 'true'
     runs-on: ubuntu-latest
     env:
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      GHCR_IMAGE: ${{ needs.publish-image.outputs.image }}:${{ needs.publish-image.outputs.sha }}
+      FLY_IMAGE: ${{ needs.publish-image.outputs.fly_image }}
     steps:
-      - name: Skip without Fly token
-        if: env.FLY_API_TOKEN == ''
-        run: echo "FLY_API_TOKEN not set; skipping Fly deploy"
       - uses: actions/checkout@v6
-        if: env.FLY_API_TOKEN != ''
-      - uses: docker/setup-buildx-action@v4
-        if: env.FLY_API_TOKEN != ''
-      - uses: docker/login-action@v4
-        if: env.FLY_API_TOKEN != ''
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: superfly/flyctl-actions/setup-flyctl@master
-        if: env.FLY_API_TOKEN != ''
       - name: Deploy
-        if: env.FLY_API_TOKEN != ''
         env:
           FLY_ORG: ${{ vars.FLY_ORG }}
         run: |
           set -euo pipefail
           APP="$(awk -F'"' '/^app[[:space:]]*=/ {print $2; exit}' dedicator/fly.toml)"
-          if [ -z "${APP}" ]; then
-            echo "No app name in dedicator/fly.toml" >&2
-            exit 1
-          fi
           if ! flyctl status --app "${APP}" >/dev/null 2>&1; then
             echo "Fly app '${APP}' not found — creating it…"
             if [ -n "${FLY_ORG:-}" ]; then
@@ -110,18 +147,8 @@ jobs:
               flyctl apps create "${APP}"
             fi
           fi
-
-          # Personal Fly cannot pull private org GHCR. GHA can → retag to Fly registry.
-          sha="${GITHUB_SHA::12}"
-          fly_image="registry.fly.io/${APP}:${sha}"
-          echo "Pull ${GHCR_IMAGE}"
-          docker pull "${GHCR_IMAGE}"
-          docker tag "${GHCR_IMAGE}" "${fly_image}"
-          flyctl auth docker
-          echo "Push ${fly_image}"
-          docker push "${fly_image}"
           flyctl deploy \
             --app "${APP}" \
             --config dedicator/fly.toml \
-            --image "${fly_image}" \
+            --image "${FLY_IMAGE}" \
             --remote-only
