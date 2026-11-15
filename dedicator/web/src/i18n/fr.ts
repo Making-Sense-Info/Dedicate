@@ -50,6 +50,7 @@ export const fr: Dict = {
   'run.transform': 'Transformer',
   'run.transformValidate': 'Transformer & valider',
   'run.running': 'En cours',
+  'run.running.hint': 'Transformation en cours — un instant…',
   'run.error.ddi': 'Indiquez une source DDI XML (fichier ou URL).',
   'run.error.shapes':
     'Choisissez un profil de formes HealthDCAT-AP, ou Autre avec un fichier/URL.',

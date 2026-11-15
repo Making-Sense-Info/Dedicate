@@ -725,11 +725,65 @@
   border-top-color: #1a1008;
   animation: spin 0.7s linear infinite;
 }
+:root[data-theme="dark"] .spinner {
+  border-color: color-mix(in srgb, #e8ecf0 25%, transparent);
+  border-top-color: #e8ecf0;
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
+
+.shell.is-busy > :not(.run-overlay) {
+  filter: blur(2.5px);
+  pointer-events: none;
+  user-select: none;
+}
+.run-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: color-mix(in srgb, var(--bg0) 35%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.run-overlay-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+  max-width: 22rem;
+  padding: 1.35rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1.15rem;
+  background: var(--surface-solid);
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--ink) 14%, transparent);
+  pointer-events: auto;
+}
+.run-overlay-spinner {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-width: 2.5px;
+  margin-bottom: 0.15rem;
+}
+.run-overlay-card strong {
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+.run-overlay-card p {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
 
 .ghost {
   border: 1px solid var(--line);

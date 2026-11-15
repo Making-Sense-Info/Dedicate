@@ -117,6 +117,11 @@ export default function App() {
     }
     setBusy(true)
     setError(null)
+    setResult(null)
+    setRunSources(null)
+    setWantedValidation(false)
+    setSelectedId(null)
+    setTab('home')
     try {
       const shapesForRun = shapesPreset === 'other' ? shapesFile : null
       const shapesUrlForRun =
@@ -167,9 +172,19 @@ export default function App() {
     ) : null
 
   return (
-    <div className="shell">
+    <div className={`shell ${busy ? 'is-busy' : ''}`}>
       <div className="orb orb-a" aria-hidden />
       <div className="orb orb-b" aria-hidden />
+
+      {busy && (
+        <div className="run-overlay" role="status" aria-live="polite" aria-busy="true">
+          <div className="run-overlay-card">
+            <span className="spinner run-overlay-spinner" aria-hidden />
+            <strong>{t('run.running')}</strong>
+            <p>{t('run.running.hint')}</p>
+          </div>
+        </div>
+      )}
 
       <header className={`topbar ${readyTabs ? 'has-tabs' : 'brand-only'}`}>
         <div className="brand-block">
