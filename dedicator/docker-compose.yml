@@ -1,0 +1,14 @@
+services:
+  dedicator:
+    build:
+      context: ..
+      dockerfile: dedicator/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DEDICATOR_CORS: "*"
+      SHACL_JAR: /opt/jars/shacl-play-app-0.12.5-onejar.jar
+    volumes:
+      # Optional: mount a local Sparna jar instead of the image copy
+      # - ${SHACL_JAR}:/opt/jars/shacl-play-app-0.12.5-onejar.jar:ro
+      - ../ddi-l-to-healthdcat-ap/xsl:/app/ddi-l-to-healthdcat-ap/xsl:ro

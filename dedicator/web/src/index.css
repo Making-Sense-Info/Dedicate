@@ -1,0 +1,88 @@
+:root {
+  color-scheme: light;
+  --bg0: #f7f7f5;
+  --bg1: #eef0f2;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-solid: #ffffff;
+  --ink: #14181c;
+  --ink-soft: #5a646e;
+  --line: rgba(20, 24, 28, 0.12);
+  --accent: #c45d7a;
+  --accent-2: #4a5560;
+  --ok: #1f7a4c;
+  --warn: #a33b2b;
+  --glow: rgba(196, 93, 122, 0.07);
+  --glow-2: rgba(20, 24, 28, 0.04);
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --sans: "Syne", system-ui, sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg0: #0c0e11;
+  --bg1: #151a20;
+  --surface: rgba(18, 22, 28, 0.78);
+  --surface-solid: #12161c;
+  --ink: #e8ecf0;
+  --ink-soft: #9aa4ae;
+  --line: rgba(232, 236, 240, 0.12);
+  --accent: #d4889e;
+  --accent-2: #a8b2bc;
+  --ok: #5dcea0;
+  --warn: #ff8f7a;
+  --glow: rgba(212, 136, 158, 0.08);
+  --glow-2: rgba(232, 236, 240, 0.03);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  color: var(--ink);
+  font-family: var(--serif);
+  background:
+    radial-gradient(720px 420px at 88% 6%, var(--glow), transparent 62%),
+    linear-gradient(165deg, var(--bg0), var(--bg1) 55%, var(--bg0));
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}

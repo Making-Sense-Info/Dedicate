@@ -11,6 +11,8 @@ The curated SSSOM file is [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-
 
 A [first implementation](./ddi-l-to-healthdcat-ap/README.md) is available to produce HealthDCAT-AP from DDI-l 3.3.
 
+[Dedicator](./dedicator/README.md) is a small test UI around that pipeline (upload DDI, transform, optional SHACL). Try the deployed app at [https://dedicator.fly.dev](https://dedicator.fly.dev).
+
 ## Common resources
 
 - [Data Catalog Vocabulary (DCAT) - Version 3](https://www.w3.org/TR/vocab-dcat-3/)

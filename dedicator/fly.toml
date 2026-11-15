@@ -1,0 +1,20 @@
+# Optional Fly.io deploy target for Dedicator (same image as GHCR).
+#   fly apps create dedicator
+#   fly deploy -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+app = "dedicator"
+primary_region = "cdg"
+
+[build]
+  # Deploy from repository root: fly deploy -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+  dockerfile = "dedicator/Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "1gb"

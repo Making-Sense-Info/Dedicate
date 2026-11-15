@@ -1,2 +1,12 @@
 .DS_Store
 *.log
+
+# Cursor / local agent
+.cursor/
+
+# Dedicator: Sparna jar is downloaded locally / in Docker (see Dockerfile)
+dedicator/jars/*.jar
+dedicator/.venv/
+dedicator/api/__pycache__/
+**/__pycache__/
+**/*.pyc
