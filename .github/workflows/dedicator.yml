@@ -81,10 +81,28 @@ jobs:
       - name: Deploy
         if: env.FLY_API_TOKEN != ''
         run: |
+          set -euo pipefail
+          APP="$(awk -F'"' '/^app[[:space:]]*=/ {print $2; exit}' dedicator/fly.toml)"
+          if [ -z "${APP}" ]; then
+            echo "No app name in dedicator/fly.toml" >&2
+            exit 1
+          fi
+          if ! flyctl status --app "${APP}" >/dev/null 2>&1; then
+            echo "Fly app '${APP}' not found — creating it…"
+            # Optional: set repo variable/secret FLY_ORG (e.g. personal / making-sense)
+            if [ -n "${FLY_ORG:-}" ]; then
+              flyctl apps create "${APP}" --org "${FLY_ORG}"
+            else
+              flyctl apps create "${APP}"
+            fi
+          fi
           owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
           image="ghcr.io/${owner}/dedicator:${GITHUB_SHA::12}"
           flyctl deploy \
+            --app "${APP}" \
             --config dedicator/fly.toml \
             --dockerfile dedicator/Dockerfile \
             --remote-only \
             --image "${image}"
+        env:
+          FLY_ORG: ${{ vars.FLY_ORG }}
