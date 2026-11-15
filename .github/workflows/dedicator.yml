@@ -89,20 +89,19 @@ jobs:
           fi
           if ! flyctl status --app "${APP}" >/dev/null 2>&1; then
             echo "Fly app '${APP}' not found — creating it…"
-            # Optional: set repo variable/secret FLY_ORG (e.g. personal / making-sense)
+            # Optional: set repo variable FLY_ORG (personal org is fine; no MS Fly org required)
             if [ -n "${FLY_ORG:-}" ]; then
               flyctl apps create "${APP}" --org "${FLY_ORG}"
             else
               flyctl apps create "${APP}"
             fi
           fi
-          owner="$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
-          image="ghcr.io/${owner}/dedicator:${GITHUB_SHA::12}"
+          # Build on Fly from Dockerfile (do not pull ghcr.io — package is under the GitHub
+          # org and usually private; personal Fly tokens cannot read it anonymously).
           flyctl deploy \
             --app "${APP}" \
             --config dedicator/fly.toml \
             --dockerfile dedicator/Dockerfile \
-            --remote-only \
-            --image "${image}"
+            --remote-only
         env:
           FLY_ORG: ${{ vars.FLY_ORG }}

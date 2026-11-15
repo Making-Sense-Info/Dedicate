@@ -140,7 +140,7 @@ Workflow [`.github/workflows/dedicator.yml`](../.github/workflows/dedicator.yml)
 
 1. Build the web app on PR/push
 2. On push to `main`/`master`: build & push `ghcr.io/<owner>/dedicator` (JDK + Saxon + Sparna + UI)
-3. Optional: if repository secret `FLY_API_TOKEN` is set, deploy that image with [fly.toml](./fly.toml). The workflow creates the Fly app named in `fly.toml` (`dedicator`) on first deploy if it does not exist. Optional repo variable `FLY_ORG` selects the Fly org.
+3. Optional: if repository secret `FLY_API_TOKEN` is set (personal Fly account is fine — no Making Sense Fly org needed), deploy with [fly.toml](./fly.toml). CI builds on Fly from the Dockerfile (it does **not** pull the private `ghcr.io/<org>/dedicator` package). The workflow creates the Fly app named in `fly.toml` (`dedicator`) on first deploy if missing. Optional repo variable `FLY_ORG` selects the Fly org.
 
 ```bash
 # one-shot local create + deploy (from repo root)
