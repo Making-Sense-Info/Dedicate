@@ -96,9 +96,10 @@ jobs:
               flyctl apps create "${APP}"
             fi
           fi
-          # Build on Fly from Dockerfile (do not pull ghcr.io — package is under the GitHub
-          # org and usually private; personal Fly tokens cannot read it anonymously).
-          flyctl deploy \
+          # Build on Fly from Dockerfile (do not pull private ghcr.io).
+          # Working directory MUST be repo root: Dockerfile COPY paths expect it,
+          # and -c alone defaults the context to the fly.toml directory (doubled path).
+          flyctl deploy . \
             --app "${APP}" \
             --config dedicator/fly.toml \
             --dockerfile dedicator/Dockerfile \

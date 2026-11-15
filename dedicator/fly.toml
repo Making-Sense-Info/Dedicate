@@ -1,11 +1,11 @@
-# Optional Fly.io deploy target for Dedicator (same image as GHCR).
+# Deploy from repository root (build context = repo root, same as Docker build):
 #   fly apps create dedicator
-#   fly deploy -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+#   fly deploy . -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
 app = "dedicator"
 primary_region = "cdg"
 
 [build]
-  # Deploy from repository root: fly deploy -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+  # Relative to deploy working directory (must be repo root — see CI / README).
   dockerfile = "dedicator/Dockerfile"
 
 [http_service]

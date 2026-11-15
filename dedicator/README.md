@@ -143,9 +143,9 @@ Workflow [`.github/workflows/dedicator.yml`](../.github/workflows/dedicator.yml)
 3. Optional: if repository secret `FLY_API_TOKEN` is set (personal Fly account is fine — no Making Sense Fly org needed), deploy with [fly.toml](./fly.toml). CI builds on Fly from the Dockerfile (it does **not** pull the private `ghcr.io/<org>/dedicator` package). The workflow creates the Fly app named in `fly.toml` (`dedicator`) on first deploy if missing. Optional repo variable `FLY_ORG` selects the Fly org.
 
 ```bash
-# one-shot local create + deploy (from repo root)
+# one-shot local create + deploy (from repo root — the "." build context matters)
 fly apps create dedicator   # once; name must be free on Fly
-fly deploy -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+fly deploy . -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
 ```
 
 GitHub Pages can host the SPA only; transform/validation stay on the container API (`VITE_API_URL` → deployed service).
