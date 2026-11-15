@@ -1,12 +1,12 @@
-# Deploy from repository root (build context = repo root, same as Docker build):
+# Fly app config. Image is built elsewhere (CI: GHCR → registry.fly.io, or local docker).
 #   fly apps create dedicator
-#   fly deploy . -c dedicator/fly.toml --dockerfile dedicator/Dockerfile
+#   docker build -f dedicator/Dockerfile -t dedicator .
+#   fly auth docker
+#   docker tag dedicator registry.fly.io/dedicator:local
+#   docker push registry.fly.io/dedicator:local
+#   fly deploy -c dedicator/fly.toml --image registry.fly.io/dedicator:local
 app = "dedicator"
 primary_region = "cdg"
-
-[build]
-  # Relative to deploy working directory (must be repo root — see CI / README).
-  dockerfile = "dedicator/Dockerfile"
 
 [http_service]
   internal_port = 8080
