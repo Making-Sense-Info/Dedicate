@@ -22,8 +22,9 @@ COPY dedicator/web/dist /out/dist
 FROM web-${WEB_MODE} AS web-final
 
 FROM eclipse-temurin:17-jre-jammy AS runtime
+# unzip required: Saxon HE ships as a zip (ensure_saxon / invoke.sh)
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends python3 python3-pip python3-venv curl ca-certificates \
+  && apt-get install -y --no-install-recommends python3 python3-pip python3-venv curl unzip ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -52,15 +53,24 @@ COPY dedicator/api /app/dedicator/api
 COPY --from=web-final /out/dist /app/dedicator/web/dist
 
 ENV SHACL_SHAPES=https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl
+ENV SAXON_URL=https://github.com/Saxonica/Saxon-HE/releases/download/SaxonHE12-5/SaxonHE12-5J.zip
+
+# lib/*.jar is gitignored — download Saxon into the image (needs unzip)
 RUN chmod +x /app/dedicator/api/invoke.sh /app/ddi-l-to-healthdcat-ap/run.sh \
-  && printf '%s\n' '<root/>' > /tmp/warm.xml \
-  && bash /app/dedicator/api/invoke.sh \
-       --input /tmp/warm.xml \
-       --output /tmp/warm.ttl \
-       --xsl /app/ddi-l-to-healthdcat-ap/xsl/ddi-lifecycle-to-dcat-ap.xsl \
-    || true \
-  && rm -f /tmp/warm.xml /tmp/warm.ttl \
-  && test -f /app/ddi-l-to-healthdcat-ap/lib/saxon-he-12.5.jar
+  && mkdir -p /app/ddi-l-to-healthdcat-ap/lib \
+  && tmp="$(mktemp -d)" \
+  && curl -fsSL -o "$tmp/saxon.zip" "$SAXON_URL" \
+  && unzip -qo "$tmp/saxon.zip" \
+       "saxon-he-12.5.jar" \
+       "lib/xmlresolver-5.2.2.jar" \
+       "lib/xmlresolver-5.2.2-data.jar" \
+       -d "$tmp" \
+  && mv "$tmp/saxon-he-12.5.jar" /app/ddi-l-to-healthdcat-ap/lib/ \
+  && mv "$tmp/lib/xmlresolver-5.2.2.jar" /app/ddi-l-to-healthdcat-ap/lib/ \
+  && mv "$tmp/lib/xmlresolver-5.2.2-data.jar" /app/ddi-l-to-healthdcat-ap/lib/ \
+  && rm -rf "$tmp" \
+  && test -f /app/ddi-l-to-healthdcat-ap/lib/saxon-he-12.5.jar \
+  && test -f /app/ddi-l-to-healthdcat-ap/lib/xmlresolver-5.2.2.jar
 
 ENV PATH="/opt/venv/bin:$PATH"
 ENV DEDICATOR_CORS="*"
