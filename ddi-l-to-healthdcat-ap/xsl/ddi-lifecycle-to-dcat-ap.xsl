@@ -6,12 +6,14 @@
     ../../ddi-lifecycle-dcat-ap-mapping.ttl
     ../../model-mapping.md
 
-  Run with Saxon-HE 12+ (see ../run.sh). Missing DDI fields are omitted.
+  Run with Saxon-HE 12+ (see ../run.sh). Missing / malformed DDI content is
+  omitted (empty fallback); the transform must not abort — SHACL validates later.
 -->
 <xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:map="http://www.w3.org/2005/xpath-functions/map"
+  xmlns:err="http://www.w3.org/2005/xqt-errors"
   xmlns:ded="https://making-sense.info/dedicate/xsl"
   xmlns:r="ddi:reusable:3_3"
   xmlns:s="ddi:studyunit:3_3"
@@ -131,6 +133,7 @@
   <!-- ===================================================================== -->
 
   <xsl:template match="s:StudyUnit" mode="dataset">
+    <xsl:try>
     <xsl:variable name="root" as="document-node()" select="root()"/>
     <xsl:variable name="dataset-uri" as="xs:string"
       select="ded:resource-uri(r:URN, 'urn:dedicate:dataset:', .)"/>
@@ -194,14 +197,20 @@
       select="ded:uap-iris($uaps, 'healthdcatap:healthCategory')"/>
     <xsl:variable name="hdab-name-pairs" as="element(r:UserAttributePair)*"
       select="$uaps[ded:uap-property-key(.) = $ded:uap-hdab-name-keys]"/>
+    <xsl:variable name="hdab-mail-pair" as="element(r:UserAttributePair)?"
+      select="$uaps[ded:uap-property-key(.) eq $ded:uap-hdab-mail-key][1]"/>
+    <xsl:variable name="hdab-url-pair" as="element(r:UserAttributePair)?"
+      select="$uaps[ded:uap-property-key(.) eq $ded:uap-hdab-url-key][1]"/>
     <xsl:variable name="hdab-mail" as="xs:string?"
-      select="(
-          for $e in ded:uap-value-entries($uaps[ded:uap-property-key(.) eq $ded:uap-hdab-mail-key][1])
+      select="
+        (
+          for $e in ded:uap-value-entries($hdab-mail-pair)
           return normalize-space(string(($e?value, '')[1]))
         )[normalize-space(.) ne ''][1]"/>
     <xsl:variable name="hdab-url" as="xs:string?"
-      select="(
-          for $e in ded:uap-value-entries($uaps[ded:uap-property-key(.) eq $ded:uap-hdab-url-key][1])
+      select="
+        (
+          for $e in ded:uap-value-entries($hdab-url-pair)
           return normalize-space(string(($e?value, '')[1]))
         )[normalize-space(.) ne ''][1]"/>
     <xsl:variable name="hdab-present" as="xs:boolean"
@@ -386,6 +395,15 @@
         <xsl:with-param name="title-strings" select="r:Citation/r:Title/r:String"/>
       </xsl:call-template>
     </xsl:if>
+    <xsl:catch>
+      <!-- Soft-fail: skip this StudyUnit; SHACL / other units continue -->
+      <xsl:text># WARN: skipped StudyUnit </xsl:text>
+      <xsl:value-of select="normalize-space((r:URN, generate-id())[1])"/>
+      <xsl:text> — </xsl:text>
+      <xsl:value-of select="replace(string($err:description), '[\r\n]+', ' ')"/>
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:catch>
+    </xsl:try>
   </xsl:template>
 
   <!-- Creator / Publisher bibliographic names → foaf:Agent -->
@@ -890,79 +908,102 @@
       "/>
   </xsl:function>
 
-  <!-- Colectica CustomField JSON (AttributeKey = extension:CustomField) → map(*), else empty -->
+  <!-- Colectica CustomField JSON (AttributeKey = extension:CustomField) → map(*), else empty.
+       Empty $pair → empty (never type-error). Bad JSON → empty. -->
   <xsl:function name="ded:uap-json-map" as="map(*)?">
-    <xsl:param name="pair" as="element()"/>
-    <xsl:variable name="akey" as="xs:string" select="normalize-space($pair/r:AttributeKey)"/>
-    <xsl:variable name="raw" as="xs:string" select="normalize-space($pair/r:AttributeValue)"/>
+    <xsl:param name="pair" as="element()?"/>
     <xsl:choose>
-      <xsl:when test="$akey eq 'extension:CustomField' and starts-with($raw, '{')">
-        <xsl:try>
-          <xsl:variable name="parsed" select="parse-json($raw)"/>
-          <xsl:sequence select="if ($parsed instance of map(*)) then $parsed else ()"/>
-          <xsl:catch>
-            <xsl:sequence select="()"/>
-          </xsl:catch>
-        </xsl:try>
+      <xsl:when test="empty($pair)">
+        <xsl:sequence select="()"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="()"/>
+        <xsl:variable name="akey" as="xs:string" select="normalize-space($pair/r:AttributeKey)"/>
+        <xsl:variable name="raw" as="xs:string" select="normalize-space($pair/r:AttributeValue)"/>
+        <xsl:choose>
+          <xsl:when test="$akey eq 'extension:CustomField' and starts-with($raw, '{')">
+            <xsl:try>
+              <xsl:variable name="parsed" select="parse-json($raw)"/>
+              <xsl:sequence select="if ($parsed instance of map(*)) then $parsed else ()"/>
+              <xsl:catch>
+                <xsl:sequence select="()"/>
+              </xsl:catch>
+            </xsl:try>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="()"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
 
   <!-- Property name: CustomField Description.en|fr, else legacy AttributeKey (sans @lang) -->
   <xsl:function name="ded:uap-property-key" as="xs:string">
-    <xsl:param name="pair" as="element()"/>
-    <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+    <xsl:param name="pair" as="element()?"/>
     <xsl:choose>
-      <xsl:when test="exists($j)">
-        <xsl:variable name="desc" select="$j?Description"/>
-        <xsl:sequence select="
-            if ($desc instance of map(*)) then
-              normalize-space(string((
-                $desc?en, $desc?fr, $desc?*
-              )[normalize-space(string(.)) ne ''][1]))
-            else ''
-          "/>
+      <xsl:when test="empty($pair)">
+        <xsl:sequence select="''"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="ded:uap-base-key(normalize-space($pair/r:AttributeKey))"/>
+        <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+        <xsl:choose>
+          <xsl:when test="exists($j)">
+            <xsl:variable name="desc" select="$j?Description"/>
+            <xsl:sequence select="
+                if ($desc instance of map(*)) then
+                  normalize-space(string((
+                    $desc?en, $desc?fr, $desc?*
+                  )[normalize-space(string(.)) ne ''][1]))
+                else ''
+              "/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="ded:uap-base-key(normalize-space($pair/r:AttributeKey))"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
 
-  <!-- Value entries as maps {lang?, value}. CustomField → MultilingualStringValue; legacy → one entry. -->
+  <!-- Value entries as maps {lang?, value}. CustomField → MultilingualStringValue; legacy → one entry.
+       Missing pair / empty values → empty sequence (never abort). -->
   <xsl:function name="ded:uap-value-entries" as="map(*)*">
-    <xsl:param name="pair" as="element()"/>
-    <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+    <xsl:param name="pair" as="element()?"/>
     <xsl:choose>
-      <xsl:when test="exists($j)">
-        <xsl:variable name="msv" select="$j?MultilingualStringValue"/>
-        <xsl:sequence select="
-            if ($msv instance of map(*)) then
-              for $lang in map:keys($msv)
-              return
-                if (normalize-space(string($msv($lang))) ne '') then
-                  map{
-                    'lang': string($lang),
-                    'value': normalize-space(string($msv($lang)))
-                  }
-                else ()
-            else ()
-          "/>
+      <xsl:when test="empty($pair)">
+        <xsl:sequence select="()"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="val" as="xs:string"
-          select="normalize-space($pair/r:AttributeValue)"/>
-        <xsl:sequence select="
-            if ($val ne '') then
-              map{
-                'lang': ded:uap-lang(normalize-space($pair/r:AttributeKey)),
-                'value': $val
-              }
-            else ()
-          "/>
+        <xsl:variable name="j" as="map(*)?" select="ded:uap-json-map($pair)"/>
+        <xsl:choose>
+          <xsl:when test="exists($j)">
+            <xsl:variable name="msv" select="$j?MultilingualStringValue"/>
+            <xsl:sequence select="
+                if ($msv instance of map(*)) then
+                  for $lang in map:keys($msv)
+                  return
+                    if (normalize-space(string($msv($lang))) ne '') then
+                      map{
+                        'lang': string($lang),
+                        'value': normalize-space(string($msv($lang)))
+                      }
+                    else ()
+                else ()
+              "/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:variable name="val" as="xs:string"
+              select="normalize-space($pair/r:AttributeValue)"/>
+            <xsl:sequence select="
+                if ($val ne '') then
+                  map{
+                    'lang': ded:uap-lang(normalize-space($pair/r:AttributeKey)),
+                    'value': $val
+                  }
+                else ()
+              "/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
