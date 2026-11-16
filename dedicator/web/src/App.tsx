@@ -10,6 +10,7 @@ import {
   type ShapesPresetId,
 } from './lib/shapes'
 import type { MainTab } from './lib/tabs'
+import { useTabRoute } from './lib/useTabRoute'
 import { SourceField } from './components/SourceField'
 import { ShapesField } from './components/ShapesField'
 import { RunSourcesBar } from './components/RunSourcesBar'
@@ -50,7 +51,7 @@ function useTheme() {
 export default function App() {
   const { theme, setTheme } = useTheme()
   const { t } = useI18n()
-  const [tab, setTab] = useState<MainTab>('home')
+  const { tab, setTab } = useTabRoute('home')
 
   const [ddiFile, setDdiFile] = useState<File | null>(null)
   const [ddiUrl, setDdiUrl] = useState('')
@@ -121,7 +122,7 @@ export default function App() {
     setRunSources(null)
     setWantedValidation(false)
     setSelectedId(null)
-    setTab('home')
+    setTab('home', { replace: true })
     try {
       const shapesForRun = shapesPreset === 'other' ? shapesFile : null
       const shapesUrlForRun =
@@ -149,7 +150,7 @@ export default function App() {
             : `${t(presetMeta.labelKey)}: ${resolvedShapesUrl}`
           : t('run.shapesSkipped'),
       })
-      setTab('home')
+      setTab('home', { replace: true })
     } catch (e) {
       setResult(null)
       setRunSources(null)
@@ -165,6 +166,17 @@ export default function App() {
     if (next === 'conformity' && !showConformity) return
     setTab(next)
   }
+
+  // Deep link / back-forward onto a result tab without data → home
+  useEffect(() => {
+    if (tab !== 'home' && !readyTabs) {
+      setTab('home', { replace: true })
+      return
+    }
+    if (tab === 'conformity' && !showConformity) {
+      setTab('home', { replace: true })
+    }
+  }, [tab, readyTabs, showConformity, setTab])
 
   const sourcesBar =
     runSources && tab !== 'home' ? (
