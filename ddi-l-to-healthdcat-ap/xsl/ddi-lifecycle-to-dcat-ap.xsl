@@ -38,10 +38,13 @@
       'healthdcatap:healthCategory'
     )"/>
 
-  <!-- Priority B UserAttributePair keys → foaf:Agent blank + foaf:name (lang from AttributeKey@lang) -->
-  <xsl:variable name="ded:uap-agent-keys" as="xs:string*" select="(
-      'healthdcatap:hdab'
+  <!-- Priority B: HDAB agent — legacy single key or catalogue split :label / :mail / :url -->
+  <xsl:variable name="ded:uap-hdab-name-keys" as="xs:string*" select="(
+      'healthdcatap:hdab',
+      'healthdcatap:hdab:label'
     )"/>
+  <xsl:variable name="ded:uap-hdab-mail-key" as="xs:string" select="'healthdcatap:hdab:mail'"/>
+  <xsl:variable name="ded:uap-hdab-url-key" as="xs:string" select="'healthdcatap:hdab:url'"/>
 
   <!-- Fast URN → element lookup -->
   <xsl:key name="by-urn"
@@ -189,8 +192,20 @@
       select="ded:uap-iris($uaps, 'dcatap:applicableLegislation')"/>
     <xsl:variable name="health-category-uris" as="xs:string*"
       select="ded:uap-iris($uaps, 'healthdcatap:healthCategory')"/>
-    <xsl:variable name="hdab-pairs" as="element(r:UserAttributePair)*"
-      select="$uaps[ded:uap-property-key(.) = $ded:uap-agent-keys]"/>
+    <xsl:variable name="hdab-name-pairs" as="element(r:UserAttributePair)*"
+      select="$uaps[ded:uap-property-key(.) = $ded:uap-hdab-name-keys]"/>
+    <xsl:variable name="hdab-mail" as="xs:string?"
+      select="(
+          for $e in ded:uap-value-entries($uaps[ded:uap-property-key(.) eq $ded:uap-hdab-mail-key][1])
+          return normalize-space(string(($e?value, '')[1]))
+        )[normalize-space(.) ne ''][1]"/>
+    <xsl:variable name="hdab-url" as="xs:string?"
+      select="(
+          for $e in ded:uap-value-entries($uaps[ded:uap-property-key(.) eq $ded:uap-hdab-url-key][1])
+          return normalize-space(string(($e?value, '')[1]))
+        )[normalize-space(.) ne ''][1]"/>
+    <xsl:variable name="hdab-present" as="xs:boolean"
+      select="exists($hdab-name-pairs) or exists($hdab-mail) or exists($hdab-url)"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -327,12 +342,12 @@
     <xsl:for-each select="$health-category-uris">
       <xsl:text> ;&#10;  healthdcatap:healthCategory {ded:iri(.)}</xsl:text>
     </xsl:for-each>
-    <xsl:if test="exists($hdab-pairs)">
+    <xsl:if test="$hdab-present">
       <xsl:text> ;&#10;  healthdcatap:hdab [&#10;</xsl:text>
       <xsl:text>    a foaf:Agent</xsl:text>
       <xsl:for-each-group
         select="
-          for $p in $hdab-pairs return ded:uap-value-entries($p)"
+          for $p in $hdab-name-pairs return ded:uap-value-entries($p)"
         group-by="string((.?lang, '')[1]) || '|' || normalize-space(string((.?value, '')[1]))">
         <xsl:variable name="name" as="xs:string"
           select="normalize-space(string((.?value, '')[1]))"/>
@@ -342,6 +357,16 @@
           <xsl:text> ;&#10;    foaf:name {ded:literal($name, $lang)}</xsl:text>
         </xsl:if>
       </xsl:for-each-group>
+      <xsl:if test="exists($hdab-mail) or (exists($hdab-url) and matches($hdab-url, '^(https?|urn):', 'i'))">
+        <xsl:text> ;&#10;    cv:contactPoint [&#10;      a cv:ContactPoint</xsl:text>
+        <xsl:if test="exists($hdab-mail)">
+          <xsl:text> ;&#10;      cv:email {ded:literal($hdab-mail)}</xsl:text>
+        </xsl:if>
+        <xsl:if test="exists($hdab-url) and matches($hdab-url, '^(https?|urn):', 'i')">
+          <xsl:text> ;&#10;      cv:contactPage {ded:iri($hdab-url)}</xsl:text>
+        </xsl:if>
+        <xsl:text>&#10;    ]</xsl:text>
+      </xsl:if>
       <xsl:text>&#10;  ]</xsl:text>
     </xsl:if>
 

@@ -7,10 +7,12 @@
   Domains/tables: BENEFICIAIRE (IR_BEN_R, IR_IBA_R), DCIR (ER_PHA_F, ER_BIO_F),
   Causes de décès (KI_ECD_R). Variable subsets only.
   StudyUnit Citation/Coverage plus UserAttributePair for Priority B HealthDCAT fields
-  (values are synthetic). UAPs use Colectica extension:CustomField JSON in AttributeValue
-  (ValueType 1, Title, Description=property key, MultilingualStringValue).
-  Citation/Publisher carries ContactInformation (Email/URL) for Dataset contactPoint
-  and publisher Agent cv:contactPoint.
+  (synthetic values, typed as the Catalogue DCAT tab should deliver after corrections):
+  ISO-8601 temporalResolution, positive integers for counts, Label (URI) for dct:type /
+  dpv:*, split healthdcatap:hdab:label|mail|url. ContactPoint remains Citation
+  ContactInformation (mail + URL) — catalogue may use dcat:contactPoint:label|mail|url.
+  UAPs use Colectica extension:CustomField JSON (ValueType 1, Title, Description=key,
+  MultilingualStringValue).
   This file is the reference DDI input for the repository.
   One LogicalProduct per PhysicalInstance; Dedicate still emits one TableGroup per Dataset.
   Hand-authored metadata for Dedicate demos — not an official SNDS or HDH DDI product.
@@ -915,7 +917,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body","fr":"Organisme d'accès aux données de santé (HDAB)"},"Description":{"en":"healthdcatap:hdab","fr":"healthdcatap:hdab"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (label)","fr":"Organisme d'accès (HDAB) — libellé"},"Description":{"en":"healthdcatap:hdab:label","fr":"healthdcatap:hdab:label"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (email)","fr":"Organisme d'accès (HDAB) — mail"},"Description":{"en":"healthdcatap:hdab:mail","fr":"healthdcatap:hdab:mail"},"MultilingualStringValue":{"en":"hdab-contact@example.org","fr":"hdab-contact@example.org"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (URL)","fr":"Organisme d'accès (HDAB) — URL"},"Description":{"en":"healthdcatap:hdab:url","fr":"healthdcatap:hdab:url"},"MultilingualStringValue":{"en":"https://www.health-data-hub.fr/contact","fr":"https://www.health-data-hub.fr/contact"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Dataset type","fr":"Type de jeu de données"},"Description":{"en":"dct:type","fr":"dct:type"},"MultilingualStringValue":{"en":"Synthetic data (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)","fr":"Données synthétiques (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -923,19 +937,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"Year (beneficiary reference tables)","fr":"Année (référentiel bénéficiaires)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"P1Y","fr":"P1Y"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo","fr":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Public interest (https://w3id.org/dpv#PublicInterest)","fr":"Intérêt public (https://w3id.org/dpv#PublicInterest)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Metadata demonstration / methodological research","fr":"Démonstration de métadonnées / recherche méthodologique"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Scientific research (https://w3id.org/dpv#ScientificResearch)","fr":"Recherche scientifique (https://w3id.org/dpv#ScientificResearch)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)","fr":"Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"Health (https://w3id.org/dpv/pd#Health); Health record (https://w3id.org/dpv/pd#HealthRecord)","fr":"Santé (https://w3id.org/dpv/pd#Health) ; Dossier de santé (https://w3id.org/dpv/pd#HealthRecord)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -947,11 +961,11 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"About 50 rows per beneficiary reference table (IR_BEN_R / IR_IBA_R)","fr":"Environ 50 lignes par table de référence (IR_BEN_R / IR_IBA_R)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"50","fr":"50"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality label (QUANTUM)","fr":"Label qualité (QUANTUM)"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"QUANTUM assessment not performed (Dedicate sample)","fr":"Évaluation QUANTUM non réalisée (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality annotation","fr":"Annotation qualité"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"TBD (QUANTUM / DQV not assessed in this sample)","fr":"À compléter (QUANTUM / DQV non évalué dans cet exemple)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1057,7 +1071,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body","fr":"Organisme d'accès aux données de santé (HDAB)"},"Description":{"en":"healthdcatap:hdab","fr":"healthdcatap:hdab"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (label)","fr":"Organisme d'accès (HDAB) — libellé"},"Description":{"en":"healthdcatap:hdab:label","fr":"healthdcatap:hdab:label"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (email)","fr":"Organisme d'accès (HDAB) — mail"},"Description":{"en":"healthdcatap:hdab:mail","fr":"healthdcatap:hdab:mail"},"MultilingualStringValue":{"en":"hdab-contact@example.org","fr":"hdab-contact@example.org"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (URL)","fr":"Organisme d'accès (HDAB) — URL"},"Description":{"en":"healthdcatap:hdab:url","fr":"healthdcatap:hdab:url"},"MultilingualStringValue":{"en":"https://www.health-data-hub.fr/contact","fr":"https://www.health-data-hub.fr/contact"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Dataset type","fr":"Type de jeu de données"},"Description":{"en":"dct:type","fr":"dct:type"},"MultilingualStringValue":{"en":"Synthetic data (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)","fr":"Données synthétiques (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1065,19 +1091,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"Day (care dates), month (DCIR feed)","fr":"Jour (dates de soins), mois (flux DCIR)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"P1D","fr":"P1D"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo","fr":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Public interest (https://w3id.org/dpv#PublicInterest)","fr":"Intérêt public (https://w3id.org/dpv#PublicInterest)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Metadata demonstration / methodological research","fr":"Démonstration de métadonnées / recherche méthodologique"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Scientific research (https://w3id.org/dpv#ScientificResearch)","fr":"Recherche scientifique (https://w3id.org/dpv#ScientificResearch)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)","fr":"Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"Health (https://w3id.org/dpv/pd#Health); Health record (https://w3id.org/dpv/pd#HealthRecord)","fr":"Santé (https://w3id.org/dpv/pd#Health) ; Dossier de santé (https://w3id.org/dpv/pd#HealthRecord)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1089,15 +1115,11 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"A few hundred claim rows (ER_PHA_F / ER_BIO_F) in the synthetic sample","fr":"Quelques centaines de lignes de prestations (ER_PHA_F / ER_BIO_F) dans le jeu synthétique"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"350","fr":"350"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Coding system","fr":"Système de codage"},"Description":{"en":"healthdcatap:hasCodingSystem","fr":"healthdcatap:hasCodingSystem"},"MultilingualStringValue":{"en":"CIP13, ATC, NABM","fr":"CIP13, ATC, NABM"}}</r:AttributeValue>
-      </r:UserAttributePair>
-      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
-         <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality label (QUANTUM)","fr":"Label qualité (QUANTUM)"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"QUANTUM assessment not performed (Dedicate sample)","fr":"Évaluation QUANTUM non réalisée (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality annotation","fr":"Annotation qualité"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"TBD (QUANTUM / DQV not assessed in this sample)","fr":"À compléter (QUANTUM / DQV non évalué dans cet exemple)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1205,7 +1227,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body","fr":"Organisme d'accès aux données de santé (HDAB)"},"Description":{"en":"healthdcatap:hdab","fr":"healthdcatap:hdab"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (label)","fr":"Organisme d'accès (HDAB) — libellé"},"Description":{"en":"healthdcatap:hdab:label","fr":"healthdcatap:hdab:label"},"MultilingualStringValue":{"en":"Fictional health data access body (Dedicate sample)","fr":"Organisme d'accès fictif (exemple Dedicate)"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (email)","fr":"Organisme d'accès (HDAB) — mail"},"Description":{"en":"healthdcatap:hdab:mail","fr":"healthdcatap:hdab:mail"},"MultilingualStringValue":{"en":"hdab-contact@example.org","fr":"hdab-contact@example.org"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Health data access body (URL)","fr":"Organisme d'accès (HDAB) — URL"},"Description":{"en":"healthdcatap:hdab:url","fr":"healthdcatap:hdab:url"},"MultilingualStringValue":{"en":"https://www.health-data-hub.fr/contact","fr":"https://www.health-data-hub.fr/contact"}}</r:AttributeValue>
+      </r:UserAttributePair>
+      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
+         <r:AttributeKey>extension:CustomField</r:AttributeKey>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Dataset type","fr":"Type de jeu de données"},"Description":{"en":"dct:type","fr":"dct:type"},"MultilingualStringValue":{"en":"Synthetic data (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)","fr":"Données synthétiques (http://publications.europa.eu/resource/authority/dataset-type/SYNTHETIC_DATA)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1213,19 +1247,19 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"Year (causes of death)","fr":"Année (causes de décès)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Temporal resolution","fr":"Résolution temporelle"},"Description":{"en":"dcat:temporalResolution","fr":"dcat:temporalResolution"},"MultilingualStringValue":{"en":"P1Y","fr":"P1Y"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo","fr":"Données synthétiques publiques (Licence Ouverte 2.0, data.gouv.fr) — base légale fictive pour la démo"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Legal basis","fr":"Base légale"},"Description":{"en":"dpv:hasLegalBasis","fr":"dpv:hasLegalBasis"},"MultilingualStringValue":{"en":"Public interest (https://w3id.org/dpv#PublicInterest)","fr":"Intérêt public (https://w3id.org/dpv#PublicInterest)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Metadata demonstration / methodological research","fr":"Démonstration de métadonnées / recherche méthodologique"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Purpose","fr":"Finalité"},"Description":{"en":"dpv:hasPurpose","fr":"dpv:hasPurpose"},"MultilingualStringValue":{"en":"Scientific research (https://w3id.org/dpv#ScientificResearch)","fr":"Recherche scientifique (https://w3id.org/dpv#ScientificResearch)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"No: fictional patients from the HDH synthetic SNDS (dpv-pd terms to be chosen)","fr":"Non : patients fictifs du SNDS synthétique HDH (termes dpv-pd à choisir)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Personal data","fr":"Données personnelles"},"Description":{"en":"dpv:hasPersonalData","fr":"dpv:hasPersonalData"},"MultilingualStringValue":{"en":"Health (https://w3id.org/dpv/pd#Health); Health record (https://w3id.org/dpv/pd#HealthRecord)","fr":"Santé (https://w3id.org/dpv/pd#Health) ; Dossier de santé (https://w3id.org/dpv/pd#HealthRecord)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
@@ -1237,15 +1271,11 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"About 50 rows (KI_ECD_R) in the synthetic sample","fr":"Environ 50 lignes (KI_ECD_R) dans le jeu synthétique"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Number of records","fr":"Nombre d'enregistrements"},"Description":{"en":"healthdcatap:numberOfRecords","fr":"healthdcatap:numberOfRecords"},"MultilingualStringValue":{"en":"50","fr":"50"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Coding system","fr":"Système de codage"},"Description":{"en":"healthdcatap:hasCodingSystem","fr":"healthdcatap:hasCodingSystem"},"MultilingualStringValue":{"en":"CIM-10 / ICD-10","fr":"CIM-10 / ICD-10"}}</r:AttributeValue>
-      </r:UserAttributePair>
-      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
-         <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality label (QUANTUM)","fr":"Label qualité (QUANTUM)"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"QUANTUM assessment not performed (Dedicate sample)","fr":"Évaluation QUANTUM non réalisée (exemple Dedicate)"}}</r:AttributeValue>
+         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality annotation","fr":"Annotation qualité"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"TBD (QUANTUM / DQV not assessed in this sample)","fr":"À compléter (QUANTUM / DQV non évalué dans cet exemple)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
