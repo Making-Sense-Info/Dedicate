@@ -1,5 +1,11 @@
 import { useI18n } from '../i18n/context'
 
+export type SourceSample = {
+  id: string
+  label: string
+  url: string
+}
+
 type Props = {
   label: string
   hint?: string
@@ -9,6 +15,9 @@ type Props = {
   onFile: (file: File | null) => void
   onUrl: (url: string) => void
   urlPlaceholder?: string
+  /** Optional third mode: preset sample URLs (e.g. Dedicate DDI examples). */
+  samples?: SourceSample[]
+  sampleNoneLabel?: string
 }
 
 export function SourceField({
@@ -20,16 +29,21 @@ export function SourceField({
   onFile,
   onUrl,
   urlPlaceholder = 'https://…',
+  samples,
+  sampleNoneLabel,
 }: Props) {
   const { t } = useI18n()
+  const hasSamples = Boolean(samples?.length)
+  const selectedSampleId =
+    samples?.find((s) => s.url === url.trim() && !file)?.id ?? ''
 
   return (
-    <div className="source-field">
+    <div className={`source-field${hasSamples ? ' has-samples' : ''}`}>
       <div className="source-head">
         <span>{label}</span>
         {hint && <small>{hint}</small>}
       </div>
-      <div className="source-modes">
+      <div className={`source-modes${hasSamples ? ' with-sample' : ''}`}>
         <label className="source-file">
           <span>{t('source.file')}</span>
           <input
@@ -55,6 +69,32 @@ export function SourceField({
             }}
           />
         </label>
+        {hasSamples && (
+          <label className="source-sample">
+            <span>{t('source.sample')}</span>
+            <select
+              value={selectedSampleId}
+              onChange={(e) => {
+                const id = e.target.value
+                if (!id) {
+                  if (selectedSampleId) onUrl('')
+                  return
+                }
+                const sample = samples?.find((s) => s.id === id)
+                if (!sample) return
+                onFile(null)
+                onUrl(sample.url)
+              }}
+            >
+              <option value="">{sampleNoneLabel ?? t('source.sample.none')}</option>
+              {samples!.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
     </div>
   )

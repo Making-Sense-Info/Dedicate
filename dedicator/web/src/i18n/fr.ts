@@ -20,9 +20,13 @@ export const fr: Dict = {
   'home.tagline':
     'Configurez une source DDI et lancez la transformation Dedicate (et éventuellement la validation) pour obtenir et parcourir le résultat HealthDCAT-AP.',
   'ddi.label': 'DDI XML',
-  'ddi.hint': 'Obligatoire · fichier ou URL',
+  'ddi.hint': 'Obligatoire · fichier, URL ou exemple',
+  'ddi.sample.example': 'ddil-example.xml (référence)',
+  'ddi.sample.errors': 'ddil-example-errors.xml (erreurs SHACL)',
   'source.file': 'Fichier',
   'source.url': 'URL',
+  'source.sample': 'Exemple',
+  'source.sample.none': '— choisir un exemple —',
 
   'validate.want': 'Je veux valider',
   'validate.want.desc': 'Lancer Sparna SHACL après la transformation',

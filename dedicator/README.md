@@ -64,7 +64,7 @@ source ~/.nvm/nvm.sh
 
 To run API or UI alone: `./dedicator/scripts/dev-api.sh` / `./dedicator/scripts/dev-web.sh`.
 
-Open http://127.0.0.1:5173. UI is EN/FR (browser locale by default, preference stored in `localStorage`). Layout is responsive (phone/tablet: scrollable tabs, stacked forms, graph-table single-column). On **Home**, set DDI (file or URL) and SHACL shapes from the HealthDCAT-AP R8 spec (`public-shapes.ttl` / `restricted-shapes.ttl` / `non-public-shapes.ttl`, or Other URL/file), then **Transform**. The repository XSLT is used automatically. After a successful run, each result screen shows the DDI / SHACL sources used. Views:
+Open http://127.0.0.1:5173. UI is EN/FR (browser locale by default, preference stored in `localStorage`). Layout is responsive (phone/tablet: scrollable tabs, stacked forms, graph-table single-column). Tabs are URL routes (`/`, `/conformity`, `/turtle`, `/hierarchy`, `/graph-table`, `/bubbles`) so the browser back/forward buttons work. On **Home**, set DDI (file or URL) and SHACL shapes from the HealthDCAT-AP R8 spec (`public-shapes.ttl` / `restricted-shapes.ttl` / `non-public-shapes.ttl`, or Other URL/file), then **Transform**. The repository XSLT is used automatically. After a successful run, each result screen shows the DDI / SHACL sources used. Views:
 
 - **Conformité** — Sparna SHACL report (only if validation was enabled)
 - **Turtle** — raw HealthDCAT-AP TTL

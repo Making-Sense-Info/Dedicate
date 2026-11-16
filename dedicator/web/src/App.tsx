@@ -11,6 +11,7 @@ import {
 } from './lib/shapes'
 import type { MainTab } from './lib/tabs'
 import { useTabRoute } from './lib/useTabRoute'
+import { DDI_SAMPLES } from './lib/ddiSamples'
 import { SourceField } from './components/SourceField'
 import { ShapesField } from './components/ShapesField'
 import { RunSourcesBar } from './components/RunSourcesBar'
@@ -307,6 +308,11 @@ export default function App() {
                 url={ddiUrl}
                 onFile={setDdiFile}
                 onUrl={setDdiUrl}
+                samples={DDI_SAMPLES.map((s) => ({
+                  id: s.id,
+                  label: t(s.labelKey),
+                  url: s.url,
+                }))}
               />
 
               <div className="validate-choice" role="radiogroup" aria-label={t('tab.conformity')}>
