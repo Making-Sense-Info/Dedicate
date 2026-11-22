@@ -14,6 +14,8 @@
   - UAP healthCategory / applicableLegislation without embedded URIs
   - UAP hdab removed (no healthdcatap:hdab)
   - First StudyUnit: no PhysicalInstanceReference (no dcat:distribution)
+  - Same OtherMaterial / RelatedOtherMaterialReference coding-system pattern as ddil-example.xml
+    (hasCodingSystem is not a CustomField UAP)
 
   For a clean reference input, use ddil-example.xml instead.
 -->
@@ -54,6 +56,75 @@
             <r:String xml:lang="fr">Paquet de ressources pour l’exemple SNDS synthétique</r:String>
          </r:Title>
       </r:Citation>
+      <r:OtherMaterialScheme xmlns:r="ddi:reusable:3_3" isUniversallyUnique="true">
+         <r:URN>urn:ddi:org.example.snds.synth:31f10fd4-6f2e-5f31-972d-40c6030a6756:1.0.0</r:URN>
+         <r:UserID typeOfUserID="ExampleID">snds-synth-referentiels</r:UserID>
+         <r:OtherMaterialSchemeName>
+            <r:String xml:lang="en">Nomenclatures for the synthetic SNDS sample</r:String>
+            <r:String xml:lang="fr">Nomenclatures de l’exemple SNDS synthétique</r:String>
+         </r:OtherMaterialSchemeName>
+         <r:Label>
+            <r:Content xml:lang="en">Synthetic SNDS nomenclatures</r:Content>
+            <r:Content xml:lang="fr">Nomenclatures SNDS synthétique</r:Content>
+         </r:Label>
+         <r:OtherMaterial isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:dcc9ee6d-6962-5e3e-804e-5b9d66f6a408:1.0.0</r:URN>
+            <r:Agency>org.example.snds.synth</r:Agency>
+            <r:ID>dcc9ee6d-6962-5e3e-804e-5b9d66f6a408</r:ID>
+            <r:Version>1.0.0</r:Version>
+            <r:UserID typeOfUserID="ExampleID">CIM10</r:UserID>
+            <r:TypeOfMaterial>ReferenceTable</r:TypeOfMaterial>
+            <r:Description>
+               <r:Content xml:lang="en">ICD-10 diagnosis codes</r:Content>
+               <r:Content xml:lang="fr">Codes diagnostics CIM-10</r:Content>
+            </r:Description>
+            <r:Citation>
+               <r:Title>
+                  <r:String xml:lang="fr-FR">CIM-10</r:String>
+                  <r:String xml:lang="en-US">ICD-10</r:String>
+               </r:Title>
+            </r:Citation>
+            <r:ExternalURLReference>https://hdeu-dcat.data.health.europa.eu/resource/authority/coding-system/ICD-10</r:ExternalURLReference>
+         </r:OtherMaterial>
+         <r:OtherMaterial isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:fe59403b-83c5-5f84-96b4-269b4a80ce5b:1.0.0</r:URN>
+            <r:Agency>org.example.snds.synth</r:Agency>
+            <r:ID>fe59403b-83c5-5f84-96b4-269b4a80ce5b</r:ID>
+            <r:Version>1.0.0</r:Version>
+            <r:UserID typeOfUserID="ExampleID">Pharmacie (CIP13 / ATC)</r:UserID>
+            <r:TypeOfMaterial>ReferenceTable</r:TypeOfMaterial>
+            <r:Description>
+               <r:Content xml:lang="en">Drug reference (CIP13 / ATC)</r:Content>
+               <r:Content xml:lang="fr">Référentiel des médicaments (CIP13 / ATC)</r:Content>
+            </r:Description>
+            <r:Citation>
+               <r:Title>
+                  <r:String xml:lang="fr-FR">Pharmacie (CIP13 / ATC)</r:String>
+                  <r:String xml:lang="en-US">Drugs (CIP13 / ATC)</r:String>
+               </r:Title>
+            </r:Citation>
+            <r:ExternalURLReference>https://hdeu-dcat.data.health.europa.eu/resource/authority/coding-system/ATC</r:ExternalURLReference>
+         </r:OtherMaterial>
+         <r:OtherMaterial isUniversallyUnique="true">
+            <r:URN>urn:ddi:org.example.snds.synth:5e06f17c-4eee-5efe-b435-5f1c373566bc:1.0.0</r:URN>
+            <r:Agency>org.example.snds.synth</r:Agency>
+            <r:ID>5e06f17c-4eee-5efe-b435-5f1c373566bc</r:ID>
+            <r:Version>1.0.0</r:Version>
+            <r:UserID typeOfUserID="ExampleID">Biologie (NABM)</r:UserID>
+            <r:TypeOfMaterial>ReferenceTable</r:TypeOfMaterial>
+            <r:Description>
+               <r:Content xml:lang="en">Laboratory test codes (NABM)</r:Content>
+               <r:Content xml:lang="fr">Codes des actes de biologie (NABM)</r:Content>
+            </r:Description>
+            <r:Citation>
+               <r:Title>
+                  <r:String xml:lang="fr-FR">Biologie (NABM)</r:String>
+                  <r:String xml:lang="en-US">Laboratory tests (NABM)</r:String>
+               </r:Title>
+            </r:Citation>
+            <r:ExternalURLReference>https://hdeu-dcat.data.health.europa.eu/resource/authority/coding-system/NABM</r:ExternalURLReference>
+         </r:OtherMaterial>
+      </r:OtherMaterialScheme>
       <l:LogicalProduct xmlns:l="ddi:logicalproduct:3_3">
          <r:URN xmlns:r="ddi:reusable:3_3">urn:ddi:org.example.snds.synth:a40d3f28-a8ba-5d07-a459-c49b06aafeea:1.0.0</r:URN>
          <l:LogicalProductName>
@@ -1058,16 +1129,20 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Coding system","fr":"Système de codage"},"Description":{"en":"healthdcatap:hasCodingSystem","fr":"healthdcatap:hasCodingSystem"},"MultilingualStringValue":{"en":"CIP13, ATC, NABM","fr":"CIP13, ATC, NABM"}}</r:AttributeValue>
-      </r:UserAttributePair>
-      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
-         <r:AttributeKey>extension:CustomField</r:AttributeKey>
          <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality label (QUANTUM)","fr":"Label qualité (QUANTUM)"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"QUANTUM assessment not performed (Dedicate sample)","fr":"Évaluation QUANTUM non réalisée (exemple Dedicate)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
          <r:AttributeValue>{"ValueType":1,"Title":{"en":"Version","fr":"Version"},"Description":{"en":"dcat:version","fr":"dcat:version"},"MultilingualStringValue":{"en":"1.0.0","fr":"1.0.0"}}</r:AttributeValue>
       </r:UserAttributePair>
+      <r:RelatedOtherMaterialReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:fe59403b-83c5-5f84-96b4-269b4a80ce5b:1.0.0</r:URN>
+         <r:TypeOfObject>OtherMaterial</r:TypeOfObject>
+      </r:RelatedOtherMaterialReference>
+      <r:RelatedOtherMaterialReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:5e06f17c-4eee-5efe-b435-5f1c373566bc:1.0.0</r:URN>
+         <r:TypeOfObject>OtherMaterial</r:TypeOfObject>
+      </r:RelatedOtherMaterialReference>
       <r:Citation xmlns:r="ddi:reusable:3_3">
          <r:Title>
             <r:String xml:lang="en">Ambulatory care claims (DCIR)</r:String>
@@ -1179,16 +1254,16 @@
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
-         <r:AttributeValue>{"ValueType":1,"Title":{"en":"Coding system","fr":"Système de codage"},"Description":{"en":"healthdcatap:hasCodingSystem","fr":"healthdcatap:hasCodingSystem"},"MultilingualStringValue":{"en":"CIM-10 / ICD-10","fr":"CIM-10 / ICD-10"}}</r:AttributeValue>
-      </r:UserAttributePair>
-      <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
-         <r:AttributeKey>extension:CustomField</r:AttributeKey>
          <r:AttributeValue>{"ValueType":1,"Title":{"en":"Quality label (QUANTUM)","fr":"Label qualité (QUANTUM)"},"Description":{"en":"dqv:hasQualityAnnotation","fr":"dqv:hasQualityAnnotation"},"MultilingualStringValue":{"en":"QUANTUM assessment not performed (Dedicate sample)","fr":"Évaluation QUANTUM non réalisée (exemple Dedicate)"}}</r:AttributeValue>
       </r:UserAttributePair>
       <r:UserAttributePair xmlns:r="ddi:reusable:3_3">
          <r:AttributeKey>extension:CustomField</r:AttributeKey>
          <r:AttributeValue>{"ValueType":1,"Title":{"en":"Version","fr":"Version"},"Description":{"en":"dcat:version","fr":"dcat:version"},"MultilingualStringValue":{"en":"1.0.0","fr":"1.0.0"}}</r:AttributeValue>
       </r:UserAttributePair>
+      <r:RelatedOtherMaterialReference xmlns:r="ddi:reusable:3_3">
+         <r:URN>urn:ddi:org.example.snds.synth:dcc9ee6d-6962-5e3e-804e-5b9d66f6a408:1.0.0</r:URN>
+         <r:TypeOfObject>OtherMaterial</r:TypeOfObject>
+      </r:RelatedOtherMaterialReference>
       <r:Citation xmlns:r="ddi:reusable:3_3">
          <r:Title>
             <r:String xml:lang="en">Causes of death</r:String>
