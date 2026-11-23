@@ -109,7 +109,8 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 - 5 LogicalProducts (one per PI) / 5 LogicalRecords -> still **one TableGroup per StudyUnit** with N Tables
 - StudyUnit Citation/Coverage filled with catalogue-style DCAT fields (`Creator`/`Publisher`/`Contributor`, `dcterms:*`, Subject/Keyword, spatial, temporal)
 - 24 variables (shared where the same column name appears on several tables)
-- 2 code lists (`BEN_SEX_COD`, Yes/No for `PHA_DEC_TOP`)
+- 2 code lists (`BEN_SEX_COD`, Yes/No for `PHA_DEC_TOP`) — column semantics only, not `hasCodingSystem`
+- `OtherMaterialScheme` with ICD-10 / ATC / NABM (`ExternalURLReference` = Coding System NAL); StudyUnits `DCIR` and `DECES` link them via `RelatedOtherMaterialReference`
 
 ## What you get
 
@@ -118,7 +119,7 @@ It mirrors a multi-domain layout (one StudyUnit / Dataset per domain, several Ph
 - StudyUnit `UserAttributePair` (Priority B): `AttributeKey` = `extension:CustomField`, JSON `AttributeValue` (`Description` = property, `MultilingualStringValue` = values). XSL emits `dcatap:applicableLegislation` (Dataset + Distribution IRIs), `healthdcatap:healthCategory` (IRI), `healthdcatap:hdab` (`foaf:Agent` + names). See [UAP contract](../model-mapping.md#studyunit-userattributepair-contract-colectica-customfield-json). Other UAP keys stay parked.
 - `healthdcatap:hasVariables` -> one CSVW `TableGroup` per Dataset, with one `csvw:Table` per LogicalRecord of the StudyUnit’s PhysicalInstances
 - Columns follow R8 SHACL `CSVWColumnShape` (name / title / description / datatype literals). See the [CSVW conformance note](../model-mapping.md#conformance-note-shacl-vs-prose-vs-w3c-csvw) in `model-mapping.md`
-- `healthdcatap:hasCodingSystem` / `hasCodeValues` from CodeLists referenced by the Dataset’s variables (`dct:Standard` + code-value Literals)
+- `healthdcatap:hasCodingSystem` from StudyUnit `RelatedOtherMaterialReference` -> `OtherMaterial` (prefer `ExternalURLReference` / Coding System NAL). Variable CodeLists are not used for this. `hasCodeValues` is not emitted yet (nomenclature filters — later).
 - Missing DDI fields are omitted (no hard failure)
 - Optional SHACL HTML + Turtle reports when `--shacl-jar` is set
 

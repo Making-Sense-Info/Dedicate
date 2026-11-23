@@ -51,7 +51,7 @@
   <!-- Fast URN → element lookup -->
   <xsl:key name="by-urn"
     match="pi:PhysicalInstance | l:Variable | l:DataRelationship | l:LogicalProduct | l:LogicalRecord
-         | l:CodeList | l:Code | l:CategoryScheme | l:Category"
+         | l:CodeList | l:Code | l:CategoryScheme | l:Category | r:OtherMaterial"
     use="normalize-space(r:URN)"/>
 
   <!-- DDI RecommendedDataType → CSVW built-in datatype name (HealthDCAT-AP R8 SHACL: literal, not XSD IRI)
@@ -161,24 +161,13 @@
     <xsl:variable name="has-variables" as="xs:boolean"
       select="exists($logical-records/l:VariablesInRecord/l:VariableUsedReference)"/>
 
-    <!-- Variables of this Dataset (for CodeList scoping) -->
-    <xsl:variable name="dataset-variables" as="element(l:Variable)*">
+    <!-- Coding systems for this Dataset: StudyUnit RelatedOtherMaterialReference
+         (nomenclatures / référentiels), not Variable CodeLists (HealthDCAT-AP #66). -->
+    <xsl:variable name="coding-materials" as="element(r:OtherMaterial)*">
       <xsl:for-each-group
-        select="$logical-records/l:VariablesInRecord/l:VariableUsedReference/r:URN
-                  ! normalize-space(.)
-                  ! key('by-urn', ., $root)[self::l:Variable]"
-        group-by="generate-id()">
-        <xsl:sequence select="."/>
-      </xsl:for-each-group>
-    </xsl:variable>
-
-    <!-- CodeLists referenced by those variables' CodeRepresentation -->
-    <xsl:variable name="code-lists" as="element(l:CodeList)*">
-      <xsl:for-each-group
-        select="$dataset-variables
-                  /l:VariableRepresentation/r:CodeRepresentation/r:CodeListReference/r:URN
+        select="r:RelatedOtherMaterialReference/r:URN
                   ! normalize-space(.)[. ne '']
-                  ! key('by-urn', ., $root)[self::l:CodeList]"
+                  ! key('by-urn', ., $root)[self::r:OtherMaterial]"
         group-by="generate-id()">
         <xsl:sequence select="."/>
       </xsl:for-each-group>
@@ -333,15 +322,21 @@
       <xsl:text> ;&#10;  healthdcatap:hasVariables {ded:iri($tablegroup-uri)}</xsl:text>
     </xsl:if>
 
-    <!-- Coding systems / code values (HealthDCAT-AP), scoped to this Dataset's variables.
-         R8 SHACL: hasCodeValues = Literal (Dedicate #12); hasCodingSystem stays BlankNodeOrIRI. -->
-    <xsl:for-each select="$code-lists">
-      <xsl:text> ;&#10;  healthdcatap:hasCodingSystem {
-        ded:iri(ded:resource-uri(r:URN, 'urn:dedicate:codelist:', .))
-      }</xsl:text>
-    </xsl:for-each>
-    <xsl:for-each select="distinct-values($code-lists/l:Code/r:Value ! normalize-space(.)[. ne ''])">
-      <xsl:text> ;&#10;  healthdcatap:hasCodeValues {ded:literal(.)}</xsl:text>
+    <!-- hasCodingSystem from RelatedOtherMaterialReference → OtherMaterial.
+         Prefer ExternalURLReference (Coding System NAL). hasCodeValues deferred. -->
+    <xsl:for-each select="$coding-materials">
+      <xsl:variable name="cs-iri" as="xs:string?"
+        select="normalize-space(r:ExternalURLReference)[matches(., '^(https?|urn):', 'i')]"/>
+      <xsl:choose>
+        <xsl:when test="$cs-iri">
+          <xsl:text> ;&#10;  healthdcatap:hasCodingSystem {ded:iri($cs-iri)}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text> ;&#10;  healthdcatap:hasCodingSystem {
+            ded:iri(ded:resource-uri(r:URN, 'urn:dedicate:coding-system:', .))
+          }</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
 
     <!-- Priority B: applicableLegislation / healthCategory (IRI), hdab (Agent) — #11 #15 #16 -->
@@ -385,7 +380,10 @@
       <xsl:with-param name="applicable-legislation" select="$legislation-uris"/>
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="$code-lists" mode="coding-system"/>
+    <!-- Local dct:Standard only when OtherMaterial has no ExternalURLReference -->
+    <xsl:apply-templates
+      select="$coding-materials[not(normalize-space(r:ExternalURLReference)[matches(., '^(https?|urn):', 'i')])]"
+      mode="coding-system"/>
 
     <xsl:if test="$has-variables">
       <xsl:call-template name="ded:emit-tablegroup">
@@ -642,27 +640,30 @@
   </xsl:template>
 
   <!-- ===================================================================== -->
-  <!-- Coding systems / code values (HealthDCAT-AP)                          -->
+  <!-- Coding systems (HealthDCAT-AP) — local OtherMaterial fallback only    -->
+  <!-- Prefer ExternalURLReference (NAL) as hasCodingSystem IRI; this emits  -->
+  <!-- dct:Standard when no usable ExternalURLReference is present.          -->
+  <!-- hasCodeValues: not emitted yet (nomenclature filters — later).        -->
   <!-- ===================================================================== -->
 
-  <xsl:template match="l:CodeList" mode="coding-system">
-    <xsl:variable name="cl-uri" as="xs:string"
-      select="ded:resource-uri(r:URN, 'urn:dedicate:codelist:', .)"/>
+  <xsl:template match="r:OtherMaterial" mode="coding-system">
+    <xsl:variable name="cs-uri" as="xs:string"
+      select="ded:resource-uri(r:URN, 'urn:dedicate:coding-system:', .)"/>
     <xsl:variable name="id" as="xs:string?"
       select="normalize-space((r:UserID)[1])[. ne '']"/>
 
-    <xsl:text>{ded:iri($cl-uri)}&#10;</xsl:text>
+    <xsl:text>{ded:iri($cs-uri)}&#10;</xsl:text>
     <xsl:text>  a dcterms:Standard</xsl:text>
 
     <xsl:if test="$id">
       <xsl:text> ;&#10;  dcterms:identifier {ded:literal($id)}</xsl:text>
     </xsl:if>
 
-    <xsl:for-each select="r:Label/r:Content">
+    <xsl:for-each select="r:Citation/r:Title/r:String">
       <xsl:text> ;&#10;  dcterms:title {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
     </xsl:for-each>
-    <xsl:if test="empty(r:Label/r:Content)">
-      <xsl:for-each select="l:CodeListName/r:String">
+    <xsl:if test="empty(r:Citation/r:Title/r:String)">
+      <xsl:for-each select="r:Description/r:Content">
         <xsl:text> ;&#10;  dcterms:title {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
       </xsl:for-each>
     </xsl:if>

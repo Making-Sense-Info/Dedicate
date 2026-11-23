@@ -8,7 +8,8 @@
 - [x] One `hasVariables` / TableGroup per Dataset (aggregate LogicalRecords of all PIs; not one TG per LogicalProduct)
 - [x] Mapping extension for variables (DDI Variable / LogicalRecord -> HealthDCAT-AP `hasVariables` + CSVW) in [`ddi-lifecycle-dcat-ap-mapping.ttl`](./ddi-lifecycle-dcat-ap-mapping.ttl)
 - [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
-- [x] Code lists -> HealthDCAT-AP `hasCodingSystem` (`dct:Standard`) / `hasCodeValues` (Literals; [#12](https://github.com/Making-Sense-Info/Dedicate/issues/12))
+- [x] `hasCodingSystem` from StudyUnit `RelatedOtherMaterialReference` → `OtherMaterial` (Coding System NAL via `ExternalURLReference`; [HealthDCAT-AP #66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66)) — not Variable CodeLists
+- [ ] `hasCodeValues` (nomenclature filters as Literals) — deferred until DDI content is available
 - [x] Optional SHACL validation in `run.sh` / `run.ps1` (Sparna jar + shapes URL / local cache)
 
 ## Spec tracker (HealthDCAT-AP upstream)
@@ -29,7 +30,8 @@ As R8 spec uses CSVW, we prefer full W3C CSVW conformance rather than a silent H
 | Property table labels vs RDF IRIs | [#63](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/63) | Doc-only for us, predicates already use RDF names |
 | `csvw:url` / `propertyUrl` range | [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56) | Watch, we rarely emit these today |
 | Column.name cardinality changelog | [#57](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/57) | Watch, we already emit `csvw:name` on Columns |
-| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) | Future; CodeLists only at Dataset level in R8 today |
+| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) | Future; Dataset coding = OtherMaterial → `hasCodingSystem` (#66); per-column ranges still open |
+| Coding system purpose / CSVW alignment | [#66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66) | Done for Dedicate: nomenclatures via OtherMaterial; `hasCodeValues` later |
 | Mandatory `csvw:name` on Table | [#31](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/31) | Watch, we emit Table `dct:title` today |
 | Distribution usage (public / HDAB) | [#58](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/58) | Context for accessURL policy later |
 
@@ -50,8 +52,8 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8)
   Done: Column SHACL checklist in model-mapping, XSL hardens name/title/datatype fallbacks for incomplete DDI
 
-- [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal; was `skos:Concept`  
-  Done: distinct Code/Value literals; `hasCodingSystem` stays `dct:Standard`; model-mapping + SSSOM updated
+- [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal (was `skos:Concept`)  
+  Superseded for source: do not dump Variable CodeList values. `hasCodeValues` = nomenclature filters (HealthDCAT-AP #66); emit later when DDI carries them. `hasCodingSystem` now from OtherMaterial.
 
 - [x] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10)
   Done: all fixture Datasets emit ≥1 `dcat:distribution`, no stub when PI absent. Misleading SHACL "missing distribution" = merged minCount+node (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real `Distribution_Shape` gaps e.g. #11 applicableLegislation
@@ -60,7 +62,7 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 
 Reference DDI input [`in/ddil-example.xml`](./ddi-l-to-healthdcat-ap/in/ddil-example.xml) carries Priority B catalogue fields as StudyUnit `UserAttributePair` with Colectica `extension:CustomField` JSON (`Description` = property name, `MultilingualStringValue` = values). Same shape as Mekong parking / `SNDS-TS.xml`. Full contract: [model-mapping.md — UAP contract](./model-mapping.md#studyunit-userattributepair-contract-colectica-customfield-json).
 
-Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `healthdcatap:hasCodingSystem` (optional per StudyUnit), `dqv:hasQualityAnnotation`, `dcat:version`.
+Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dct:type (éditeur)`, `dcat:temporalResolution`, `dpv:hasLegalBasis`, `dpv:hasPurpose`, `dpv:hasPersonalData`, `healthdcatap:populationCoverage`, `healthdcatap:numberOfUniqueIndividuals`, `healthdcatap:numberOfRecords`, `dqv:hasQualityAnnotation`, `dcat:version`. (`hasCodingSystem` is not a UAP — use `OtherMaterial` + `RelatedOtherMaterialReference`.)
 
 - [x] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - UAP -> Dataset + Distribution IRIs (multi-ELI extract); model-mapping + SSSOM + XSL
 - [x] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - `Citation/dcterms:provenance` -> `dct:ProvenanceStatement` blank + `rdfs:label`@lang (not Literal); sample + model-mapping + SSSOM + XSL
@@ -86,4 +88,4 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
 - Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse CustomField JSON / URI extract helpers already in XSL
-- Structured code↔category labels (dropped when `hasCodeValues` became Literals): revisit if upstream restores Concept range, or via CSVW column value ranges (#4)
+- `hasCodeValues` as nomenclature filters (which codes/branches a Dataset covers under a `hasCodingSystem`): needs DDI content; Variable CodeLists stay CSVW-only for now (#66 / #4)

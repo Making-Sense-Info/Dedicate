@@ -31,8 +31,8 @@
 # - ❓ propertyUrl: ConceptReference URN vs Concept URI vs DPV-PD (do not invent)?
 # - ✅ RecommendedDataType → CSVW built-in name literal (string, integer, …); not XSD IRI (Dedicate #7 / upstream #61)
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
-# - ✅ hasCodeValues: R8 SHACL Literal — emit distinct Code/Value strings (Dedicate #12)
-# - ✅ hasCodingSystem: Coding System NAL / Wikidata when known; else local CodeList URN as dct:Standard
+# - ✅ hasCodingSystem: StudyUnit RelatedOtherMaterialReference -> OtherMaterial (prefer ExternalURLReference / Coding System NAL; HealthDCAT-AP #66).
+# - ⏳ hasCodeValues: R8 Literal = nomenclature filters under a coding system. Deferred (no DDI content yet, Dedicate #12 range settled, source TBD)
 # - ✅ Priority B UAP (#11 #15 #16): extension:CustomField JSON (Description + MultilingualStringValue) → applicableLegislation / healthCategory IRIs + hdab Agent; other UAP keys still parked
 
 # --- Mapping sets --- #
@@ -70,7 +70,7 @@
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/spatialcoverage-to-spatial>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/temporalcoverage-to-temporal>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/physicalinstanceref-to-distribution>
-  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/othermaterial-to-hascodingsystem>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-applicablelegislation>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory>
@@ -564,34 +564,37 @@
     sssom:comment "The `Variable/UserID` maps to `dcterms:identifier` on the CSVW Column" .
 
 
-<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> a owl:Axiom;
-    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/codelist-to-hascodingsystem> ;
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/othermaterial-to-hascodingsystem> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/othermaterial-to-hascodingsystem> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
-    dcterms:created "2026-11-06"^^xsd:date;
+    dcterms:created "2026-11-22"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
-    owl:annotatedSource lifecycle:codeList;
+    owl:annotatedSource lifecycle:otherMaterial;
     owl:annotatedTarget healthdcatap:hasCodingSystem;
-    sssom:confidence 0.75; # ⏳
+    sssom:confidence 0.9;
     sssom:mapping_justification semapv:ManualMappingCuration;
-    sssom:subject_label "CodeList"@en;
+    sssom:subject_label "OtherMaterial"@en;
     sssom:object_label "coding system";
-    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
-    sssom:comment "CodeLists referenced by Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard` (IRI = CodeList URN - `dct:identifier` = UserID - `dct:title` from Label/Name). Prefer Coding System NAL / Wikidata IRIs when the list is a known medical coding system" .
+    sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ,
+      <https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66> ;
+    sssom:comment "StudyUnit RelatedOtherMaterialReference → OtherMaterial (ReferenceTable) → healthdcatap:hasCodingSystem. Prefer ExternalURLReference (Coding System NAL / Wikidata). Else local dct:Standard from OtherMaterial URN + UserID / Citation title. Not Variable CodeLists (those stay CSVW column semantics)." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/code-to-hascodevalues> ;
     pav:authoredBy <http://id.making-sense.info/nicolas> ;
     dcterms:created "2026-11-06"^^xsd:date;
+    dcterms:modified "2026-11-22"^^xsd:date;
     owl:annotatedProperty owl:equivalentClass;
-    owl:annotatedSource lifecycle:code;
+    owl:annotatedSource lifecycle:otherMaterial; # ⏳ source TBD
     owl:annotatedTarget healthdcatap:hasCodeValues;
-    sssom:confidence 0.95;
+    sssom:confidence 0.4; # ⏳ deferred
     sssom:mapping_justification semapv:ManualMappingCuration;
-    sssom:subject_label "Code"@en;
+    sssom:subject_label "nomenclature filter (TBD)"@en;
     sssom:object_label "code values";
     sssom:see_also <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ,
-      <https://github.com/Making-Sense-Info/Dedicate/issues/12> ;
-    sssom:comment "Distinct Code/Value strings from Dataset-scoped CodeLists -> `healthdcatap:hasCodeValues` Literals (R8 SHACL nodeKind Literal / Dedicate #12). No skos:Concept for now, link only via hasCodingSystem." .
+      <https://github.com/Making-Sense-Info/Dedicate/issues/12> ,
+      <https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66> ;
+    sssom:comment "⏳ Not emitted. R8 hasCodeValues Literals = filters under a hasCodingSystem (which codes/branches the Dataset covers), not dumping Variable CodeList values. Revisit when DDI carries that content." .
 
 # Priority B — StudyUnit UserAttributePair (#11 #15 #16)
 

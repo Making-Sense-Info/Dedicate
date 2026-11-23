@@ -125,7 +125,7 @@ Rules for the XSL:
 4. For IRI-ranged properties, scan every `MultilingualStringValue` string: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL → IRI (deduped across languages). Prose with no URI is omitted.
 5. Legacy fallback (not used in the reference sample): plain `AttributeKey` = property name, optional `property@lang` suffix, raw `AttributeValue` text — same emit rules as before.
 
-Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`, optional catalogue `hasCodingSystem`) stay parked until ranges / shapes are settled.
+Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`) stay parked until ranges / shapes are settled. Dataset `hasCodingSystem` comes from `OtherMaterial` / `RelatedOtherMaterialReference`, not from UAPs.
 
 Agent-ranged UAP values (`hdab`): each `MultilingualStringValue` entry becomes `foaf:name` with that language (no URI required).
 
@@ -341,23 +341,20 @@ Not mapped.
 
 ###### `healthdcatap:hasCodingSystem` ✅
 
-CodeLists referenced by `VariableRepresentation/CodeRepresentation/CodeListReference` on Variables of the StudyUnit’s LogicalRecords -> `healthdcatap:hasCodingSystem` -> `dct:Standard`.
+StudyUnit `RelatedOtherMaterialReference` → ResourcePackage `OtherMaterial` (typically `TypeOfMaterial` = `ReferenceTable`) → `healthdcatap:hasCodingSystem`.
+
+Intent ([HealthDCAT-AP #66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66)): dataset-level pointers to nomenclatures / référentiels used by the Dataset — not variable CodeLists (those stay in CSVW / LogicalProduct for column semantics).
 
 Support:
 
-- IRI = CodeList URN
-- `dct:identifier` = `UserID`
-- `dct:title` from Label (fallback CodeListName)
+- Prefer `OtherMaterial/ExternalURLReference` when it is an IRI (Coding System NAL / Wikidata)
+- Else local `dct:Standard` IRI from the OtherMaterial URN, with `dct:identifier` = `UserID` and `dct:title` from Citation/Title (fallback Description)
 
-HealthDCAT-AP R8 prefers the Coding System NAL (or Wikidata) for well-known medical systems (ICD-10, SNOMED,...).
+Do not invent NAL IRIs. Variable `CodeList` / `CodeRepresentation` are not mapped to `hasCodingSystem`.
 
-Local / study-specific lists stay on the DDI CodeList URN; do not invent NAL IRIs.
+###### `healthdcatap:hasCodeValues` ❌ (later)
 
-###### `healthdcatap:hasCodeValues` ✅
-
-Distinct `Code/Value` strings from those CodeLists -> `healthdcatap:hasCodeValues` as Literals ([Dedicate #12](https://github.com/Making-Sense-Info/Dedicate/issues/12) - R8 SHACL `nodeKind` Literal).
-
-Per-code `skos:Concept` resources are no longer emitted. Linkage code <-> scheme is only via `hasCodingSystem` (the CodeList / Standard), not via structured code nodes.
+Not emitted. R8 models `hasCodeValues` as Literals that act as filters relative to a coding system (which codes / branches the Dataset covers), not as dumping every CodeList value. DDI content for that is not settled yet; keep Variable CodeLists for CSVW only until then.
 
 ###### `dpv:hasLegalBasis` ❌
 
@@ -620,5 +617,5 @@ Omit if absent.
 
 #### Open points
 
-- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`). Settled: Columns #7+#9+#8; `hasCodeValues` Literals #12.
+- See open questions at the top of the SSSOM file (`propertyUrl`, `csvw:title` vs `csvw:titles`). Settled: Columns #7+#9+#8. Coding: `hasCodingSystem` from OtherMaterial (#66); `hasCodeValues` deferred.
 - Known medical coding systems: map to Coding System NAL / Wikidata when an authoritative IRI is available in DDI (not invented).
