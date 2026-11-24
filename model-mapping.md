@@ -159,7 +159,7 @@ EHDS Art. 51 CV. StudyUnit CustomField `Description` `healthdcatap:healthCategor
 
 ###### `healthdcatap:hdab` ✅
 
-Health data access body. StudyUnit CustomField `Description` `healthdcatap:hdab` → one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each `MultilingualStringValue` entry ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Agent `cv:contactPoint` on hdab (HealthAgent_Shape) is not emitted yet; publisher Agent contact is [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
+Health data access body. StudyUnit CustomField `Description` `healthdcatap:hdab` or catalogue split `healthdcatap:hdab:label` -> one `healthdcatap:hdab` / `foaf:Agent` blank with `foaf:name` language-tagged from each `MultilingualStringValue` entry ([Dedicate #16](https://github.com/Making-Sense-Info/Dedicate/issues/16)). Optional `healthdcatap:hdab:mail` / `healthdcatap:hdab:url` → Agent `cv:contactPoint` (`cv:email` Literal, `cv:contactPage` IRI). Publisher Agent contact remains [#18](https://github.com/Making-Sense-Info/Dedicate/issues/18).
 
 ###### `healthdcatap:hasStructuredData` ✅
 
