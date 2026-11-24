@@ -18,7 +18,7 @@ DDI XML (+ optional XSL / shapes)
   React UI (Conformité · Turtle · Hierarchy · Graph-table · Bubbles)
 ```
 
-The `.sh` helpers are for **macOS / Linux**. On **Windows**, use the `.ps1` scripts (PowerShell). Docker works on all three.
+The `.sh` helpers are for **macOS / Linux**. On **Windows**, use the `.ps1` scripts (PowerShell).
 
 ## Prerequisites
 
@@ -114,16 +114,6 @@ CLI-only pipeline (no UI):
   -Shapes "https://data.health.europa.eu/healthdcat-ap/releases/release-8/html/shacl/HealthDCAT-AP_validator/config/rdf-validator/ehds/shapes/non-public-shapes.ttl"
 ```
 
-## Local all-in-one (Docker — any OS)
-
-From the **repository root**:
-
-```bash
-docker compose -f dedicator/docker-compose.yml up --build
-```
-
-App: http://127.0.0.1:8080 (API + built UI). The image downloads Saxon and Sparna during build. No need to set `SHACL_JAR` locally.
-
 ## Script map
 
 | Role | macOS / Linux | Windows |
@@ -133,26 +123,6 @@ App: http://127.0.0.1:8080 (API + built UI). The image downloads Saxon and Sparn
 | Start UI only | `dedicator/scripts/dev-web.sh` | `dedicator/scripts/dev-web.ps1` |
 | Job runner (used by API) | `dedicator/api/invoke.sh` | `dedicator/api/invoke.ps1` |
 | CLI pipeline | `ddi-l-to-healthdcat-ap/run.sh` | `ddi-l-to-healthdcat-ap/run.ps1` |
-
-## CI / deploy
-
-Workflow [`.github/workflows/dedicator.yml`](../.github/workflows/dedicator.yml):
-
-1. Build the web app on PR/push
-2. On push to `main`/`master`: build & push `ghcr.io/<owner>/dedicator` (JDK + Saxon + Sparna + UI)
-3. Optional: if repository secret `FLY_API_TOKEN` is set (personal Fly account is fine), deploy with [fly.toml](./fly.toml). CI builds the web once, caches the Sparna jar, builds the image with prebuilt `dist` (`WEB_MODE=compiled`), pushes **in one go** to `ghcr.io/<org>/dedicator` and `registry.fly.io/dedicator:<sha>` (Fly registry login via your token), then `fly deploy --image`. Subsequent runs reuse GHA BuildKit cache + jar cache — first run is the slow one. Optional repo variable `FLY_ORG`.
-
-```bash
-# local create + deploy (from repo root)
-fly apps create dedicator
-docker build -f dedicator/Dockerfile -t dedicator .
-fly auth docker
-docker tag dedicator registry.fly.io/dedicator:local
-docker push registry.fly.io/dedicator:local
-fly deploy -c dedicator/fly.toml --image registry.fly.io/dedicator:local
-```
-
-GitHub Pages can host the SPA only; transform/validation stay on the container API (`VITE_API_URL` → deployed service).
 
 ## API
 
