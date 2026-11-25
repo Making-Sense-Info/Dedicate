@@ -125,7 +125,7 @@ Rules for the XSL:
 4. For IRI-ranged properties, scan every `MultilingualStringValue` string: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL → IRI (deduped across languages). Prose with no URI is omitted.
 5. Legacy fallback (not used in the reference sample): plain `AttributeKey` = property name, optional `property@lang` suffix, raw `AttributeValue` text — same emit rules as before.
 
-Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dcat:version`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dct:type (éditeur)`) stay parked until ranges / shapes are settled. Dataset `hasCodingSystem` comes from `OtherMaterial` / `RelatedOtherMaterialReference`, not from UAPs.
+Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dcat:version`, and `dct:type (éditeur)` as `dcterms:type` on the publisher Agent. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`) stay parked until ranges / shapes are settled. Dataset `hasCodingSystem` comes from `OtherMaterial` / `RelatedOtherMaterialReference`, not from UAPs. Dataset `dct:type` (dataset-type CV) is still not emitted.
 
 Agent-ranged UAP values (`hdab`): each `MultilingualStringValue` entry becomes `foaf:name` with that language (no URI required).
 
@@ -175,7 +175,7 @@ Core discoverability / DCAT-AP-style recommended properties (and HealthDCAT-AP "
 
 ###### `dct:publisher` ✅
 
-`Citation/Publisher` (`PublisherName` / `OrganizationName`) -> `foaf:Agent` / `foaf:name`. When `ContactInformation` is present (under Publisher, else Citation / StudyUnit), also emit exactly one `cv:contactPoint` / `cv:ContactPoint` with `cv:email` (Literal) and/or `cv:contactPage` (IRI from `URL`) for `HealthPublisherAgent_Shape` ([Dedicate #18](https://github.com/Making-Sense-Info/Dedicate/issues/18)). Optional publisher `dct:description` is not mapped yet.
+`Citation/Publisher` (`PublisherName` / `OrganizationName`) -> `foaf:Agent` / `foaf:name`. When `ContactInformation` is present (under Publisher, else Citation / StudyUnit), also emit exactly one `cv:contactPoint` / `cv:ContactPoint` with `cv:email` (Literal) and/or `cv:contactPage` (IRI from `URL`) for `HealthPublisherAgent_Shape` ([Dedicate #18](https://github.com/Making-Sense-Info/Dedicate/issues/18)). StudyUnit CustomField `Description` `dct:type (éditeur)` -> Agent `dcterms:type` IRI(s) (EHDS publisher-type CV; extract embedded / whole-value URIs). Optional publisher `dct:description` is not mapped yet.
 
 ###### `dcat:contactPoint` ✅
 
@@ -223,9 +223,13 @@ Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset e
 
 `Citation/Creator` -> `foaf:Agent` / `foaf:name`.
 
-###### `dct:type` ❌
+###### `dct:type` (Dataset) ❌
 
-Dataset type CV. No StudyUnit mapping; not emitted.
+Dataset-type CV on the Dataset itself. Citation may carry `dcterms:type` prose, but Dedicate does not emit Dataset `dct:type` yet (needs catalogue URIs / upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)). Do not confuse with publisher `dct:type (éditeur)` below.
+
+###### `dct:type (éditeur)` ✅
+
+StudyUnit CustomField `Description` `dct:type (éditeur)` → `dcterms:type` IRI on the Dataset’s `dcterms:publisher` / `foaf:Agent` (EHDS [publisher-type](https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/) CV). Not written on the Dataset resource ([Dedicate #14](https://github.com/Making-Sense-Info/Dedicate/issues/14) publisher part).
 
 ###### `dcat:version` ✅
 

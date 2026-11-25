@@ -33,7 +33,7 @@
 # - ❓ healthdcatap namespace IRI + hasStructuredData true vs omit when empty?
 # - ✅ hasCodingSystem: StudyUnit RelatedOtherMaterialReference -> OtherMaterial (prefer ExternalURLReference / Coding System NAL; HealthDCAT-AP #66).
 # - ⏳ hasCodeValues: R8 Literal = nomenclature filters under a coding system. Deferred (no DDI content yet, Dedicate #12 range settled, source TBD)
-# - ✅ Priority B UAP (#11 #15 #16 + version): extension:CustomField JSON -> applicableLegislation / healthCategory IRIs + hdab Agent + dcat:version Literal; other UAP keys still parked
+# - ✅ Priority B UAP (#11 #15 #16 + version + publisher type): extension:CustomField JSON -> applicableLegislation / healthCategory IRIs + hdab Agent + dcat:version Literal + dct:type (éditeur) on publisher Agent; other UAP keys still parked
 
 # --- Mapping sets --- #
 
@@ -76,6 +76,7 @@
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-healthcategory>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-hdab>
   <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-version>
+  <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-publisher-type>
   ) .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/distribution> a sssom:MappingSet ;
@@ -658,6 +659,22 @@
     sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
       <https://data.health.europa.eu/healthdcat-ap/releases/release-8/#Dataset> ;
     sssom:comment "StudyUnit CustomField `Description` `dcat:version` → one `dcat:version` Literal (prefer MultilingualStringValue.en, then .fr, then any; no @lang on the version string)." .
+
+<https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-publisher-type> a owl:Axiom;
+    sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/dataset/uap-to-publisher-type> ;
+    pav:authoredBy <http://id.making-sense.info/nicolas> ;
+    dcterms:created "2026-11-25"^^xsd:date;
+    owl:annotatedProperty owl:equivalentClass;
+    owl:annotatedSource lifecycle:userAttributePair;
+    owl:annotatedTarget dcterms:type;
+    sssom:confidence 0.9;
+    sssom:mapping_justification semapv:ManualMappingCuration;
+    sssom:subject_label "UserAttributePair dct:type (éditeur)"@en;
+    sssom:object_label "publisher type";
+    sssom:see_also <https://github.com/Making-Sense-Info/Dedicate/blob/main/model-mapping.md#studyunit-userattributepair-language-contract> ,
+      <https://github.com/Making-Sense-Info/Dedicate/issues/14> ,
+      <https://hdeu-dcat.data.health.europa.eu/resource/authority/publisher-type/> ;
+    sssom:comment "StudyUnit CustomField `Description` `dct:type (éditeur)` → `dcterms:type` IRI(s) on the Dataset `dcterms:publisher` / `foaf:Agent` (EHDS publisher-type CV). Not Dataset dct:type (dataset-type CV still open)." .
 
 <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables>    a owl:Axiom;
     sssom:record_id <https://making-sense.info/dedicate/ddi-lifecycle-to-dcat-ap/variables/studyunit-to-hasvariables> ; # ⏳

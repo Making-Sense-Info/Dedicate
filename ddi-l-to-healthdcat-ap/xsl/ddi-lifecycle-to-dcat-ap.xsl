@@ -220,6 +220,9 @@
             return normalize-space(string(($e?value, '')[1]))
           )[normalize-space(.) ne '']
         )[1]"/>
+    <!-- Publisher Agent dct:type — EHDS publisher-type CV (UAP key "dct:type (éditeur)") -->
+    <xsl:variable name="publisher-type-uris" as="xs:string*"
+      select="ded:uap-iris($uaps, 'dct:type (éditeur)')"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -239,7 +242,9 @@
     </xsl:for-each>
 
     <xsl:apply-templates select="r:Citation/r:Creator" mode="dataset-creator"/>
-    <xsl:apply-templates select="r:Citation/r:Publisher" mode="dataset-publisher"/>
+    <xsl:apply-templates select="r:Citation/r:Publisher" mode="dataset-publisher">
+      <xsl:with-param name="publisher-types" select="$publisher-type-uris"/>
+    </xsl:apply-templates>
 
     <xsl:for-each select="r:Citation/r:Language ! normalize-space(.)[. ne '']">
       <xsl:choose>
@@ -437,6 +442,7 @@
   </xsl:template>
 
   <xsl:template match="r:Publisher" mode="dataset-publisher">
+    <xsl:param name="publisher-types" as="xs:string*" select="()"/>
     <xsl:variable name="names" as="element(r:String)*"
       select="r:PublisherName/r:String | r:OrganizationName/r:String"/>
     <!-- HealthPublisherAgent_Shape: exactly one cv:contactPoint (Dedicate #18).
@@ -452,6 +458,10 @@
       <xsl:text> ;&#10;  dcterms:publisher [&#10;    a foaf:Agent</xsl:text>
       <xsl:for-each select="$names">
         <xsl:text> ;&#10;    foaf:name {ded:literal(normalize-space(.), @xml:lang)}</xsl:text>
+      </xsl:for-each>
+      <!-- EHDS publisher-type CV from StudyUnit UAP "dct:type (éditeur)" — not Dataset dct:type -->
+      <xsl:for-each select="$publisher-types">
+        <xsl:text> ;&#10;    dcterms:type {ded:iri(.)}</xsl:text>
       </xsl:for-each>
       <xsl:apply-templates select="$contact" mode="agent-cv-contact"/>
       <xsl:text>&#10;  ]</xsl:text>

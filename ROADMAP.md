@@ -66,16 +66,17 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 
 - [x] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - UAP -> Dataset + Distribution IRIs (multi-ELI extract); model-mapping + SSSOM + XSL
 - [x] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - `Citation/dcterms:provenance` -> `dct:ProvenanceStatement` blank + `rdfs:label`@lang (not Literal); sample + model-mapping + SSSOM + XSL
-- [ ] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher type as `dct:type (éditeur)` pair, dataset-type CV still watch upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
+- [x] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher part: UAP `dct:type (éditeur)` → Agent `dcterms:type` IRI; Dataset `dct:type` (dataset-type CV) still open / upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
 - [x] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - UAP -> healthCategory IRI; model-mapping + SSSOM + XSL
 - [x] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - UAP -> `foaf:Agent` + `foaf:name`@lang; model-mapping + SSSOM + XSL (Agent contact still #17/#18)
 - [x] [#17 `vcard:hasEmail` / `hasURL`](https://github.com/Making-Sense-Info/Dedicate/issues/17) - `ContactInformation` Email/URL -> `vcard:hasEmail` / `hasURL` IRIs on Dataset `dcat:contactPoint`; sample + model-mapping + SSSOM + XSL (Contributor email-shaped name fallback)
-- [x] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - Publisher `ContactInformation` -> Agent `cv:contactPoint` / `cv:ContactPoint` (`cv:email` Literal, `cv:contactPage` IRI); sample under Publisher; model-mapping + SSSOM + XSL. Optional `dct:description` / publisher-type upstream [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44) still open; hdab Agent contact still parked
+- [x] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - Publisher `ContactInformation` -> Agent `cv:contactPoint` / `cv:ContactPoint` (`cv:email` Literal, `cv:contactPage` IRI); sample under Publisher; model-mapping + SSSOM + XSL. Publisher-type via UAP `dct:type (éditeur)` -> Agent `dcterms:type` (#14). Optional `dct:description` / upstream [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44) still open
 
 ## Other backlog
 
 - [x] `dcat:version` from StudyUnit UAP CustomField → Dataset Literal
-- [ ] Add mapping for selected DCAT-AP optional properties still parked (`dct:type (éditeur)`, temporalResolution, dpv:*, counts, …)
+- [x] `dct:type (éditeur)` from StudyUnit UAP → publisher Agent `dcterms:type` IRI
+- [ ] Add mapping for selected DCAT-AP optional properties still parked (Dataset `dct:type`, temporalResolution, dpv:*, counts, …)
 - [ ] Implementation of step 2
 - [ ] Extension of the mapping to HealthDCAT-AP (remaining properties beyond SHACL blockers)
 - [ ] After [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) / related clarity: optional `tableSchema` (#55), Distribution <-> Table link (#62), Table `csvw:name` (#31), per-column value ranges (#4)
@@ -88,5 +89,5 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse CustomField JSON / URI extract helpers already in XSL
+- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation) + Dataset `dct:type`: confirm SHACL ranges / catalogue URIs before emit
 - `hasCodeValues` as nomenclature filters (which codes/branches a Dataset covers under a `hasCodingSystem`): needs DDI content; Variable CodeLists stay CSVW-only for now (#66 / #4)
