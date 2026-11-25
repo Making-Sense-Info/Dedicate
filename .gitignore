@@ -4,7 +4,7 @@
 # Cursor / local agent
 .cursor/
 
-# Dedicator: Sparna jar is downloaded locally / in Docker (see Dockerfile)
+# Dedicator: Sparna jar downloaded locally (see dedicator/README.md)
 dedicator/jars/*.jar
 dedicator/.venv/
 dedicator/api/__pycache__/

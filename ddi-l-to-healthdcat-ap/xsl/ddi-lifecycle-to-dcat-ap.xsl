@@ -204,6 +204,22 @@
         )[normalize-space(.) ne ''][1]"/>
     <xsl:variable name="hdab-present" as="xs:boolean"
       select="exists($hdab-name-pairs) or exists($hdab-mail) or exists($hdab-url)"/>
+    <!-- dcat:version — plain Literal (prefer en, then fr, then any MultilingualStringValue) -->
+    <xsl:variable name="version-pair" as="element(r:UserAttributePair)?"
+      select="$uaps[ded:uap-property-key(.) eq 'dcat:version'][1]"/>
+    <xsl:variable name="version" as="xs:string?"
+      select="
+        (
+          let $entries := ded:uap-value-entries($version-pair)
+          return (
+            for $e in $entries[string((.?lang, '')[1]) eq 'en']
+            return normalize-space(string(($e?value, '')[1])),
+            for $e in $entries[string((.?lang, '')[1]) eq 'fr']
+            return normalize-space(string(($e?value, '')[1])),
+            for $e in $entries
+            return normalize-space(string(($e?value, '')[1]))
+          )[normalize-space(.) ne '']
+        )[1]"/>
 
     <!-- Dataset resource (StudyUnit Citation / Coverage → DCAT Dataset) -->
     <xsl:text>{ded:iri($dataset-uri)}&#10;</xsl:text>
@@ -339,13 +355,16 @@
       </xsl:choose>
     </xsl:for-each>
 
-    <!-- Priority B: applicableLegislation / healthCategory (IRI), hdab (Agent) — #11 #15 #16 -->
+    <!-- Priority B: applicableLegislation / healthCategory (IRI), hdab (Agent), version — #11 #15 #16 -->
     <xsl:for-each select="$legislation-uris">
       <xsl:text> ;&#10;  dcatap:applicableLegislation {ded:iri(.)}</xsl:text>
     </xsl:for-each>
     <xsl:for-each select="$health-category-uris">
       <xsl:text> ;&#10;  healthdcatap:healthCategory {ded:iri(.)}</xsl:text>
     </xsl:for-each>
+    <xsl:if test="$version">
+      <xsl:text> ;&#10;  dcat:version {ded:literal($version)}</xsl:text>
+    </xsl:if>
     <xsl:if test="$hdab-present">
       <xsl:text> ;&#10;  healthdcatap:hdab [&#10;</xsl:text>
       <xsl:text>    a foaf:Agent</xsl:text>

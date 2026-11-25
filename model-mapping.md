@@ -125,7 +125,7 @@ Rules for the XSL:
 4. For IRI-ranged properties, scan every `MultilingualStringValue` string: whole-value `http(s)|urn` URI, or every embedded `http(s)` URL → IRI (deduped across languages). Prose with no URI is omitted.
 5. Legacy fallback (not used in the reference sample): plain `AttributeKey` = property name, optional `property@lang` suffix, raw `AttributeValue` text — same emit rules as before.
 
-Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dcat:version`, `dct:type (éditeur)`) stay parked until ranges / shapes are settled. Dataset `hasCodingSystem` comes from `OtherMaterial` / `RelatedOtherMaterialReference`, not from UAPs.
+Emitted today: `dcatap:applicableLegislation`, `healthdcatap:healthCategory`, `healthdcatap:hdab`, `dcat:version`. Other UAP keys in the sample (`dcat:temporalResolution`, `dpv:*`, `populationCoverage`, counts, `dqv:hasQualityAnnotation`, `dct:type (éditeur)`) stay parked until ranges / shapes are settled. Dataset `hasCodingSystem` comes from `OtherMaterial` / `RelatedOtherMaterialReference`, not from UAPs.
 
 Agent-ranged UAP values (`hdab`): each `MultilingualStringValue` entry becomes `foaf:name` with that language (no URI required).
 
@@ -227,9 +227,9 @@ Verified on `ddil-example.xml`: every StudyUnit has ≥1 PI ref, every Dataset e
 
 Dataset type CV. No StudyUnit mapping; not emitted.
 
-###### `dcat:version` ❌
+###### `dcat:version` ✅
 
-StudyUnit CustomField `Description` `dcat:version`. `pi:DataFileVersion` on PhysicalInstance remains out of scope for Dataset today. XSL emit TODO.
+StudyUnit CustomField `Description` `dcat:version` → one `dcat:version` Literal (prefer `MultilingualStringValue.en`, then `.fr`, then any other entry; no language tag on the version string). `pi:DataFileVersion` on PhysicalInstance remains out of scope for Dataset.
 
 ###### `dcat:temporalResolution` ❌
 

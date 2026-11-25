@@ -74,7 +74,8 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 
 ## Other backlog
 
-- [ ] Add mapping for selected DCAT-AP optional properties still parked (version, …)
+- [x] `dcat:version` from StudyUnit UAP CustomField → Dataset Literal
+- [ ] Add mapping for selected DCAT-AP optional properties still parked (`dct:type (éditeur)`, temporalResolution, dpv:*, counts, …)
 - [ ] Implementation of step 2
 - [ ] Extension of the mapping to HealthDCAT-AP (remaining properties beyond SHACL blockers)
 - [ ] After [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) / related clarity: optional `tableSchema` (#55), Distribution <-> Table link (#62), Table `csvw:name` (#31), per-column value ranges (#4)
@@ -87,5 +88,5 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 ## Questions
 
 - How to link DDI Lifecycle concepts to CSVW `propertyURL`? -> see SSSOM `variables/conceptreference-to-propertyurl` (still low confidence / TODO); related upstream [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56)
-- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, version, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse CustomField JSON / URI extract helpers already in XSL
+- Priority B remaining UAP keys (temporalResolution, dpv:*, populationCoverage, counts, qualityAnnotation, `dct:type (éditeur)`): confirm SHACL ranges before emit; reuse CustomField JSON / URI extract helpers already in XSL
 - `hasCodeValues` as nomenclature filters (which codes/branches a Dataset covers under a `hasCodingSystem`): needs DDI content; Variable CodeLists stay CSVW-only for now (#66 / #4)
