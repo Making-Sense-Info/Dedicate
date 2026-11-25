@@ -101,7 +101,7 @@ java -jar shacl-play-app-0.12.5-onejar.jar validate \
 
 ## Sample input
 
-[`in/ddil-example.xml`](./in/ddil-example.xml) is a compact DDI Lifecycle 3.3 instance built from the public [HDH synthetic SNDS](https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante) on data.gouv.fr (Licence Ouverte 2.0, 50 fictional patients). Variable names match the published CSV headers, the DDI itself is hand-authored for Dedicate demos (not an official HDH product).
+[`in/ddil-example.xml`](./in/ddil-example.xml) is a compact DDI Lifecycle 3.3 instance built from the public [HDH synthetic SNDS](https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante) on data.gouv.fr (source data Licence Ouverte 2.0, 50 fictional patients). Variable names match the published CSV headers, the DDI itself is hand-authored for Dedicate demos (not an official HDH product).
 
 [`in/ddil-example-errors.xml`](./in/ddil-example-errors.xml) is the same skeleton with intentional HealthDCAT-AP gaps (no contact email/URL, no hdab, no theme URI, no keywords, no provenance/identifier, broken legislation/healthCategory URIs, first StudyUnit without distributions) for Dedicator validation demos.
 

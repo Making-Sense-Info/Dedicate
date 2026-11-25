@@ -1087,8 +1087,7 @@
          <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
-         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
-         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Non-public (http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC)</dcterms:accessRights>
          <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
@@ -1249,8 +1248,7 @@
          <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
-         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
-         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Non-public (http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC)</dcterms:accessRights>
          <dcterms:accrualPeriodicity xml:lang="fr">mensuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">monthly</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
@@ -1409,8 +1407,7 @@
          <dcterms:source xml:lang="fr">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:source xml:lang="en">https://www.data.gouv.fr/datasets/donnees-synthetiques-de-la-base-principales-du-systeme-national-des-donnees-de-sante</dcterms:source>
          <dcterms:conformsTo xml:lang="en">DCAT-AP</dcterms:conformsTo>
-         <dcterms:accessRights xml:lang="fr">Licence Ouverte 2.0</dcterms:accessRights>
-         <dcterms:accessRights xml:lang="en">Open Licence 2.0</dcterms:accessRights>
+         <dcterms:accessRights xml:lang="en">Non-public (http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC)</dcterms:accessRights>
          <dcterms:accrualPeriodicity xml:lang="fr">annuelle</dcterms:accrualPeriodicity>
          <dcterms:accrualPeriodicity xml:lang="en">annual</dcterms:accrualPeriodicity>
          <dcterms:modified xml:lang="en">2024-04-11</dcterms:modified>
