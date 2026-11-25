@@ -928,11 +928,13 @@
 }
 .val-toolbar {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
 }
 .val-toolbar input {
   flex: 1;
+  min-width: 12rem;
   border: 1px solid var(--line);
   background: var(--surface-solid);
   color: var(--ink);

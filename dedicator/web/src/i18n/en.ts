@@ -113,6 +113,7 @@ export const en: Dict = {
   'val.conforms': 'Conforms',
   'val.notConforms': 'Does not conform',
   'val.report': 'Validation report',
+  'val.download': 'Download Turtle',
   'val.all': 'All',
   'val.filter': 'Filter messages, paths, focus nodes…',
   'val.groups': '{{count}} group',

@@ -7,6 +7,8 @@ type Props = {
   reportTtl: string | null
   validated: boolean
   shaclConfigured?: boolean
+  /** Suggested download name, e.g. `ddil-example-validation.ttl`. */
+  downloadName?: string
 }
 
 const SEVERITY_ORDER: ShaclSeverity[] = ['Violation', 'Warning', 'Info', 'Other']
@@ -64,7 +66,12 @@ function GroupRow({ group, defaultOpen }: { group: ShaclGroup; defaultOpen?: boo
   )
 }
 
-export function ValidationReport({ reportTtl, validated, shaclConfigured }: Props) {
+export function ValidationReport({
+  reportTtl,
+  validated,
+  shaclConfigured,
+  downloadName = 'validation.ttl',
+}: Props) {
   const { t } = useI18n()
   const report = useMemo(() => parseShaclReport(reportTtl), [reportTtl])
   const [filter, setFilter] = useState<ShaclSeverity | 'All'>('All')
@@ -140,6 +147,13 @@ export function ValidationReport({ reportTtl, validated, shaclConfigured }: Prop
         <span className="muted">
           {t(groups.length === 1 ? 'val.groups' : 'val.groups_plural', { count: groups.length })}
         </span>
+        <a
+          className="ghost"
+          href={`data:text/turtle;charset=utf-8,${encodeURIComponent(reportTtl)}`}
+          download={downloadName}
+        >
+          {t('val.download')}
+        </a>
       </div>
 
       <div className="val-groups">

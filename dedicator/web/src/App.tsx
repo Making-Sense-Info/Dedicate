@@ -12,6 +12,7 @@ import {
 import type { MainTab } from './lib/tabs'
 import { useTabRoute } from './lib/useTabRoute'
 import { DDI_SAMPLES } from './lib/ddiSamples'
+import { ddiStem, validationReportFilename } from './lib/downloadName'
 import { SourceField } from './components/SourceField'
 import { ShapesField } from './components/ShapesField'
 import { RunSourcesBar } from './components/RunSourcesBar'
@@ -27,6 +28,8 @@ import './App.css'
 type RunSources = {
   ddi: string
   shapes: string
+  /** Input basename without extension (for validation report download). */
+  ddiStem: string
 }
 
 function sourceLabel(file: File | null, url: string, empty: string): string {
@@ -150,6 +153,7 @@ export default function App() {
             ? sourceLabel(shapesFile, shapesOtherUrl, '—')
             : `${t(presetMeta.labelKey)}: ${resolvedShapesUrl}`
           : t('run.shapesSkipped'),
+        ddiStem: ddiStem(ddiFile, ddiUrl),
       })
       setTab('home', { replace: true })
     } catch (e) {
@@ -408,6 +412,7 @@ export default function App() {
               reportTtl={result.reportTtl}
               validated={result.validated}
               shaclConfigured={result.shaclConfigured}
+              downloadName={validationReportFilename(runSources?.ddiStem ?? 'ddi')}
             />
           </div>
         )}
