@@ -1,19 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import cytoscape, { type Core, type ElementDefinition, type StylesheetStyle } from 'cytoscape'
 import { useI18n } from '../i18n/context'
-import type { RdfIndex, ResourceView } from '../lib/rdf'
-import { isDataset } from '../lib/rdf'
+import type { BubbleKind, RdfIndex, ResourceView } from '../lib/rdf'
+import { bubbleKind } from '../lib/rdf'
 
 type Props = {
   index: RdfIndex
 }
 
-/** Dataset bubbles first; double-click expands neighbors; click shows details. */
+const BORDER: Record<Exclude<BubbleKind, 'other'>, string> = {
+  dataset: '#c45d7a',
+  distribution: '#2a7a8c',
+  table: '#b87333',
+  variable: '#1f7a4c',
+}
+
+/** Dataset bubbles first; double-click expands / collapses neighbors; click shows details. */
 export function BubbleView({ index }: Props) {
   const { t } = useI18n()
   const hostRef = useRef<HTMLDivElement>(null)
   const cyRef = useRef<Core | null>(null)
-  const visibleRef = useRef<Set<string>>(new Set())
+  /** Nodes whose linked resources are shown. */
+  const expandedRef = useRef<Set<string>>(new Set())
   const [selected, setSelected] = useState<ResourceView | null>(null)
 
   const seed = useMemo(() => {
@@ -24,7 +32,7 @@ export function BubbleView({ index }: Props) {
 
   useEffect(() => {
     if (!hostRef.current) return
-    visibleRef.current = new Set(seed)
+    expandedRef.current = new Set()
     setSelected(null)
 
     const styles = getComputedStyle(document.documentElement)
@@ -33,21 +41,47 @@ export function BubbleView({ index }: Props) {
     const accent2 = styles.getPropertyValue('--accent-2').trim() || '#4a5560'
     const surface = styles.getPropertyValue('--surface-solid').trim() || '#fff'
 
+    const computeVisible = (): Set<string> => {
+      const visible = new Set(seed)
+      let grew = true
+      while (grew) {
+        grew = false
+        for (const id of expandedRef.current) {
+          if (!visible.has(id)) continue
+          for (const n of index.adjacency.get(id) ?? []) {
+            if (!visible.has(n) && index.byId.has(n)) {
+              visible.add(n)
+              grew = true
+            }
+          }
+        }
+      }
+      for (const id of [...expandedRef.current]) {
+        if (!visible.has(id)) expandedRef.current.delete(id)
+      }
+      return visible
+    }
+
+    const nodeClasses = (r: ResourceView, expanded: boolean): string => {
+      const kind = bubbleKind(r)
+      return expanded ? `${kind} open` : kind
+    }
+
     const buildElements = (): ElementDefinition[] => {
-      const visible = visibleRef.current
+      const visible = computeVisible()
       const nodes: ElementDefinition[] = [...visible]
         .filter((id) => index.byId.has(id))
         .map((id) => {
           const r = index.byId.get(id)!
-          const ds = isDataset(r)
+          const kind = bubbleKind(r)
           return {
             group: 'nodes' as const,
             data: {
               id,
               label: r.title.slice(0, 36),
-              kind: ds ? 'dataset' : 'other',
+              kind,
             },
-            classes: ds ? 'dataset' : 'other',
+            classes: nodeClasses(r, expandedRef.current.has(id)),
           }
         })
 
@@ -96,10 +130,27 @@ export function BubbleView({ index }: Props) {
             width: '118px',
             height: '118px',
             'border-width': 3,
-            'background-color': `color-mix(in srgb, ${accent2} 14%, ${surface})`,
+            'border-color': BORDER.dataset,
+            'background-color': `color-mix(in srgb, ${BORDER.dataset} 14%, ${surface})`,
             'font-size': '12px',
             'font-weight': 700,
           },
+        },
+        {
+          selector: 'node.distribution',
+          style: { 'border-color': BORDER.distribution, 'border-width': 3 },
+        },
+        {
+          selector: 'node.table',
+          style: { 'border-color': BORDER.table, 'border-width': 3 },
+        },
+        {
+          selector: 'node.variable',
+          style: { 'border-color': BORDER.variable, 'border-width': 3 },
+        },
+        {
+          selector: 'node.open',
+          style: { 'border-width': 4 },
         },
         {
           selector: 'edge',
@@ -146,20 +197,12 @@ export function BubbleView({ index }: Props) {
       const id = String(evt.target.id())
       const r = index.byId.get(id)
       if (!r) return
-      let added = false
-      for (const l of r.linksOut) {
-        if (index.byId.has(l.target) && !visibleRef.current.has(l.target)) {
-          visibleRef.current.add(l.target)
-          added = true
-        }
+      if (expandedRef.current.has(id)) {
+        expandedRef.current.delete(id)
+      } else {
+        expandedRef.current.add(id)
       }
-      for (const l of r.linksIn) {
-        if (index.byId.has(l.source) && !visibleRef.current.has(l.source)) {
-          visibleRef.current.add(l.source)
-          added = true
-        }
-      }
-      if (added) relayout()
+      relayout()
       setSelected(r)
     })
 
@@ -185,26 +228,40 @@ export function BubbleView({ index }: Props) {
         <div className="cy-wrap tight">
           <div className="cy-toolbar">
             <span className="muted">{t('bubbles.hint')}</span>
+            <ul className="bubble-legend" aria-label={t('bubbles.legend')}>
+              {(
+                [
+                  ['dataset', t('bubbles.kind.dataset')],
+                  ['distribution', t('bubbles.kind.distribution')],
+                  ['table', t('bubbles.kind.table')],
+                  ['variable', t('bubbles.kind.variable')],
+                ] as const
+              ).map(([kind, label]) => (
+                <li key={kind}>
+                  <span className="bubble-swatch" style={{ borderColor: BORDER[kind] }} />
+                  {label}
+                </li>
+              ))}
+            </ul>
             <button
               type="button"
               className="ghost"
               onClick={() => {
-                visibleRef.current = new Set(seed)
+                expandedRef.current = new Set()
                 setSelected(null)
                 const cy = cyRef.current
                 if (!cy) return
                 cy.elements().remove()
-                const styles = getComputedStyle(document.documentElement)
-                void styles
                 cy.add(
                   [...seed]
                     .filter((id) => index.byId.has(id))
                     .map((id) => {
                       const r = index.byId.get(id)!
+                      const kind = bubbleKind(r)
                       return {
                         group: 'nodes' as const,
-                        data: { id, label: r.title.slice(0, 36) },
-                        classes: isDataset(r) ? 'dataset' : 'other',
+                        data: { id, label: r.title.slice(0, 36), kind },
+                        classes: kind === 'dataset' ? 'dataset' : kind,
                       }
                     }),
                 )

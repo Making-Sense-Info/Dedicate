@@ -21,7 +21,7 @@ function Node({
   onSelect?: (id: string) => void
 }) {
   const { t } = useI18n()
-  const [open, setOpen] = useState(depth < 1)
+  const [open, setOpen] = useState(false)
   const children = resource.linksOut
     .map((l) => ({ link: l, child: index.byId.get(l.target) }))
     .filter((x): x is { link: (typeof resource.linksOut)[0]; child: ResourceView } => Boolean(x.child))
@@ -42,7 +42,15 @@ function Node({
         >
           ▸
         </button>
-        <button type="button" className="tree-main" onClick={() => onSelect?.(resource.id)}>
+        <button
+          type="button"
+          className="tree-main"
+          onClick={() => {
+            if (children.length) setOpen((v) => !v)
+            onSelect?.(resource.id)
+          }}
+          aria-expanded={children.length ? open : undefined}
+        >
           <span className="tree-type">{resource.types[0] ?? t('resource')}</span>
           <strong>{resource.title}</strong>
         </button>

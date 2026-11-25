@@ -1476,6 +1476,33 @@ th {
 }
 
 /* Bubbles */
+.bubbles .cy-toolbar {
+  flex-wrap: wrap;
+}
+.bubble-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.bubble-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.bubble-swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  border: 3px solid;
+  background: var(--surface-solid);
+  box-sizing: border-box;
+}
 .bubbles-layout {
   display: grid;
   grid-template-columns: 1fr min(320px, 34%);
