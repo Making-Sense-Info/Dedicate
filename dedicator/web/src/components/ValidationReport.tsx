@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 import { parseShaclReport, type ShaclGroup, type ShaclSeverity } from '../lib/shacl'
 import { shortIri } from '../lib/rdf'
 

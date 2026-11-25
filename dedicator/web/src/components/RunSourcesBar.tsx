@@ -1,4 +1,4 @@
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 
 type Props = {
   ddi: string

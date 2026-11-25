@@ -70,7 +70,7 @@ Open http://127.0.0.1:5173. UI is EN/FR (browser locale by default, preference s
 - **Turtle** — raw HealthDCAT-AP TTL
 - **Hierarchy** — tree rooted on `dcat:Dataset`
 - **Graph-table** — resource tables linked by edges
-- **Bubbles** — Dataset bubbles first; single-click inspects, double-click expands / collapses links; border colours for Dataset / Distribution / Table / Variable (`csvw:Column`)
+- **Bubbles** — Dataset bubbles first; single-click inspects, double-click expands / collapses links; border colours for Dataset / Distribution / TableGroup / Table / Variable (`csvw:Column`)
 
 CLI-only pipeline (no UI), same jars:
 

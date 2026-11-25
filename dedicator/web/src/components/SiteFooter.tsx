@@ -1,4 +1,4 @@
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 
 const SITE = 'https://making-sense.info/'
 const LINKEDIN = 'https://www.linkedin.com/company/making-sense-info/'

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import cytoscape, { type Core, type ElementDefinition, type StylesheetStyle } from 'cytoscape'
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 import type { BubbleKind, RdfIndex, ResourceView } from '../lib/rdf'
 import { bubbleKind } from '../lib/rdf'
 
@@ -11,6 +11,7 @@ type Props = {
 const BORDER: Record<Exclude<BubbleKind, 'other'>, string> = {
   dataset: '#c45d7a',
   distribution: '#2a7a8c',
+  tableGroup: '#c9a227',
   table: '#b87333',
   variable: '#1f7a4c',
 }
@@ -141,6 +142,10 @@ export function BubbleView({ index }: Props) {
           style: { 'border-color': BORDER.distribution, 'border-width': 3 },
         },
         {
+          selector: 'node.tableGroup',
+          style: { 'border-color': BORDER.tableGroup, 'border-width': 3 },
+        },
+        {
           selector: 'node.table',
           style: { 'border-color': BORDER.table, 'border-width': 3 },
         },
@@ -233,6 +238,7 @@ export function BubbleView({ index }: Props) {
                 [
                   ['dataset', t('bubbles.kind.dataset')],
                   ['distribution', t('bubbles.kind.distribution')],
+                  ['tableGroup', t('bubbles.kind.tableGroup')],
                   ['table', t('bubbles.kind.table')],
                   ['variable', t('bubbles.kind.variable')],
                 ] as const

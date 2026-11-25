@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 import type { RdfIndex, ResourceView } from '../lib/rdf'
 
 type Props = {

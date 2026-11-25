@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useI18n } from './i18n/context'
+import { useI18n } from './i18n/useI18n'
 import { runPipeline, type RunResult } from './lib/api'
 import { buildRdfIndex } from './lib/rdf'
 import { parseShaclReport } from './lib/shacl'

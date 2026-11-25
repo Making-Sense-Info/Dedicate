@@ -1,4 +1,4 @@
-import { useI18n } from '../i18n/context'
+import { useI18n } from '../i18n/useI18n'
 import { SHAPES_PRESETS, shapesPreset, type ShapesPresetId } from '../lib/shapes'
 
 type Props = {

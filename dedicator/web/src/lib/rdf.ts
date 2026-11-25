@@ -37,11 +37,18 @@ const TITLE_PREDS = [
 const TYPE_PRED = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
 export const DCAT_DATASET = 'http://www.w3.org/ns/dcat#Dataset'
 export const DCAT_DISTRIBUTION = 'http://www.w3.org/ns/dcat#Distribution'
+export const CSVW_TABLE_GROUP = 'http://www.w3.org/ns/csvw#TableGroup'
 export const CSVW_TABLE = 'http://www.w3.org/ns/csvw#Table'
 export const CSVW_COLUMN = 'http://www.w3.org/ns/csvw#Column'
 
 /** Main HealthDCAT kinds used for bubble border colours (DDI Variable → csvw:Column). */
-export type BubbleKind = 'dataset' | 'distribution' | 'table' | 'variable' | 'other'
+export type BubbleKind =
+  | 'dataset'
+  | 'distribution'
+  | 'tableGroup'
+  | 'table'
+  | 'variable'
+  | 'other'
 
 export function shortIri(value: string): string {
   if (value.startsWith('_:')) return value
@@ -77,6 +84,7 @@ export function bubbleKind(r: ResourceView): BubbleKind {
   const short = r.types
   if (iris.includes(DCAT_DATASET) || short.includes('Dataset')) return 'dataset'
   if (iris.includes(DCAT_DISTRIBUTION) || short.includes('Distribution')) return 'distribution'
+  if (iris.includes(CSVW_TABLE_GROUP) || short.includes('TableGroup')) return 'tableGroup'
   if (iris.includes(CSVW_TABLE) || short.includes('Table')) return 'table'
   if (iris.includes(CSVW_COLUMN) || short.includes('Column')) return 'variable'
   return 'other'

@@ -103,6 +103,7 @@ export const fr: Dict = {
   'bubbles.legend': 'Couleurs de bordure par type',
   'bubbles.kind.dataset': 'Dataset',
   'bubbles.kind.distribution': 'Distribution',
+  'bubbles.kind.tableGroup': 'TableGroup',
   'bubbles.kind.table': 'Table',
   'bubbles.kind.variable': 'Variable',
   'bubbles.reset': 'Réinitialiser',
