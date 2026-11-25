@@ -80,7 +80,7 @@ export function BubbleView({ index }: Props) {
             'border-color': accent2,
             color: ink,
             'font-size': '11px',
-            'font-family': 'Syne, sans-serif',
+            'font-family': 'system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
             'text-valign': 'center',
             'text-halign': 'center',
             'text-wrap': 'wrap',
