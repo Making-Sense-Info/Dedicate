@@ -186,6 +186,7 @@ if [[ -n "$SHACL_JAR" ]]; then
   java -jar "$SHACL_JAR" validate \
     --input "$OUT" \
     --shapes "$SHAPES_LOCAL" \
+    --avoidResolvingTargets \
     --output "$REPORT" \
     --output "$report_ttl"
   echo "Wrote $REPORT"

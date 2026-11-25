@@ -10,7 +10,7 @@
 - [x] XSL implementation of the `variables` mapping set in [`ddi-l-to-healthdcat-ap/`](./ddi-l-to-healthdcat-ap/)
 - [x] `hasCodingSystem` from StudyUnit `RelatedOtherMaterialReference` → `OtherMaterial` (Coding System NAL via `ExternalURLReference`; [HealthDCAT-AP #66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66)) — not Variable CodeLists
 - [ ] `hasCodeValues` (nomenclature filters as Literals) — deferred until DDI content is available
-- [x] Optional SHACL validation in `run.sh` / `run.ps1` (Sparna jar + shapes URL / local cache)
+- [x] Optional SHACL validation in `run.sh` / `run.ps1` / Dedicator (Sparna jar + shapes URL / local cache; `--avoidResolvingTargets` by default)
 
 ## Spec tracker (HealthDCAT-AP upstream)
 
@@ -22,18 +22,21 @@ As R8 spec uses CSVW, we prefer full W3C CSVW conformance rather than a silent H
 
 | Topic | Upstream | Impact on Dedicate |
 | --- | --- | --- |
-| Full CSVW conformance | [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) | Product decision: full W3C CSVW vs documented HealthDCAT subset, wait before inventing structure |
-| CSVW Table -> column vs `tableSchema` | [#55](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/55) (comment added) | Keep current flatten until clarified, do not invent `tableSchema` yet |
-| CSVW Column datatype form | [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61) | Done in Dedicate (#7): emit CSVW name literals, revisit if R8 changes |
-| SHACL `dcat:distribution` message (minCount + node merged) | [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65) | Explains misleading "missing distribution" when `Distribution_Shape` fails, Dedicate #10 OK |
-| Distribution <-> Table link | [#62](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/62) | No RDF link to emit until the profile adds one |
-| Property table labels vs RDF IRIs | [#63](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/63) | Doc-only for us, predicates already use RDF names |
-| `csvw:url` / `propertyUrl` range | [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56) | Watch, we rarely emit these today |
-| Column.name cardinality changelog | [#57](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/57) | Watch, we already emit `csvw:name` on Columns |
-| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) | Future; Dataset coding = OtherMaterial → `hasCodingSystem` (#66); per-column ranges still open |
-| Coding system purpose / CSVW alignment | [#66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66) | Done for Dedicate: nomenclatures via OtherMaterial; `hasCodeValues` later |
-| Mandatory `csvw:name` on Table | [#31](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/31) | Watch, we emit Table `dct:title` today |
-| Distribution usage (public / HDAB) | [#58](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/58) | Context for accessURL policy later |
+| Full CSVW conformance | [#64](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/64) open | Product decision: full W3C CSVW vs documented HealthDCAT subset, wait before inventing structure |
+| CSVW Table -> column vs `tableSchema` | [#55](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/55) open | Keep current flatten until clarified, do not invent `tableSchema` yet |
+| CSVW Column datatype form | [#61](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/61) open | Done in Dedicate (#7): emit CSVW name literals, revisit if R8 changes |
+| SHACL `dcat:distribution` message (minCount + node merged) | [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65) closed | Explains misleading "missing distribution" when `Distribution_Shape` fails → close Dedicate #10 |
+| Distribution <-> Table link | [#62](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/62) open | No RDF link to emit until the profile adds one |
+| Property table labels vs RDF IRIs | [#63](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/63) closed | Doc-only; predicates already use RDF names |
+| `csvw:url` / `propertyUrl` range | [#56](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/56) open | Watch, we rarely emit these today |
+| Column.name cardinality changelog | [#57](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/57) closed | We already emit `csvw:name` on Columns |
+| Column value ranges / coding per variable | [#4](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/4) open | Future; Dataset coding = OtherMaterial → `hasCodingSystem` (#66 closed); per-column ranges still open |
+| Coding system purpose / CSVW alignment | [#66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66) closed | Done for Dedicate: nomenclatures via OtherMaterial; `hasCodeValues` = filters later (retitle Dedicate #12) |
+| Mandatory `csvw:name` on Table | [#31](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/31) closed | We emit Table `dct:title` today; watch if shapes tighten |
+| Distribution usage (public / HDAB) | [#58](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/58) open | Context for accessURL policy later |
+| Dataset-type vocabulary fit for health | [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41) open | Blocks Dedicate #14 Dataset `dct:type` until catalogue has usable URIs |
+| Publisher-type CV gaps | [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44) closed | Publisher `dct:type (éditeur)` already mapped; watch vocabulary evolution |
+| Misleading `dct:provenance` SHACL message | [#67](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/67) closed | Same class of issue as #65; Dedicate #13 already emits ProvenanceStatement |
 
 ## SHACL violations (HealthDCAT-AP validation)
 
@@ -52,11 +55,9 @@ For each item: update [`model-mapping.md`](./model-mapping.md) + [`ddi-lifecycle
 - [x] [#8 CSVWColumnShape](https://github.com/Making-Sense-Info/Dedicate/issues/8)
   Done: Column SHACL checklist in model-mapping, XSL hardens name/title/datatype fallbacks for incomplete DDI
 
-- [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) - SHACL `nodeKind` Literal (was `skos:Concept`)  
-  Superseded for source: do not dump Variable CodeList values. `hasCodeValues` = nomenclature filters (HealthDCAT-AP #66); emit later when DDI carries them. `hasCodingSystem` now from OtherMaterial.
+- [x] [#12 `hasCodeValues` Literal](https://github.com/Making-Sense-Info/Dedicate/issues/12) — **retitle / reopen as backlog** or close + open new issue: SHACL Literal requirement is understood; we no longer dump CodeList values. Remaining work = nomenclature filters under `hasCodingSystem` (upstream [#66](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/66) closed)
 
-- [x] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10)
-  Done: all fixture Datasets emit ≥1 `dcat:distribution`, no stub when PI absent. Misleading SHACL "missing distribution" = merged minCount+node (upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65)). Real `Distribution_Shape` gaps e.g. #11 applicableLegislation
+- [x] [#10 Distribution on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/10) — **close on GitHub** (XSL OK; upstream [#65](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/65) closed clarifies misleading Sparna message)
 
 ### Priority B - catalogue enrichment in DDI (StudyUnit `UserAttributePair`)
 
@@ -66,9 +67,9 @@ Property keys in `Description`: `dcatap:applicableLegislation`, `healthdcatap:he
 
 - [x] [#11 `dcatap:applicableLegislation`](https://github.com/Making-Sense-Info/Dedicate/issues/11) - UAP -> Dataset + Distribution IRIs (multi-ELI extract); model-mapping + SSSOM + XSL
 - [x] [#13 `dct:provenance`](https://github.com/Making-Sense-Info/Dedicate/issues/13) - `Citation/dcterms:provenance` -> `dct:ProvenanceStatement` blank + `rdfs:label`@lang (not Literal); sample + model-mapping + SSSOM + XSL
-- [x] [#14 `dct:type`](https://github.com/Making-Sense-Info/Dedicate/issues/14) - publisher part: UAP `dct:type (éditeur)` → Agent `dcterms:type` IRI; Dataset `dct:type` (dataset-type CV) still open / upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41)
+- [ ] [#14 `dct:type` on Dataset](https://github.com/Making-Sense-Info/Dedicate/issues/14) - still open: needs dataset-type URI in DDI + upstream [#41](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/41). Publisher `dct:type (éditeur)` is done (Agent `dcterms:type`) — comment that on the issue, do not close until Dataset type ships
 - [x] [#15 `healthdcatap:healthCategory`](https://github.com/Making-Sense-Info/Dedicate/issues/15) - UAP -> healthCategory IRI; model-mapping + SSSOM + XSL
-- [x] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - UAP -> `foaf:Agent` + `foaf:name`@lang; model-mapping + SSSOM + XSL (Agent contact still #17/#18)
+- [x] [#16 `healthdcatap:hdab`](https://github.com/Making-Sense-Info/Dedicate/issues/16) - UAP -> `foaf:Agent` + `foaf:name`@lang + optional `hdab:mail|url` → `cv:contactPoint`; model-mapping + SSSOM + XSL
 - [x] [#17 `vcard:hasEmail` / `hasURL`](https://github.com/Making-Sense-Info/Dedicate/issues/17) - `ContactInformation` Email/URL -> `vcard:hasEmail` / `hasURL` IRIs on Dataset `dcat:contactPoint`; sample + model-mapping + SSSOM + XSL (Contributor email-shaped name fallback)
 - [x] [#18 publisher `HealthPublisherAgent_Shape`](https://github.com/Making-Sense-Info/Dedicate/issues/18) - Publisher `ContactInformation` -> Agent `cv:contactPoint` / `cv:ContactPoint` (`cv:email` Literal, `cv:contactPage` IRI); sample under Publisher; model-mapping + SSSOM + XSL. Publisher-type via UAP `dct:type (éditeur)` -> Agent `dcterms:type` (#14). Optional `dct:description` / upstream [#44](https://code.europa.eu/healthdataeu/healthdcat-ap/-/work_items/44) still open
 

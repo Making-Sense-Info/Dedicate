@@ -105,6 +105,7 @@ if (-not [string]::IsNullOrWhiteSpace($ShaclJar)) {
     & java -jar $ShaclJar validate `
         --input $OutputPath `
         --shapes $ShapesLocal `
+        --avoidResolvingTargets `
         --output $Report `
         --output $reportTtl
     Write-Host "Wrote $Report"

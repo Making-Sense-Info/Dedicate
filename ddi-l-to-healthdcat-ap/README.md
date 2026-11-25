@@ -44,6 +44,8 @@ From this directory (`ddi-l-to-healthdcat-ap`), with the following arguments:
 
 Sparna `validate` only accepts local paths for `--shapes`. If you pass an `https://` URL, `run.sh` / `run.ps1` download it into `lib/shacl-cache/` then pass the cached file.
 
+Validation always passes Sparna `--avoidResolvingTargets` (`-art`): that disables Sparna’s extra “data coverage” check (Warnings like « subject not validated by any shape » for blank nodes / NAL IRIs outside NodeShape targets). Real HealthDCAT property Violations are unchanged. Dedicator uses the same flag.
+
 All HealthDCAT-AP Release 8 SHACL shapes (public / restricted / non-public, ranges, vocabularies, recommended,...) are listed under [Validation of HealthDCAT-AP](https://data.health.europa.eu/healthdcat-ap/releases/release-8/#validation-of-healthdcat-ap).
 
 By default we use the non-public profile, for another access level, use an other shape filefrom that page.
@@ -92,6 +94,7 @@ Or the following command:
 java -jar shacl-play-app-0.12.5-onejar.jar validate \
   --input path/to/output.ttl \
   --shapes path/to/shapes.ttl \
+  --avoidResolvingTargets \
   --output validation-report.html \
   --output validation-report.ttl
 ```
